@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bookings · CAMS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;650;700;750&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/layout.css">
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <aside class="admin-sidebar" data-admin-sidebar>
+      <a class="brand" href="dashboard.html">
+        <img class="brand-logo" src="/assets/care-logo.jpg" alt="" aria-hidden="true">
+        <span class="brand-text"><strong>CARE Kenya</strong><span data-brand-subtitle>CAMS</span></span>
+      </a>
+      <nav class="admin-nav" data-admin-nav aria-label="Admin"></nav>
+    </aside>
+    <div class="admin-main">
+      <header class="admin-topbar">
+        <button type="button" class="btn btn-secondary btn-sm admin-menu-toggle" data-admin-menu-toggle>Menu</button>
+        <h1 style="font-size:var(--text-lg);margin:0;">Bookings</h1>
+        <div class="admin-user">
+          <div class="admin-user-meta"><strong data-admin-name>—</strong><span data-admin-role></span></div>
+          <button type="button" class="btn btn-ghost btn-sm" data-logout>Sign out</button>
+        </div>
+      </header>
+      <div class="admin-content">
+        <div class="toolbar" style="justify-content:space-between;align-items:flex-end;">
+          <form class="toolbar" id="bookings-filters" style="flex:1;">
+            <div class="form-group search">
+              <label class="form-label" for="search">Search</label>
+              <input class="form-control" type="search" id="search" name="search" placeholder="Reference, name, email, organisation">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="status">Status</label>
+              <select class="form-control" id="status" name="status"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="campId">Camp</label>
+              <select class="form-control" id="campId" name="campId"><option value="">All camps</option></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sort">Sort</label>
+              <select class="form-control" id="sort" name="sort">
+                <option value="createdAt:desc">Newest first</option>
+                <option value="createdAt:asc">Oldest first</option>
+                <option value="arrivalDate:asc">Arrival (soonest)</option>
+                <option value="arrivalDate:desc">Arrival (latest)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" style="opacity:0;">Apply</label>
+              <button class="btn btn-primary" type="submit">Apply</button>
+            </div>
+          </form>
+          <a class="btn btn-primary" href="booking-create.html" style="margin-left:var(--space-4);">Create Booking</a>
+        </div>
+        <div class="table-wrap">
+          <table class="table" aria-label="Bookings">
+            <thead>
+              <tr>
+                <th>Reference</th>
+                <th>Guest</th>
+                <th>Camp</th>
+                <th>Arrival</th>
+                <th>Departure</th>
+                <th>Stay Type</th>
+                <th>Status</th>
+                <th>Room</th>
+              </tr>
+            </thead>
+            <tbody id="bookings-table-body">
+              <tr><td colspan="8" class="empty-state">Loading bookings…</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="bookings-pagination"></div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="../js/pages/admin-bookings.js"></script>
+</body>
+</html>

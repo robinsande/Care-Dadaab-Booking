@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Booking · CAMS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;650;700;750&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/layout.css">
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <aside class="admin-sidebar" data-admin-sidebar>
+      <a class="brand" href="dashboard.html">
+        <img class="brand-logo" src="/assets/care-logo.jpg" alt="" aria-hidden="true">
+        <span class="brand-text"><strong>CARE Kenya</strong><span data-brand-subtitle>CAMS</span></span>
+      </a>
+      <nav class="admin-nav" data-admin-nav aria-label="Admin"></nav>
+    </aside>
+    <div class="admin-main">
+      <header class="admin-topbar">
+        <button type="button" class="btn btn-secondary btn-sm admin-menu-toggle" data-admin-menu-toggle>Menu</button>
+        <h1 style="font-size:var(--text-lg);margin:0;">Booking Details</h1>
+        <div class="admin-user">
+          <div class="admin-user-meta"><strong data-admin-name>—</strong><span data-admin-role></span></div>
+          <button type="button" class="btn btn-ghost btn-sm" data-logout>Sign out</button>
+        </div>
+      </header>
+      <div class="admin-content">
+        <div class="toolbar" style="justify-content:space-between;align-items:center;margin-bottom:var(--space-4);">
+          <div>
+            <p class="mb-0">Status: <span id="booking-status">—</span></p>
+          </div>
+          <div class="table-actions" id="action-bar"></div>
+        </div>
+        <div id="invoice-link" hidden style="margin-bottom:var(--space-4);"></div>
+        <form id="booking-form" class="panel" style="max-width:800px;" novalidate>
+          <h3 class="form-section-title">Guest Information</h3>
+          <div class="form-grid two-col">
+            <div class="form-group"><label class="form-label" for="firstName">First Name <span class="required">*</span></label><input class="form-control" id="firstName" name="firstName" required><span class="form-error" data-error-for="firstName"></span></div>
+            <div class="form-group"><label class="form-label" for="lastName">Last Name <span class="required">*</span></label><input class="form-control" id="lastName" name="lastName" required><span class="form-error" data-error-for="lastName"></span></div>
+            <div class="form-group"><label class="form-label" for="email">Email <span class="required">*</span></label><input class="form-control" type="email" id="email" name="email" required><span class="form-error" data-error-for="email"></span></div>
+            <div class="form-group"><label class="form-label" for="phone">Phone <span class="required">*</span></label><input class="form-control" type="tel" id="phone" name="phone" required><span class="form-error" data-error-for="phone"></span></div>
+            <div class="form-group"><label class="form-label" for="organisation">Organisation <span class="required">*</span></label><input class="form-control" id="organisation" name="organisation" required><span class="form-error" data-error-for="organisation"></span></div>
+            <div class="form-group"><label class="form-label" for="gender">Gender <span class="required">*</span></label><select class="form-control" id="gender" name="gender" required></select><span class="form-error" data-error-for="gender"></span></div>
+            <div class="form-group"><label class="form-label" for="contractType">Contract Type <span class="required">*</span></label><select class="form-control" id="contractType" name="contractType" required></select><span class="form-error" data-error-for="contractType"></span></div>
+            <div class="form-group"><label class="form-label" for="departureCountry">Departure Country <span class="required">*</span></label><input class="form-control" id="departureCountry" name="departureCountry" required><span class="form-error" data-error-for="departureCountry"></span></div>
+            <div class="form-group full-width"><label class="form-label" for="reasonForVisit">Reason for Visit <span class="required">*</span></label><textarea class="form-control" id="reasonForVisit" name="reasonForVisit" rows="2" required></textarea><span class="form-error" data-error-for="reasonForVisit"></span></div>
+            <div class="form-group full-width"><div class="form-check"><input type="checkbox" id="driverPickup" name="driverPickup" value="true"><label for="driverPickup">Driver pickup required</label></div></div>
+          </div>
+          <h3 class="form-section-title">Accommodation</h3>
+          <div class="form-grid two-col">
+            <div class="form-group"><label class="form-label" for="campId">Camp <span class="required">*</span></label><select class="form-control" id="campId" name="campId" required></select><span class="form-error" data-error-for="campId"></span></div>
+            <div class="form-group"><label class="form-label" for="blockId">Block <span class="required">*</span></label><select class="form-control" id="blockId" name="blockId" required><option value="">Select camp first</option></select><span class="form-error" data-error-for="blockId"></span></div>
+            <div class="form-group"><label class="form-label" for="roomId">Room <span class="required">*</span></label><select class="form-control" id="roomId" name="roomId" required><option value="">Select block and dates</option></select><span class="form-error" data-error-for="roomId"></span></div>
+            <div class="form-group"><label class="form-label" for="stayType">Stay Type <span class="required">*</span></label><select class="form-control" id="stayType" name="stayType" required></select><span class="form-error" data-error-for="stayType"></span></div>
+            <div class="form-group"><label class="form-label" for="arrivalDate">Arrival Date <span class="required">*</span></label><input class="form-control" type="date" id="arrivalDate" name="arrivalDate" required><span class="form-error" data-error-for="arrivalDate"></span></div>
+            <div class="form-group"><label class="form-label" for="departureDate">Departure Date <span class="required">*</span></label><input class="form-control" type="date" id="departureDate" name="departureDate" required><span class="form-error" data-error-for="departureDate"></span></div>
+            <div class="form-group full-width" id="price-summary" aria-live="polite"></div>
+            <div class="form-group full-width"><label class="form-label" for="remarks">Remarks</label><textarea class="form-control" id="remarks" name="remarks" rows="2"></textarea></div>
+          </div>
+          <div class="form-actions">
+            <a class="btn btn-secondary" href="bookings.html">Back to Bookings</a>
+            <button type="submit" class="btn btn-primary" id="booking-submit">Save Changes</button>
+          </div>
+        </form>
+        <div class="panel" style="max-width:800px;margin-top:var(--space-6);" id="booking-timeline"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" data-modal="cancel" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="cancel-title">
+      <div class="modal-header">
+        <h2 id="cancel-title">Cancel Booking</h2>
+        <button type="button" class="modal-close" data-close-modal="cancel" aria-label="Close">&times;</button>
+      </div>
+      <form id="cancel-form">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="cancel-reason">Cancellation Reason <span class="required">*</span></label>
+            <textarea class="form-control" id="cancel-reason" name="reason" rows="3" required></textarea>
+            <span class="form-error" data-error-for="reason"></span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal="cancel">Close</button>
+          <button type="submit" class="btn btn-danger" id="cancel-submit">Cancel Booking</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" data-modal="confirm" hidden>
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-header"><h2 data-confirm-title>Confirm</h2><button type="button" class="modal-close" data-close-modal="confirm" aria-label="Close">&times;</button></div>
+      <div class="modal-body"><p data-confirm-message class="mb-0"></p></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-confirm-cancel data-close-modal="confirm">Cancel</button>
+        <button type="button" class="btn btn-primary" data-confirm-accept>Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../js/pages/admin-booking-edit.js"></script>
+</body>
+</html>

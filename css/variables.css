@@ -1,0 +1,72 @@
+:root {
+  /* Brand — CARE orange */
+  --color-brand: #e8721e;
+  --color-brand-dark: #c45e12;
+  --color-brand-soft: #fff4eb;
+  --color-brand-accent: #f9b233;
+
+  /* Neutrals */
+  --color-ink: #1f2933;
+  --color-ink-muted: #5f6c7b;
+  --color-border: #d9e2ec;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f7f9fc;
+  --color-bg: #f5f7fa;
+  --color-bg-accent: #fff8f2;
+
+  /* Semantic */
+  --color-success: #1b7a4e;
+  --color-success-soft: #e6f5ee;
+  --color-warning: #9a6b00;
+  --color-warning-soft: #fff4d9;
+  --color-danger: #b42318;
+  --color-danger-soft: #fce8e6;
+  --color-info: #175cd3;
+  --color-info-soft: #e8f1fc;
+
+  /* Status badges */
+  --status-pending: #9a6b00;
+  --status-approved: #175cd3;
+  --status-rejected: #b42318;
+  --status-cancellation: #e8721e;
+  --status-cancelled: #667085;
+  --status-checked-in: #1b7a4e;
+  --status-checked-out: #475467;
+
+  /* Typography */
+  --font-sans: "Source Sans 3", "Segoe UI", sans-serif;
+  --font-display: "Libre Franklin", "Source Sans 3", sans-serif;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.35rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Layout */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.08);
+  --container: 1120px;
+  --header-height: 64px;
+  --sidebar-width: 240px;
+
+  /* Motion */
+  --transition: 160ms ease;
+}

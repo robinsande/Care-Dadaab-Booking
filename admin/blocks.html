@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blocks · CAMS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;650;700;750&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/layout.css">
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <aside class="admin-sidebar" data-admin-sidebar>
+      <a class="brand" href="dashboard.html">
+        <img class="brand-logo" src="/assets/care-logo.jpg" alt="" aria-hidden="true">
+        <span class="brand-text"><strong>CARE Kenya</strong><span data-brand-subtitle>CAMS</span></span>
+      </a>
+      <nav class="admin-nav" data-admin-nav aria-label="Admin"></nav>
+    </aside>
+    <div class="admin-main">
+      <header class="admin-topbar">
+        <button type="button" class="btn btn-secondary btn-sm admin-menu-toggle" data-admin-menu-toggle>Menu</button>
+        <h1 style="font-size:var(--text-lg);margin:0;">Blocks</h1>
+        <div class="admin-user">
+          <div class="admin-user-meta"><strong data-admin-name>—</strong><span data-admin-role></span></div>
+          <button type="button" class="btn btn-ghost btn-sm" data-logout>Sign out</button>
+        </div>
+      </header>
+      <div class="admin-content">
+        <div class="toolbar">
+          <div class="form-group"><label class="form-label" for="filter-camp">Camp</label><select class="form-control" id="filter-camp"></select></div>
+          <button type="button" class="btn btn-primary" id="add-block-btn">Add Block</button>
+        </div>
+        <div class="table-wrap">
+          <table class="table" aria-label="Blocks">
+            <thead><tr><th>Camp</th><th>Block</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="blocks-table-body"><tr><td colspan="4" class="empty-state">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop" data-modal="block" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="block-modal-title">
+      <div class="modal-header">
+        <h2 id="block-modal-title">Add Block</h2>
+        <button type="button" class="modal-close" data-close-modal="block" aria-label="Close">&times;</button>
+      </div>
+      <form id="block-form">
+        <div class="modal-body">
+          <input type="hidden" id="block-id" name="id">
+          <div class="form-group"><label class="form-label" for="campId">Camp <span class="required">*</span></label><select class="form-control" id="campId" name="campId" required></select><span class="form-error" data-error-for="campId"></span></div>
+          <div class="form-group"><label class="form-label" for="name">Block Name <span class="required">*</span></label><input class="form-control" id="name" name="name" placeholder="e.g. A" required><span class="form-error" data-error-for="name"></span></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal="block">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="block-submit">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="modal-backdrop" data-modal="confirm" hidden>
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-header"><h2 data-confirm-title>Confirm</h2><button type="button" class="modal-close" data-close-modal="confirm" aria-label="Close">&times;</button></div>
+      <div class="modal-body"><p data-confirm-message class="mb-0"></p></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-confirm-cancel data-close-modal="confirm">Cancel</button>
+        <button type="button" class="btn btn-primary" data-confirm-accept>Confirm</button>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="../js/pages/admin-blocks.js"></script>
+</body>
+</html>

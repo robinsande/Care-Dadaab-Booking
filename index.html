@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAMS · CARE Accommodation Management System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;650;700;750&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+</head>
+<body>
+
+  <!-- ============ LOGIN PAGE ============ -->
+  <div id="page-login" class="page-container" data-route="login" hidden>
+    <div class="login-page">
+      <div class="login-panel panel">
+        <div class="login-brand">
+          <img class="brand-logo" src="assets/care-logo.jpg" alt="" aria-hidden="true">
+          <h1 style="font-size:var(--text-xl);margin-bottom:var(--space-2);">Staff Login</h1>
+          <p class="mb-0">CARE Accommodation Management System</p>
+        </div>
+        <form id="login-form" novalidate>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="login-email">Email <span class="required" aria-hidden="true">*</span></label>
+              <input class="form-control" type="email" id="login-email" name="email" autocomplete="username" required>
+              <span class="form-error" data-error-for="email"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="login-password">Password <span class="required" aria-hidden="true">*</span></label>
+              <input class="form-control" type="password" id="login-password" name="password" autocomplete="current-password" required>
+              <span class="form-error" data-error-for="password"></span>
+            </div>
+          </div>
+          <div class="form-actions" style="margin-top:var(--space-5);">
+            <button class="btn btn-primary btn-block" type="submit" id="login-submit">Sign In</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ADMIN SHELL (shared by all authenticated pages) ============ -->
+  <div id="admin-app" class="admin-body" hidden>
+    <div class="admin-shell">
+      <aside class="admin-sidebar" data-admin-sidebar>
+        <a class="brand" data-nav-link href="#/dashboard">
+          <img class="brand-logo" src="assets/care-logo.jpg" alt="" aria-hidden="true">
+          <span class="brand-text">
+            <strong>CARE Kenya</strong>
+            <span data-brand-subtitle>CAMS</span>
+          </span>
+        </a>
+        <nav class="admin-nav" data-admin-nav aria-label="Admin"></nav>
+      </aside>
+
+      <div class="admin-main">
+        <header class="admin-topbar">
+          <button type="button" class="btn btn-secondary btn-sm admin-menu-toggle" data-admin-menu-toggle>Menu</button>
+          <h1 id="page-title" style="font-size:var(--text-lg);margin:0;">Dashboard</h1>
+          <div class="admin-user">
+            <div class="admin-user-meta">
+              <strong data-admin-name>—</strong>
+              <span data-admin-role></span>
+            </div>
+            <button type="button" class="btn btn-ghost btn-sm" data-logout>Sign out</button>
+          </div>
+        </header>
+
+        <!-- ============ DASHBOARD PAGE ============ -->
+        <div id="page-dashboard" class="admin-content page-container" data-route="dashboard" hidden>
+          <div class="page-header">
+            <h2 style="font-size:var(--text-xl);">Overview</h2>
+            <p>Today's activity and facility occupancy across CARE accommodation camps.</p>
+          </div>
+          <div class="stats-grid" id="stats-grid" aria-live="polite">
+            <div class="stat"><div class="stat-label">Today's Arrivals</div><div class="stat-value" data-stat="todayArrivals">—</div></div>
+            <div class="stat"><div class="stat-label">Today's Departures</div><div class="stat-value" data-stat="todayDepartures">—</div></div>
+            <div class="stat"><div class="stat-label">Occupied Rooms</div><div class="stat-value" data-stat="occupiedRooms">—</div></div>
+            <div class="stat"><div class="stat-label">Available Rooms</div><div class="stat-value" data-stat="availableRooms">—</div></div>
+            <div class="stat"><div class="stat-label">Outstanding Invoices</div><div class="stat-value" data-stat="outstandingInvoices">—</div></div>
+          </div>
+          <div class="form-actions">
+            <a class="btn btn-primary" data-nav-link href="#/booking/create">Create Booking</a>
+            <a class="btn btn-secondary" data-nav-link href="#/bookings">View All Bookings</a>
+          </div>
+          <div class="panel" style="margin-top:var(--space-6);">
+            <h3 style="font-size:var(--text-lg);margin-bottom:var(--space-4);">Bookings by Camp</h3>
+            <div class="table-wrap">
+              <table class="table" aria-label="Bookings by camp">
+                <thead><tr><th>Camp</th><th>Active Bookings</th></tr></thead>
+                <tbody id="camp-stats-body"><tr><td colspan="2" class="empty-state">Loading…</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="panel" style="margin-top:var(--space-6);">
+            <h3 style="font-size:var(--text-lg);margin-bottom:var(--space-4);">Recent Bookings</h3>
+            <div class="table-wrap">
+              <table class="table" aria-label="Recent bookings">
+                <thead><tr><th>Reference</th><th>Guest</th><th>Camp</th><th>Arrival</th><th>Departure</th><th>Status</th></tr></thead>
+                <tbody id="recent-bookings-body"><tr><td colspan="6" class="empty-state">Loading…</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ BOOKINGS LIST PAGE ============ -->
+        <div id="page-bookings" class="admin-content page-container" data-route="bookings" hidden>
+          <div class="toolbar" style="justify-content:space-between;align-items:flex-end;">
+            <form class="toolbar" id="bookings-filters" style="flex:1;">
+              <div class="form-group search">
+                <label class="form-label" for="bf-search">Search</label>
+                <input class="form-control" type="search" id="bf-search" name="search" placeholder="Reference, name, email, organisation">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="bf-status">Status</label>
+                <select class="form-control" id="bf-status" name="status"></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="bf-campId">Camp</label>
+                <select class="form-control" id="bf-campId" name="campId"><option value="">All camps</option></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="bf-sort">Sort</label>
+                <select class="form-control" id="bf-sort" name="sort">
+                  <option value="createdAt:desc">Newest first</option>
+                  <option value="createdAt:asc">Oldest first</option>
+                  <option value="arrivalDate:asc">Arrival (soonest)</option>
+                  <option value="arrivalDate:desc">Arrival (latest)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" style="opacity:0;">Apply</label>
+                <button class="btn btn-primary" type="submit">Apply</button>
+              </div>
+            </form>
+            <a class="btn btn-primary" data-nav-link href="#/booking/create" style="margin-left:var(--space-4);">Create Booking</a>
+          </div>
+          <div class="table-wrap">
+            <table class="table" aria-label="Bookings">
+              <thead>
+                <tr>
+                  <th>Reference</th><th>Guest</th><th>Camp</th><th>Arrival</th><th>Departure</th>
+                  <th>Stay Type</th><th>Status</th><th>Room</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="bookings-table-body"><tr><td colspan="9" class="empty-state">Loading bookings…</td></tr></tbody>
+            </table>
+          </div>
+          <div id="bookings-pagination"></div>
+        </div>
+
+        <!-- ============ CREATE BOOKING PAGE ============ -->
+        <div id="page-booking-create" class="admin-content page-container" data-route="booking/create" hidden>
+          <div class="page-header">
+            <h2 style="font-size:var(--text-xl);">New Accommodation Booking</h2>
+            <p>Enter guest details, select camp, block, and room. Booking is created immediately.</p>
+          </div>
+          <form id="booking-create-form" class="panel" style="max-width:800px;" novalidate>
+            <h3 class="form-section-title">Guest Information</h3>
+            <div class="form-grid two-col">
+              <div class="form-group"><label class="form-label" for="bc-firstName">First Name <span class="required">*</span></label><input class="form-control" id="bc-firstName" name="firstName" required><span class="form-error" data-error-for="firstName"></span></div>
+              <div class="form-group"><label class="form-label" for="bc-lastName">Last Name <span class="required">*</span></label><input class="form-control" id="bc-lastName" name="lastName" required><span class="form-error" data-error-for="lastName"></span></div>
+              <div class="form-group"><label class="form-label" for="bc-email">Email <span class="required">*</span></label><input class="form-control" type="email" id="bc-email" name="email" required><span class="form-error" data-error-for="email"></span></div>
+              <div class="form-group"><label class="form-label" for="bc-phone">Phone <span class="required">*</span></label><input class="form-control" type="tel" id="bc-phone" name="phone" required><span class="form-error" data-error-for="phone"></span></div>
+              <div class="form-group"><label class="form-label" for="bc-organisation">Organisation <span class="required">*</span></label><input class="form-control" id="bc-organisation" name="organisation" required><span class="form-error" data-error-for="organisation"></span></div>
+              <div class="form-group"><label class="form-label" for="bc-gender">Gender <span class="required">*</span></label><select class="form-control" id="bc-gender" name="gender" required></select><span class="form-error" data-error-for="gender"></span></div>
+              <div class="form-group"><label class="form-label" for="bc-contractType">Contract Type <span class="required">*</span></label><select class="form-control" id="bc-contractType" name="contractType" required></select><span class="form-error" data-error-for="contractType"></span></div>
+              <div class="form-group"><label class="form-label" for="bc-departureCountry">Departure Country <span class="required">*</span></label><input class="form-control" id="bc-departureCountry" name="departureCountry" required><span class="form-error" data-error-for="departureCountry"></span></div>
+              <div class="form-group full-width"><label class="form-label" for="bc-reasonForVisit">Reason for Visit <span class="required">*</span></label><textarea class="form-control" id="bc-reasonForVisit" name="reasonForVisit" rows="2" required></textarea><span class="form-error" data-error-for="reasonForVisit"></span></div>
+              <div class="form-group full-width"><div class="form-check"><input type="checkbox" id="bc-driverPickup" name="driverPickup" value="true"><label for="bc-driverPickup">Driver pickup required</label></div></div>
+            </div>
+            <h3 class="form-section-title">Accommodation</h3>
+            <div class="form-grid two-col">
+              <div class="form-group"><label class="form-label" for="bc-campId">Camp <span class="required">*</span></label><select class="form-control" id="bc-campId" name="campId" required></select><span class="form-error" data-error-for="campId"></span></div>
+              <div class="form-group"><label class="form-label" for="bc-blockId">Block <span class="required">*</span></label><select class="form-control" id="bc-blockId" name="blockId" required disabled><option value="">Select camp first</option></select><span class="form-error" data-error-for="blockId"></span></div>
+              <div class="form-group"><label class="form-label" for="bc-roomId">Room <span class="required">*</span></label><select class="form-control" id="bc-roomId" name="roomId" required disabled><option value="">Select block and dates</option></select><span class="form-error" data-error-for="roomId"></span></div>
+              <div class="form-group"><label class="form-label" for="bc-stayType">Stay Type <span class="required">*</span></label><select class="form-control" id="bc-stayType" name="stayType" required></select><span class="form-error" data-error-for="stayType"></span></div>
+              <div class="form-group"><label class="form-label" for="bc-arrivalDate">Arrival Date <span class="required">*</span></label><input class="form-control" type="date" id="bc-arrivalDate" name="arrivalDate" required><span class="form-error" data-error-for="arrivalDate"></span></div>
+              <div class="form-group"><label class="form-label" for="bc-departureDate">Departure Date <span class="required">*</span></label><input class="form-control" type="date" id="bc-departureDate" name="departureDate" required><span class="form-error" data-error-for="departureDate"></span></div>
+              <div class="form-group full-width" id="bc-price-summary" aria-live="polite"></div>
+              <div class="form-group full-width"><label class="form-label" for="bc-remarks">Remarks</label><textarea class="form-control" id="bc-remarks" name="remarks" rows="2"></textarea></div>
+            </div>
+            <div class="form-actions">
+              <a class="btn btn-secondary" data-nav-link href="#/bookings">Cancel</a>
+              <button type="submit" class="btn btn-primary" id="booking-create-submit">Create Booking</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- ============ EDIT BOOKING PAGE ============ -->
+        <div id="page-booking-edit" class="admin-content page-container" data-route="booking/edit" hidden>
+          <div class="toolbar" style="justify-content:space-between;align-items:center;margin-bottom:var(--space-4);">
+            <div><p class="mb-0">Status: <span id="booking-status">—</span></p></div>
+            <div class="table-actions" id="action-bar"></div>
+          </div>
+          <div id="invoice-link" hidden style="margin-bottom:var(--space-4);"></div>
+          <form id="booking-form" class="panel" style="max-width:800px;" novalidate>
+            <h3 class="form-section-title">Guest Information</h3>
+            <div class="form-grid two-col">
+              <div class="form-group"><label class="form-label" for="be-firstName">First Name <span class="required">*</span></label><input class="form-control" id="be-firstName" name="firstName" required><span class="form-error" data-error-for="firstName"></span></div>
+              <div class="form-group"><label class="form-label" for="be-lastName">Last Name <span class="required">*</span></label><input class="form-control" id="be-lastName" name="lastName" required><span class="form-error" data-error-for="lastName"></span></div>
+              <div class="form-group"><label class="form-label" for="be-email">Email <span class="required">*</span></label><input class="form-control" type="email" id="be-email" name="email" required><span class="form-error" data-error-for="email"></span></div>
+              <div class="form-group"><label class="form-label" for="be-phone">Phone <span class="required">*</span></label><input class="form-control" type="tel" id="be-phone" name="phone" required><span class="form-error" data-error-for="phone"></span></div>
+              <div class="form-group"><label class="form-label" for="be-organisation">Organisation <span class="required">*</span></label><input class="form-control" id="be-organisation" name="organisation" required><span class="form-error" data-error-for="organisation"></span></div>
+              <div class="form-group"><label class="form-label" for="be-gender">Gender <span class="required">*</span></label><select class="form-control" id="be-gender" name="gender" required></select><span class="form-error" data-error-for="gender"></span></div>
+              <div class="form-group"><label class="form-label" for="be-contractType">Contract Type <span class="required">*</span></label><select class="form-control" id="be-contractType" name="contractType" required></select><span class="form-error" data-error-for="contractType"></span></div>
+              <div class="form-group"><label class="form-label" for="be-departureCountry">Departure Country <span class="required">*</span></label><input class="form-control" id="be-departureCountry" name="departureCountry" required><span class="form-error" data-error-for="departureCountry"></span></div>
+              <div class="form-group full-width"><label class="form-label" for="be-reasonForVisit">Reason for Visit <span class="required">*</span></label><textarea class="form-control" id="be-reasonForVisit" name="reasonForVisit" rows="2" required></textarea><span class="form-error" data-error-for="reasonForVisit"></span></div>
+              <div class="form-group full-width"><div class="form-check"><input type="checkbox" id="be-driverPickup" name="driverPickup" value="true"><label for="be-driverPickup">Driver pickup required</label></div></div>
+            </div>
+            <h3 class="form-section-title">Accommodation</h3>
+            <div class="form-grid two-col">
+              <div class="form-group"><label class="form-label" for="be-campId">Camp <span class="required">*</span></label><select class="form-control" id="be-campId" name="campId" required></select><span class="form-error" data-error-for="campId"></span></div>
+              <div class="form-group"><label class="form-label" for="be-blockId">Block <span class="required">*</span></label><select class="form-control" id="be-blockId" name="blockId" required><option value="">Select camp first</option></select><span class="form-error" data-error-for="blockId"></span></div>
+              <div class="form-group"><label class="form-label" for="be-roomId">Room <span class="required">*</span></label><select class="form-control" id="be-roomId" name="roomId" required><option value="">Select block and dates</option></select><span class="form-error" data-error-for="roomId"></span></div>
+              <div class="form-group"><label class="form-label" for="be-stayType">Stay Type <span class="required">*</span></label><select class="form-control" id="be-stayType" name="stayType" required></select><span class="form-error" data-error-for="stayType"></span></div>
+              <div class="form-group"><label class="form-label" for="be-arrivalDate">Arrival Date <span class="required">*</span></label><input class="form-control" type="date" id="be-arrivalDate" name="arrivalDate" required><span class="form-error" data-error-for="arrivalDate"></span></div>
+              <div class="form-group"><label class="form-label" for="be-departureDate">Departure Date <span class="required">*</span></label><input class="form-control" type="date" id="be-departureDate" name="departureDate" required><span class="form-error" data-error-for="departureDate"></span></div>
+              <div class="form-group full-width" id="price-summary" aria-live="polite"></div>
+              <div class="form-group full-width"><label class="form-label" for="be-remarks">Remarks</label><textarea class="form-control" id="be-remarks" name="remarks" rows="2"></textarea></div>
+            </div>
+            <div class="form-actions">
+              <a class="btn btn-secondary" data-nav-link href="#/bookings">Back to Bookings</a>
+              <button type="submit" class="btn btn-primary" id="booking-submit">Save Changes</button>
+            </div>
+          </form>
+          <div class="panel" style="max-width:800px;margin-top:var(--space-6);" id="booking-timeline"></div>
+        </div>
+
+        <!-- ============ INVOICES PAGE ============ -->
+        <div id="page-invoices" class="admin-content page-container" data-route="invoices" hidden>
+          <form class="toolbar" id="invoices-filters">
+            <div class="form-group search">
+              <label class="form-label" for="inv-search">Search</label>
+              <input class="form-control" type="search" id="inv-search" name="search" placeholder="Invoice #, booking ref, guest">
+            </div>
+            <div class="form-group">
+              <label class="form-label" style="opacity:0;">Apply</label>
+              <button class="btn btn-primary" type="submit">Apply</button>
+            </div>
+          </form>
+          <p class="form-hint" style="margin-bottom:var(--space-4);">Click a row to view, print, or download an invoice.</p>
+          <div class="table-wrap">
+            <table class="table" aria-label="Invoices">
+              <thead>
+                <tr><th>Invoice #</th><th>Booking Ref</th><th>Guest</th><th>Camp</th><th>Total</th><th>Email Status</th></tr>
+              </thead>
+              <tbody id="invoices-table-body"><tr><td colspan="6" class="empty-state">Loading…</td></tr></tbody>
+            </table>
+          </div>
+          <div id="invoices-pagination"></div>
+        </div>
+
+        <!-- ============ CAMPS PAGE ============ -->
+        <div id="page-camps" class="admin-content page-container" data-route="camps" hidden>
+          <div class="toolbar" style="justify-content:space-between;align-items:flex-end;">
+            <div class="form-group search" style="flex:1;max-width:320px;">
+              <label class="form-label" for="camp-search">Search</label>
+              <input class="form-control" type="search" id="camp-search" placeholder="Search camps by name">
+            </div>
+            <button type="button" class="btn btn-primary" id="add-camp-btn">Add Camp</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table" aria-label="Camps">
+              <thead><tr><th>Name</th><th>Code</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="camps-table-body"><tr><td colspan="4" class="empty-state">Loading…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ============ BLOCKS PAGE ============ -->
+        <div id="page-blocks" class="admin-content page-container" data-route="blocks" hidden>
+          <div class="toolbar">
+            <div class="form-group"><label class="form-label" for="blk-filter-camp">Camp</label><select class="form-control" id="blk-filter-camp"></select></div>
+            <button type="button" class="btn btn-primary" id="add-block-btn">Add Block</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table" aria-label="Blocks">
+              <thead><tr><th>Camp</th><th>Block</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="blocks-table-body"><tr><td colspan="4" class="empty-state">Loading…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ============ ROOMS PAGE ============ -->
+        <div id="page-rooms" class="admin-content page-container" data-route="rooms" hidden>
+          <div class="toolbar">
+            <div class="form-group"><label class="form-label" for="rm-filter-camp">Camp</label><select class="form-control" id="rm-filter-camp"></select></div>
+            <div class="form-group"><label class="form-label" for="rm-filter-block">Block</label><select class="form-control" id="rm-filter-block"><option value="">All blocks</option></select></div>
+            <div class="form-group search"><label class="form-label" for="rm-filter-search">Search Room</label><input class="form-control" type="search" id="rm-filter-search" placeholder="Room number or guest"></div>
+            <button type="button" class="btn btn-primary" id="add-room-btn" data-super-admin-only>Add Room</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table" aria-label="Rooms">
+              <thead>
+                <tr><th>Camp</th><th>Block</th><th>Room Number</th><th>Current Guest</th><th>Capacity</th><th>Room Status</th><th>Active</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="rooms-table-body"><tr><td colspan="8" class="empty-state">Loading…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ============ RATES PAGE ============ -->
+        <div id="page-rates" class="admin-content page-container" data-route="rates" hidden>
+          <div class="page-header">
+            <h2 style="font-size:var(--text-xl);">Accommodation Rates</h2>
+            <p>Configure Short Stay and Long Stay rates per camp. Applied rates are stored on each booking.</p>
+          </div>
+          <div class="panel" style="max-width:560px;">
+            <div class="form-group">
+              <label class="form-label" for="rt-camp-select">Camp</label>
+              <select class="form-control" id="rt-camp-select"></select>
+            </div>
+            <p class="form-hint" id="rt-current-rates">Select a camp to view and edit rates.</p>
+            <form id="rates-form" hidden novalidate>
+              <div class="form-grid">
+                <div class="form-group"><label class="form-label" for="rt-currency">Currency</label><input class="form-control" type="text" id="rt-currency" name="currency" value="KES" readonly></div>
+                <div class="form-group"><label class="form-label" for="rt-shortStayRate">Short Stay Rate <span class="required">*</span></label><input class="form-control" type="number" id="rt-shortStayRate" name="shortStayRate" min="0" step="1" required><span class="form-error" data-error-for="shortStayRate"></span></div>
+                <div class="form-group"><label class="form-label" for="rt-longStayRate">Long Stay Rate <span class="required">*</span></label><input class="form-control" type="number" id="rt-longStayRate" name="longStayRate" min="0" step="1" required><span class="form-error" data-error-for="longStayRate"></span></div>
+              </div>
+              <div class="form-actions"><button type="submit" class="btn btn-primary" id="rates-submit">Save Rates</button></div>
+            </form>
+          </div>
+        </div>
+
+        <!-- ============ REPORTS PAGE ============ -->
+        <div id="page-reports" class="admin-content page-container" data-route="reports" hidden>
+          <div class="page-header">
+            <h2 style="font-size:var(--text-xl);">Reports</h2>
+            <p>Generate and export operational reports. Super Admin access only.</p>
+          </div>
+          <form class="panel" id="report-filters" style="margin-bottom:var(--space-6);">
+            <div class="form-grid two-col">
+              <div class="form-group"><label class="form-label" for="rp-reportType">Report Type <span class="required">*</span></label><select class="form-control" id="rp-reportType" name="reportType" required></select></div>
+              <div class="form-group"><label class="form-label" for="rp-campId">Camp</label><select class="form-control" id="rp-campId" name="campId"></select></div>
+              <div class="form-group"><label class="form-label" for="rp-from">From Date</label><input class="form-control" type="date" id="rp-from" name="from"></div>
+              <div class="form-group"><label class="form-label" for="rp-to">To Date</label><input class="form-control" type="date" id="rp-to" name="to"></div>
+              <div class="form-group"><label class="form-label" for="rp-stayType">Stay Type</label><select class="form-control" id="rp-stayType" name="stayType"></select></div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary" id="generate-report">Generate Report</button>
+              <button type="button" class="btn btn-secondary" id="export-pdf" disabled>Export PDF</button>
+              <button type="button" class="btn btn-secondary" id="export-excel" disabled>Export Excel</button>
+              <button type="button" class="btn btn-secondary" id="print-report" disabled>Print</button>
+            </div>
+          </form>
+          <div class="table-wrap report-print-area" id="report-results" hidden>
+            <table class="table" aria-label="Report results">
+              <thead id="report-results-head"></thead>
+              <tbody id="report-results-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ============ USERS PAGE ============ -->
+        <div id="page-users" class="admin-content page-container" data-route="users" hidden>
+          <div class="toolbar" style="justify-content:space-between;align-items:center;">
+            <p class="mb-0 text-muted">Manage Accommodation Officers and Super Admins.</p>
+            <button type="button" class="btn btn-primary" id="add-user-btn">Add User</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table" aria-label="Users">
+              <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="users-table-body"><tr><td colspan="5" class="empty-state">Loading users…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ============ SETTINGS PAGE ============ -->
+        <div id="page-settings" class="admin-content page-container" data-route="settings" hidden>
+          <div class="page-header">
+            <h2 style="font-size:var(--text-xl);">System Settings</h2>
+            <p>Facility contact and global payment instructions shown on invoices.</p>
+          </div>
+          <div class="panel" style="max-width:640px;">
+            <form id="settings-form" novalidate>
+              <h3 class="form-section-title">Facility</h3>
+              <div class="form-grid two-col">
+                <div class="form-group full-width"><label class="form-label" for="st-facilityName">Facility Name</label><input class="form-control" type="text" id="st-facilityName" name="facilityName"></div>
+                <div class="form-group"><label class="form-label" for="st-supportEmail">Support Email</label><input class="form-control" type="email" id="st-supportEmail" name="supportEmail"><span class="form-error" data-error-for="supportEmail"></span></div>
+                <div class="form-group"><label class="form-label" for="st-supportPhone">Support Phone</label><input class="form-control" type="tel" id="st-supportPhone" name="supportPhone"></div>
+              </div>
+              <h3 class="form-section-title">Payment Instructions</h3>
+              <div class="form-grid two-col">
+                <div class="form-group"><label class="form-label" for="st-mpesaPaybill">M-Pesa Paybill Number <span class="required">*</span></label><input class="form-control" id="st-mpesaPaybill" name="mpesaPaybill" required><span class="form-error" data-error-for="mpesaPaybill"></span></div>
+                <div class="form-group"><label class="form-label" for="st-bankName">Bank Name <span class="required">*</span></label><input class="form-control" id="st-bankName" name="bankName" required><span class="form-error" data-error-for="bankName"></span></div>
+                <div class="form-group"><label class="form-label" for="st-bankAccountName">Bank Account Name <span class="required">*</span></label><input class="form-control" id="st-bankAccountName" name="bankAccountName" required><span class="form-error" data-error-for="bankAccountName"></span></div>
+                <div class="form-group"><label class="form-label" for="st-bankAccountNumber">Bank Account Number <span class="required">*</span></label><input class="form-control" id="st-bankAccountNumber" name="bankAccountNumber" required><span class="form-error" data-error-for="bankAccountNumber"></span></div>
+              </div>
+              <div class="form-actions"><button type="submit" class="btn btn-primary" id="settings-submit">Save Settings</button></div>
+            </form>
+          </div>
+        </div>
+
+        <!-- ============ CHANGE PASSWORD PAGE ============ -->
+        <div id="page-change-password" class="admin-content page-container" data-route="change-password" hidden>
+          <div class="page-header">
+            <h2 style="font-size:var(--text-xl);">Change Password</h2>
+            <p>Update your account password. You will stay signed in after saving.</p>
+          </div>
+          <div class="panel" style="max-width:480px;">
+            <form id="change-password-form" novalidate>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="cp-currentPassword">Current Password <span class="required">*</span></label>
+                  <input class="form-control" type="password" id="cp-currentPassword" name="currentPassword" autocomplete="current-password" required>
+                  <span class="form-error" data-error-for="currentPassword"></span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="cp-newPassword">New Password <span class="required">*</span></label>
+                  <input class="form-control" type="password" id="cp-newPassword" name="newPassword" autocomplete="new-password" required>
+                  <span class="form-hint">At least 8 characters</span>
+                  <span class="form-error" data-error-for="newPassword"></span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="cp-confirmPassword">Confirm New Password <span class="required">*</span></label>
+                  <input class="form-control" type="password" id="cp-confirmPassword" name="confirmPassword" autocomplete="new-password" required>
+                  <span class="form-error" data-error-for="confirmPassword"></span>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="change-password-submit">Update Password</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ SHARED MODALS ============ -->
+
+    <!-- Cancel Booking Modal -->
+    <div class="modal-backdrop" data-modal="cancel" hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="cancel-title">
+        <div class="modal-header">
+          <h2 id="cancel-title">Cancel Booking</h2>
+          <button type="button" class="modal-close" data-close-modal="cancel" aria-label="Close">&times;</button>
+        </div>
+        <form id="cancel-form">
+          <div class="modal-body">
+            <div class="form-group">
+              <label class="form-label" for="cancel-reason">Cancellation Reason <span class="required">*</span></label>
+              <textarea class="form-control" id="cancel-reason" name="reason" rows="3" required></textarea>
+              <span class="form-error" data-error-for="reason"></span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-close-modal="cancel">Close</button>
+            <button type="submit" class="btn btn-danger" id="cancel-submit">Cancel Booking</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div class="modal-backdrop" data-modal="confirm" hidden>
+      <div class="modal" role="dialog" aria-modal="true">
+        <div class="modal-header"><h2 data-confirm-title>Confirm</h2><button type="button" class="modal-close" data-close-modal="confirm" aria-label="Close">&times;</button></div>
+        <div class="modal-body"><p data-confirm-message class="mb-0"></p></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-confirm-cancel data-close-modal="confirm">Cancel</button>
+          <button type="button" class="btn btn-primary" data-confirm-accept>Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Invoice Modal -->
+    <div class="modal-backdrop" data-modal="invoice" hidden>
+      <div class="modal modal-lg" role="dialog" aria-modal="true" aria-labelledby="invoice-modal-title">
+        <div class="modal-header">
+          <h2 id="invoice-modal-title">Invoice</h2>
+          <button type="button" class="modal-close" data-close-modal="invoice" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body" id="invoice-detail-body"></div>
+        <div class="modal-footer">
+          <div id="invoice-email-status" class="invoice-status-actions" style="margin-right:auto;display:flex;align-items:center;gap:var(--space-3);"></div>
+          <button type="button" class="btn btn-secondary" id="invoice-print-btn">Print</button>
+          <button type="button" class="btn btn-secondary" id="invoice-pdf-btn">Download PDF</button>
+          <button type="button" class="btn btn-secondary" data-close-modal="invoice">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Camp Modal -->
+    <div class="modal-backdrop" data-modal="camp" hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="camp-modal-title">
+        <div class="modal-header">
+          <h2 id="camp-modal-title">Add Camp</h2>
+          <button type="button" class="modal-close" data-close-modal="camp" aria-label="Close">&times;</button>
+        </div>
+        <form id="camp-form">
+          <div class="modal-body">
+            <input type="hidden" id="camp-id" name="id">
+            <div class="form-group"><label class="form-label" for="camp-name">Camp Name <span class="required">*</span></label><input class="form-control" id="camp-name" name="name" required><span class="form-error" data-error-for="name"></span></div>
+            <div class="form-group"><label class="form-label" for="camp-code">Code</label><input class="form-control" id="camp-code" name="code" placeholder="e.g. dmo"><span class="form-hint">Optional short identifier (e.g. dmo, hag, ifo)</span></div>
+            <div class="form-group"><label class="form-label" for="camp-description">Description</label><textarea class="form-control" id="camp-description" name="description" rows="3" placeholder="Brief description of this camp"></textarea></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-close-modal="camp">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="camp-submit">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Block Modal -->
+    <div class="modal-backdrop" data-modal="block" hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="block-modal-title">
+        <div class="modal-header">
+          <h2 id="block-modal-title">Add Block</h2>
+          <button type="button" class="modal-close" data-close-modal="block" aria-label="Close">&times;</button>
+        </div>
+        <form id="block-form">
+          <div class="modal-body">
+            <input type="hidden" id="block-id" name="id">
+            <div class="form-group"><label class="form-label" for="block-campId">Camp <span class="required">*</span></label><select class="form-control" id="block-campId" name="campId" required></select><span class="form-error" data-error-for="campId"></span></div>
+            <div class="form-group"><label class="form-label" for="block-name">Block Name <span class="required">*</span></label><input class="form-control" id="block-name" name="name" placeholder="e.g. A" required><span class="form-error" data-error-for="name"></span></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-close-modal="block">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="block-submit">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Room Modal -->
+    <div class="modal-backdrop" data-modal="room" hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="room-modal-title">
+        <div class="modal-header">
+          <h2 id="room-modal-title">Add Room</h2>
+          <button type="button" class="modal-close" data-close-modal="room" aria-label="Close">&times;</button>
+        </div>
+        <form id="room-form">
+          <div class="modal-body">
+            <input type="hidden" id="room-id" name="id">
+            <div class="form-grid two-col">
+              <div class="form-group"><label class="form-label" for="room-campId">Camp <span class="required">*</span></label><select class="form-control" id="room-campId" name="campId" required></select><span class="form-error" data-error-for="campId"></span></div>
+              <div class="form-group"><label class="form-label" for="room-blockId">Block <span class="required">*</span></label><select class="form-control" id="room-blockId" name="blockId" required disabled><option value="">Select camp first</option></select><span class="form-error" data-error-for="blockId"></span></div>
+              <div class="form-group"><label class="form-label" for="room-roomNumber">Room Number <span class="required">*</span></label><input class="form-control" id="room-roomNumber" name="roomNumber" required><span class="form-error" data-error-for="roomNumber"></span></div>
+              <div class="form-group"><label class="form-label" for="room-capacity">Capacity <span class="required">*</span></label><input class="form-control" type="number" id="room-capacity" name="capacity" min="1" required><span class="form-error" data-error-for="capacity"></span></div>
+              <div class="form-group"><label class="form-label" for="room-status">Status <span class="required">*</span></label><select class="form-control" id="room-status" name="status" required></select><span class="form-error" data-error-for="status"></span></div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-close-modal="room">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="room-submit">Save Room</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- User Modal -->
+    <div class="modal-backdrop" data-modal="user" hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="user-modal-title">
+        <div class="modal-header">
+          <h2 id="user-modal-title">Add User</h2>
+          <button type="button" class="modal-close" data-close-modal="user" aria-label="Close">&times;</button>
+        </div>
+        <form id="user-form">
+          <div class="modal-body">
+            <input type="hidden" id="user-id" name="id">
+            <div class="form-grid two-col">
+              <div class="form-group">
+                <label class="form-label" for="user-firstName">First Name <span class="required" aria-hidden="true">*</span></label>
+                <input class="form-control" type="text" id="user-firstName" name="firstName" required>
+                <span class="form-error" data-error-for="firstName"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="user-lastName">Last Name <span class="required" aria-hidden="true">*</span></label>
+                <input class="form-control" type="text" id="user-lastName" name="lastName" required>
+                <span class="form-error" data-error-for="lastName"></span>
+              </div>
+              <div class="form-group full-width">
+                <label class="form-label" for="user-email">Email <span class="required" aria-hidden="true">*</span></label>
+                <input class="form-control" type="email" id="user-email" name="email" required>
+                <span class="form-error" data-error-for="email"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="user-role">Role <span class="required" aria-hidden="true">*</span></label>
+                <select class="form-control" id="user-role" name="role" required></select>
+                <span class="form-error" data-error-for="role"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="user-password">Password <span class="required" id="password-required" aria-hidden="true">*</span></label>
+                <input class="form-control" type="password" id="user-password" name="password" autocomplete="new-password">
+                <span class="form-hint" id="password-hint">Required for new users. Leave blank to keep current password when editing.</span>
+                <span class="form-error" data-error-for="password"></span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-close-modal="user">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="user-submit">Save User</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/pages/spa-main.js"></script>
+</body>
+</html>

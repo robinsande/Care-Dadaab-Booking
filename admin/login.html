@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Login · CAMS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;650;700;750&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/layout.css">
+</head>
+<body class="login-page">
+  <div class="login-panel panel">
+    <div class="login-brand">
+      <img class="brand-logo" src="/assets/care-logo.jpg" alt="" aria-hidden="true">
+      <h1 style="font-size:var(--text-xl);margin-bottom:var(--space-2);">Staff Login</h1>
+      <p class="mb-0">CARE Accommodation Management System</p>
+    </div>
+
+    <form id="login-form" novalidate>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label" for="email">Email <span class="required" aria-hidden="true">*</span></label>
+          <input class="form-control" type="email" id="email" name="email" autocomplete="username" required>
+          <span class="form-error" data-error-for="email"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Password <span class="required" aria-hidden="true">*</span></label>
+          <input class="form-control" type="password" id="password" name="password" autocomplete="current-password" required>
+          <span class="form-error" data-error-for="password"></span>
+        </div>
+      </div>
+      <div class="form-actions" style="margin-top:var(--space-5);">
+        <button class="btn btn-primary btn-block" type="submit" id="login-submit">Sign In</button>
+      </div>
+    </form>
+  </div>
+
+  <script type="module" src="../js/pages/admin-login.js"></script>
+</body>
+</html>

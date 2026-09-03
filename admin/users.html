@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users · CAMS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;650;700;750&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/layout.css">
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <aside class="admin-sidebar" data-admin-sidebar>
+      <a class="brand" href="dashboard.html">
+        <img class="brand-logo" src="/assets/care-logo.jpg" alt="" aria-hidden="true">
+        <span class="brand-text">
+          <strong>CARE Kenya</strong>
+          <span data-brand-subtitle>CAMS</span>
+        </span>
+      </a>
+      <nav class="admin-nav" data-admin-nav aria-label="Admin"></nav>
+    </aside>
+
+    <div class="admin-main">
+      <header class="admin-topbar">
+        <button type="button" class="btn btn-secondary btn-sm admin-menu-toggle" data-admin-menu-toggle>Menu</button>
+        <h1 style="font-size:var(--text-lg);margin:0;">Users</h1>
+        <div class="admin-user">
+          <div class="admin-user-meta">
+            <strong data-admin-name>—</strong>
+            <span data-admin-role></span>
+          </div>
+          <button type="button" class="btn btn-ghost btn-sm" data-logout>Sign out</button>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        <div class="toolbar" style="justify-content:space-between;align-items:center;">
+          <p class="mb-0 text-muted">Manage Accommodation Officers and Super Admins.</p>
+          <button type="button" class="btn btn-primary" id="add-user-btn">Add User</button>
+        </div>
+
+        <div class="table-wrap">
+          <table class="table" aria-label="Users">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="users-table-body">
+              <tr><td colspan="5" class="empty-state">Loading users…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" data-modal="user" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="user-modal-title">
+      <div class="modal-header">
+        <h2 id="user-modal-title">Add User</h2>
+        <button type="button" class="modal-close" data-close-modal="user" aria-label="Close">&times;</button>
+      </div>
+      <form id="user-form">
+        <div class="modal-body">
+          <input type="hidden" id="user-id" name="id">
+          <div class="form-grid two-col">
+            <div class="form-group">
+              <label class="form-label" for="firstName">First Name <span class="required" aria-hidden="true">*</span></label>
+              <input class="form-control" type="text" id="firstName" name="firstName" required>
+              <span class="form-error" data-error-for="firstName"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="lastName">Last Name <span class="required" aria-hidden="true">*</span></label>
+              <input class="form-control" type="text" id="lastName" name="lastName" required>
+              <span class="form-error" data-error-for="lastName"></span>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label" for="email">Email <span class="required" aria-hidden="true">*</span></label>
+              <input class="form-control" type="email" id="email" name="email" required>
+              <span class="form-error" data-error-for="email"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="role">Role <span class="required" aria-hidden="true">*</span></label>
+              <select class="form-control" id="role" name="role" required></select>
+              <span class="form-error" data-error-for="role"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="password">Password <span class="required" id="password-required" aria-hidden="true">*</span></label>
+              <input class="form-control" type="password" id="password" name="password" autocomplete="new-password">
+              <span class="form-hint" id="password-hint">Required for new users. Leave blank to keep current password when editing.</span>
+              <span class="form-error" data-error-for="password"></span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal="user">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="user-submit">Save User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" data-modal="confirm" hidden>
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h2 data-confirm-title>Confirm</h2>
+        <button type="button" class="modal-close" data-close-modal="confirm" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body"><p data-confirm-message class="mb-0"></p></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-confirm-cancel data-close-modal="confirm">Cancel</button>
+        <button type="button" class="btn btn-primary" data-confirm-accept>Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../js/pages/admin-users.js"></script>
+</body>
+</html>

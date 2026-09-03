@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings · CAMS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;650;700;750&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/layout.css">
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <aside class="admin-sidebar" data-admin-sidebar>
+      <a class="brand" href="dashboard.html">
+        <img class="brand-logo" src="/assets/care-logo.jpg" alt="" aria-hidden="true">
+        <span class="brand-text"><strong>CARE Kenya</strong><span data-brand-subtitle>CAMS</span></span>
+      </a>
+      <nav class="admin-nav" data-admin-nav aria-label="Admin"></nav>
+    </aside>
+    <div class="admin-main">
+      <header class="admin-topbar">
+        <button type="button" class="btn btn-secondary btn-sm admin-menu-toggle" data-admin-menu-toggle>Menu</button>
+        <h1 style="font-size:var(--text-lg);margin:0;">Settings</h1>
+        <div class="admin-user">
+          <div class="admin-user-meta"><strong data-admin-name>—</strong><span data-admin-role></span></div>
+          <button type="button" class="btn btn-ghost btn-sm" data-logout>Sign out</button>
+        </div>
+      </header>
+      <div class="admin-content">
+        <div class="page-header">
+          <h2 style="font-size:var(--text-xl);">System Settings</h2>
+          <p>Facility contact and global payment instructions shown on invoices.</p>
+        </div>
+        <div class="panel" style="max-width:640px;">
+          <form id="settings-form" novalidate>
+            <h3 class="form-section-title">Facility</h3>
+            <div class="form-grid two-col">
+              <div class="form-group full-width"><label class="form-label" for="facilityName">Facility Name</label><input class="form-control" type="text" id="facilityName" name="facilityName"></div>
+              <div class="form-group"><label class="form-label" for="supportEmail">Support Email</label><input class="form-control" type="email" id="supportEmail" name="supportEmail"><span class="form-error" data-error-for="supportEmail"></span></div>
+              <div class="form-group"><label class="form-label" for="supportPhone">Support Phone</label><input class="form-control" type="tel" id="supportPhone" name="supportPhone"></div>
+            </div>
+            <h3 class="form-section-title">Payment Instructions</h3>
+            <div class="form-grid two-col">
+              <div class="form-group"><label class="form-label" for="mpesaPaybill">M-Pesa Paybill Number <span class="required">*</span></label><input class="form-control" id="mpesaPaybill" name="mpesaPaybill" required><span class="form-error" data-error-for="mpesaPaybill"></span></div>
+              <div class="form-group"><label class="form-label" for="bankName">Bank Name <span class="required">*</span></label><input class="form-control" id="bankName" name="bankName" required><span class="form-error" data-error-for="bankName"></span></div>
+              <div class="form-group"><label class="form-label" for="bankAccountName">Bank Account Name <span class="required">*</span></label><input class="form-control" id="bankAccountName" name="bankAccountName" required><span class="form-error" data-error-for="bankAccountName"></span></div>
+              <div class="form-group"><label class="form-label" for="bankAccountNumber">Bank Account Number <span class="required">*</span></label><input class="form-control" id="bankAccountNumber" name="bankAccountNumber" required><span class="form-error" data-error-for="bankAccountNumber"></span></div>
+            </div>
+            <div class="form-actions"><button type="submit" class="btn btn-primary" id="settings-submit">Save Settings</button></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="../js/pages/admin-settings.js"></script>
+</body>
+</html>

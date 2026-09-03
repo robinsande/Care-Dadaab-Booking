@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports · CAMS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;650;700;750&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/layout.css">
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <aside class="admin-sidebar" data-admin-sidebar>
+      <a class="brand" href="dashboard.html">
+        <img class="brand-logo" src="/assets/care-logo.jpg" alt="" aria-hidden="true">
+        <span class="brand-text"><strong>CARE Kenya</strong><span data-brand-subtitle>CAMS</span></span>
+      </a>
+      <nav class="admin-nav" data-admin-nav aria-label="Admin"></nav>
+    </aside>
+    <div class="admin-main">
+      <header class="admin-topbar">
+        <button type="button" class="btn btn-secondary btn-sm admin-menu-toggle" data-admin-menu-toggle>Menu</button>
+        <h1 style="font-size:var(--text-lg);margin:0;">Reports</h1>
+        <div class="admin-user">
+          <div class="admin-user-meta"><strong data-admin-name>—</strong><span data-admin-role></span></div>
+          <button type="button" class="btn btn-ghost btn-sm" data-logout>Sign out</button>
+        </div>
+      </header>
+      <div class="admin-content">
+        <div class="page-header">
+          <h2 style="font-size:var(--text-xl);">Reports</h2>
+          <p>Generate and export operational reports. Super Admin access only.</p>
+        </div>
+        <form class="panel" id="report-filters" style="margin-bottom:var(--space-6);">
+          <div class="form-grid two-col">
+            <div class="form-group"><label class="form-label" for="reportType">Report Type <span class="required">*</span></label><select class="form-control" id="reportType" name="reportType" required></select></div>
+            <div class="form-group"><label class="form-label" for="campId">Camp</label><select class="form-control" id="campId" name="campId"></select></div>
+            <div class="form-group"><label class="form-label" for="from">From Date</label><input class="form-control" type="date" id="from" name="from"></div>
+            <div class="form-group"><label class="form-label" for="to">To Date</label><input class="form-control" type="date" id="to" name="to"></div>
+            <div class="form-group"><label class="form-label" for="stayType">Stay Type</label><select class="form-control" id="stayType" name="stayType"></select></div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="generate-report">Generate Report</button>
+            <button type="button" class="btn btn-secondary" id="export-pdf" disabled>Export PDF</button>
+            <button type="button" class="btn btn-secondary" id="export-excel" disabled>Export Excel</button>
+            <button type="button" class="btn btn-secondary" id="print-report" disabled>Print</button>
+          </div>
+        </form>
+        <div class="table-wrap report-print-area" id="report-results" hidden>
+          <table class="table" aria-label="Report results">
+            <thead id="report-results-head"></thead>
+            <tbody id="report-results-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="../js/pages/admin-reports.js"></script>
+</body>
+</html>
