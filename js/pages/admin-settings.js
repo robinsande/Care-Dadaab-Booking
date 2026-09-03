@@ -24,6 +24,7 @@ async function loadSettings() {
     form.elements.facilityName.value = settings.facilityName || '';
     form.elements.supportEmail.value = settings.supportEmail || '';
     form.elements.supportPhone.value = settings.supportPhone || '';
+    form.elements.sendBookingConfirmation.checked = settings.notifications?.sendBookingConfirmation !== false;
     form.elements.mpesaPaybill.value = payment.mpesaPaybillNumber || '';
     form.elements.bankAccountName.value = payment.bankAccountName || '';
     form.elements.bankAccountNumber.value = payment.bankAccountNumber || '';
@@ -58,6 +59,9 @@ form.addEventListener('submit', async (event) => {
       facilityName: values.facilityName || '',
       supportEmail: values.supportEmail || '',
       supportPhone: values.supportPhone || '',
+      notifications: {
+        sendBookingConfirmation: values.sendBookingConfirmation,
+      },
       payment: {
         mpesaPaybillNumber: values.mpesaPaybill,
         bankAccountName: values.bankAccountName,

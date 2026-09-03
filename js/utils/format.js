@@ -55,6 +55,7 @@ export function statusBadgeClass(status) {
     'Checked In': 'badge-checked-in',
     'Checked Out': 'badge-checked-out',
     Available: 'badge-available',
+    Booked: 'badge-approved',
     Occupied: 'badge-occupied',
     Maintenance: 'badge-maintenance',
     Outstanding: 'badge-pending',

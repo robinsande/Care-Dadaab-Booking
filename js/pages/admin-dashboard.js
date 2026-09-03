@@ -39,6 +39,7 @@ async function loadDashboard() {
     });
 
     renderCampStats(data.bookingsByCamp || []);
+    renderRoomStatuses(data.roomStatuses || []);
     renderRecentBookings(data.recentBookings || []);
   } catch (error) {
     showToast(
@@ -46,6 +47,23 @@ async function loadDashboard() {
       'error',
     );
   }
+}
+
+function renderRoomStatuses(rooms) {
+  const tbody = document.getElementById('room-status-body');
+  if (!tbody) return;
+  if (!rooms.length) {
+    tbody.innerHTML = '<tr><td colspan="4" class="empty-state">No rooms available.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = rooms.map((room) => `
+    <tr>
+      <td>${escapeHtml(room.campName)}</td>
+      <td>${escapeHtml(room.blockName)}</td>
+      <td>${escapeHtml(room.roomNumber)}</td>
+      <td>${statusBadge(room.status)}</td>
+    </tr>
+  `).join('');
 }
 
 function renderCampStats(rows) {

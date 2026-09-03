@@ -89,6 +89,15 @@
             <a class="btn btn-secondary" data-nav-link href="#/bookings">View All Bookings</a>
           </div>
           <div class="panel" style="margin-top:var(--space-6);">
+            <h3 style="font-size:var(--text-lg);margin-bottom:var(--space-4);">Room Status by Camp and Block</h3>
+            <div class="table-wrap">
+              <table class="table" aria-label="Room status by camp and block">
+                <thead><tr><th>Camp</th><th>Block</th><th>Room</th><th>Status</th></tr></thead>
+                <tbody id="room-status-body"><tr><td colspan="4" class="empty-state">Loading…</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="panel" style="margin-top:var(--space-6);">
             <h3 style="font-size:var(--text-lg);margin-bottom:var(--space-4);">Bookings by Camp</h3>
             <div class="table-wrap">
               <table class="table" aria-label="Bookings by camp">

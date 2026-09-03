@@ -1,6 +1,6 @@
 const BOOKING_STATUSES = ['Booked', 'Checked In', 'Checked Out', 'Cancelled'];
 
-const ROOM_STATUSES = ['Available', 'Occupied', 'Maintenance'];
+const ROOM_STATUSES = ['Available', 'Booked', 'Occupied', 'Maintenance'];
 
 const STAY_TYPES = ['Short Stay', 'Long Stay'];
 
