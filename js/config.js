@@ -2,8 +2,10 @@
  * Application configuration.
  * Update API_BASE_URL to point at the backend server.
  */
+export const API_BASE = 'https://care-dadaab-booking-backend.onrender.com/api/v1';
+
 export const config = {
-  API_BASE_URL: window.__API_BASE_URL__ || 'https://care-dadaab-booking-backend.onrender.com',
+  API_BASE_URL: API_BASE,
   APP_NAME: 'CAMS',
   APP_TITLE: 'CARE Accommodation Management System',
   BRAND_LOGO_SRC: '/assets/care-logo.jpg',

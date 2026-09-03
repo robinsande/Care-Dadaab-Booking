@@ -41,7 +41,7 @@ npx serve .
 Configure API base URL in `js/config.js`:
 
 ```js
-API_BASE_URL: 'https://care-dadaab-booking-backend.onrender.com'
+API_BASE_URL: 'https://care-dadaab-booking-backend.onrender.com/api/v1'
 ```
 
 Or at runtime before modules load:
@@ -127,7 +127,7 @@ This frontend targets the CAMS backend at `care-dadaab-accommodation-booking-bac
 
 | Setting | Frontend (`js/config.js`) | Backend (`.env`) |
 |---------|---------------------------|------------------|
-| API base | `https://care-dadaab-booking-backend.onrender.com` | `API_PREFIX=/api/v1`, `PORT=5000` |
+| API base | `https://care-dadaab-booking-backend.onrender.com/api/v1` | `API_PREFIX=/api/v1`, `PORT=5000` |
 | CORS | Any static origin | `CORS_ORIGIN=*` (or your frontend URL) |
 
 ### Run both locally
