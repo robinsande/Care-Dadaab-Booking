@@ -2,7 +2,8 @@
  * Application configuration.
  * Update API_BASE_URL to point at the backend server.
  */
-export const API_BASE = 'https://care-dadaab-booking-backend.onrender.com/api/v1';
+export const BACKEND_URL = 'https://care-dadaab-booking-backend.onrender.com';
+export const API_BASE = `${BACKEND_URL}/api/v1`;
 
 export const config = {
   API_BASE_URL: API_BASE,
