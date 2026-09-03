@@ -41,7 +41,7 @@ npx serve .
 Configure API base URL in `js/config.js`:
 
 ```js
-API_BASE_URL: 'http://7qynla1liirgcnnje1qqeaop.37.27.2.185.sslip.io/api/v1'
+API_BASE_URL: 'https://7qynla1liirgcnnje1qqeaop.37.27.2.185.sslip.io/api/v1'
 ```
 
 Or at runtime before modules load:
@@ -127,7 +127,7 @@ This frontend targets the CAMS backend at `care-dadaab-accommodation-booking-bac
 
 | Setting | Frontend (`js/config.js`) | Backend (`.env`) |
 |---------|---------------------------|------------------|
-| API base | `http://7qynla1liirgcnnje1qqeaop.37.27.2.185.sslip.io/api/v1` | `API_PREFIX=/api/v1`, `PORT=5000` |
+| API base | `https://7qynla1liirgcnnje1qqeaop.37.27.2.185.sslip.io/api/v1` | `API_PREFIX=/api/v1`, `PORT=5000` |
 | CORS | Any static origin | `CORS_ORIGIN=*` (or your frontend URL) |
 
 ### Run both locally
