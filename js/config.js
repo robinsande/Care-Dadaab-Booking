@@ -3,7 +3,7 @@
  * Update API_BASE_URL to point at the backend server.
  */
 export const config = {
-  API_BASE_URL: window.__API_BASE_URL__ || 'https://7qynla1liirgcnnje1qqeaop.37.27.2.185.sslip.io/api/v1',
+  API_BASE_URL: window.__API_BASE_URL__ || 'https://care-dadaab-booking-backend.onrender.com/api/v1',
   APP_NAME: 'CAMS',
   APP_TITLE: 'CARE Accommodation Management System',
   BRAND_LOGO_SRC: '/assets/care-logo.jpg',
