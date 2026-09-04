@@ -306,13 +306,18 @@ async function onAction(event) {
     return;
   }
   if (action === 'early-check-out') {
-    await processCheckout(true);
+    const reason = window.prompt('Reason for emergency early check out:');
+    if (reason === null || !reason.trim()) {
+      showToast('A reason is required for an emergency early check out.', 'error');
+      return;
+    }
+    await processCheckout(true, reason.trim());
     return;
   }
   return onCancelAction(action);
 }
 
-async function processCheckout(isEmergency) {
+async function processCheckout(isEmergency, checkoutReason = null) {
     const nights = nightsBetween(booking.arrivalDate, booking.departureDate);
     const ok = await confirmDialog({
       title: isEmergency ? 'Emergency early check out' : 'Check out guest',
@@ -323,7 +328,7 @@ async function processCheckout(isEmergency) {
     try {
       const resp =       await withLoading(() => checkOutBooking(
         booking._id || booking.id,
-        isEmergency ? 'Emergency' : null,
+        checkoutReason,
       ), 'Checking out…');
       const data = resp.data || {};
       const inv = data.invoice || data.booking?.invoice;

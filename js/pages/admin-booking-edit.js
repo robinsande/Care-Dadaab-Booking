@@ -255,14 +255,19 @@ async function onAction(event) {
   }
 
   if (action === 'early-check-out') {
+    const reason = window.prompt('Reason for emergency early check out:');
+    if (reason === null || !reason.trim()) {
+      showToast('A reason is required for an emergency early check out.', 'error');
+      return;
+    }
     const ok = await confirmDialog({
       title: 'Emergency early check out',
-      message: `Record an emergency early check out for ${fullName(booking)}?`,
+      message: `Record an emergency early check out for ${fullName(booking)}? Reason: ${reason.trim()}`,
       confirmLabel: 'Check Out',
     });
     if (!ok) return;
     try {
-      await withLoading(() => checkOutBooking(bookingId, 'Emergency'), 'Checking out…');
+      await withLoading(() => checkOutBooking(bookingId, reason.trim()), 'Checking out…');
       showToast('Guest checked out early due to emergency.', 'success');
       await loadBooking();
     } catch (error) {
