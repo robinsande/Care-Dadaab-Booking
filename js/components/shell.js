@@ -59,8 +59,17 @@ export function initAdminShell() {
     }
   });
 
+  toggle?.setAttribute('aria-expanded', 'false');
   toggle?.addEventListener('click', () => {
-    sidebar?.classList.toggle('is-open');
+    const isOpen = sidebar?.classList.toggle('is-open') || false;
+    toggle.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  sidebar?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      sidebar.classList.remove('is-open');
+      toggle?.setAttribute('aria-expanded', 'false');
+    });
   });
 
   document.querySelector('[data-logout]')?.addEventListener('click', (event) => {

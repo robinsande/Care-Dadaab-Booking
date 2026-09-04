@@ -1,7 +1,6 @@
 import { navigate } from '../spa-main.js';
 import { getDashboardStats } from '../../api/dashboard.js';
 import { ApiError } from '../../api/client.js';
-import { withLoading } from '../../components/loading.js';
 import { showToast } from '../../components/toast.js';
 import { escapeHtml, formatDate, fullName, campLabel, statusBadge } from '../../utils/format.js';
 
@@ -27,14 +26,11 @@ function onVisibilityChange() {
   if (!document.hidden) loadDashboard({ showLoading: false });
 }
 
-async function loadDashboard({ showLoading = true } = {}) {
+async function loadDashboard() {
   if (dashboardRequestActive) return;
   dashboardRequestActive = true;
   try {
-    const request = () => getDashboardStats();
-    const response = showLoading
-      ? await withLoading(request, 'Loading dashboard…')
-      : await request();
+    const response = await getDashboardStats();
     const data = response.data || {};
 
     const mapping = {

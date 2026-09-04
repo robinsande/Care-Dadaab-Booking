@@ -136,8 +136,17 @@ function initAdminChromeOnce() {
     if (!isSuperAdmin(user)) el.hidden = true;
   });
 
+  toggle?.setAttribute('aria-expanded', 'false');
   toggle?.addEventListener('click', () => {
-    sidebar?.classList.toggle('is-open');
+    const isOpen = sidebar?.classList.toggle('is-open') || false;
+    toggle.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  sidebar?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      sidebar.classList.remove('is-open');
+      toggle?.setAttribute('aria-expanded', 'false');
+    });
   });
 
   logoutBtn?.addEventListener('click', (event) => {

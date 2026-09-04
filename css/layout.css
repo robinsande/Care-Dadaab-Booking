@@ -349,6 +349,7 @@
 
 .admin-menu-toggle {
   display: inline-flex;
+  min-width: 76px;
 }
 
 @media (min-width: 960px) {
@@ -379,10 +380,21 @@
 .admin-sidebar.is-open {
   display: flex;
   position: fixed;
-  inset: 0 auto 0 0;
+  inset: var(--header-height) auto 0 0;
   width: min(280px, 86vw);
   z-index: 1200;
+  overflow-y: auto;
   box-shadow: var(--shadow-md);
+}
+
+@media (max-width: 959px) {
+  .admin-sidebar.is-open::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: rgba(28, 18, 38, 0.34);
+  }
 }
 
 .stats-grid {
