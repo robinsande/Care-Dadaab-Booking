@@ -1,6 +1,6 @@
 import { listCamps } from '../api/camps.js';
 import { listBlocks } from '../api/blocks.js';
-import { listAvailableRooms } from '../api/rooms.js';
+import { listAvailableRooms, listRooms } from '../api/rooms.js';
 import { getCampRates } from '../api/rates.js';
 import { ApiError } from '../api/client.js';
 import { fillSelect } from '../utils/constants.js';
@@ -97,17 +97,14 @@ export function createCampSelectors({
     const arrival = arrivalInput?.value;
     const departure = departureInput?.value;
 
-    if (!campId || !blockId || !arrival || !departure) {
-      roomSelect.innerHTML = '<option value="">Select dates and block</option>';
+    if (!campId || !blockId) {
+      roomSelect.innerHTML = '<option value="">Select block first</option>';
       return;
     }
 
-    const response = await listAvailableRooms({
-      campId,
-      blockId,
-      arrivalDate: arrival,
-      departureDate: departure,
-    });
+    const response = arrival && departure
+      ? await listAvailableRooms({ campId, blockId, arrivalDate: arrival, departureDate: departure })
+      : await listRooms({ campId, blockId });
 
     const data = response.data;
     state.rooms = data?.rooms || data?.items || data || [];
@@ -172,8 +169,10 @@ export function createCampSelectors({
   }
 
   campSelect.addEventListener('change', async () => {
-    await loadBlocks(campSelect.value);
-    await updateRateDisplay();
+    await Promise.all([
+      loadBlocks(campSelect.value),
+      updateRateDisplay(),
+    ]);
   });
 
   blockSelect.addEventListener('change', async () => {
