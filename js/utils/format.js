@@ -142,6 +142,12 @@ export function emailStatusBadge(status) {
   return `<span class="badge ${cls}">${escapeHtml(status)}</span>`;
 }
 
+export function paymentStatusBadge(status) {
+  const normalized = String(status || 'Unpaid');
+  const cls = normalized === 'Paid' ? 'badge-approved' : 'badge-pending';
+  return `<span class="badge ${cls}">${escapeHtml(normalized)}</span>`;
+}
+
 export function yesNo(value) {
   if (value === true || value === 'true' || value === 'Yes') return 'Yes';
   if (value === false || value === 'false' || value === 'No') return 'No';

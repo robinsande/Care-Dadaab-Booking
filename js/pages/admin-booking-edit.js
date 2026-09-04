@@ -175,6 +175,7 @@ function renderActions(b) {
   }
   if (b.status === 'Checked In') {
     buttons.push(`<button type="button" class="btn btn-primary btn-sm" data-action="check-out">Check Out</button>`);
+    buttons.push(`<button type="button" class="btn btn-secondary btn-sm" data-action="early-check-out">Emergency Early Check Out</button>`);
     buttons.push(`<button type="button" class="btn btn-danger btn-sm" data-action="cancel">Cancel Booking</button>`);
   }
 
@@ -246,6 +247,23 @@ async function onAction(event) {
     try {
       await withLoading(() => checkOutBooking(bookingId), 'Checking out…');
       showToast('Guest checked out. Invoice generated.', 'success');
+      await loadBooking();
+    } catch (error) {
+      showToast(error instanceof ApiError ? error.message : 'Check-out failed.', 'error');
+    }
+    return;
+  }
+
+  if (action === 'early-check-out') {
+    const ok = await confirmDialog({
+      title: 'Emergency early check out',
+      message: `Record an emergency early check out for ${fullName(booking)}?`,
+      confirmLabel: 'Check Out',
+    });
+    if (!ok) return;
+    try {
+      await withLoading(() => checkOutBooking(bookingId, 'Emergency'), 'Checking out…');
+      showToast('Guest checked out early due to emergency.', 'success');
       await loadBooking();
     } catch (error) {
       showToast(error instanceof ApiError ? error.message : 'Check-out failed.', 'error');

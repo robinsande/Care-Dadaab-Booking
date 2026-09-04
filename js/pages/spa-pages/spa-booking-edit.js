@@ -194,6 +194,7 @@ function renderActions(b) {
   }
   if (b.status === 'Checked In') {
     buttons.push(`<button type="button" class="btn btn-primary btn-sm" data-action="check-out">Check Out</button>`);
+    buttons.push(`<button type="button" class="btn btn-secondary btn-sm" data-action="early-check-out">Emergency Early Check Out</button>`);
     buttons.push(`<button type="button" class="btn btn-danger btn-sm" data-action="cancel">Cancel Booking</button>`);
   }
   if (isSuperAdmin()) {
@@ -301,15 +302,29 @@ async function onAction(event) {
     return;
   }
   if (action === 'check-out') {
+    await processCheckout(false);
+    return;
+  }
+  if (action === 'early-check-out') {
+    await processCheckout(true);
+    return;
+  }
+  return onCancelAction(action);
+}
+
+async function processCheckout(isEmergency) {
     const nights = nightsBetween(booking.arrivalDate, booking.departureDate);
     const ok = await confirmDialog({
-      title: 'Check out guest',
-      message: `Check out ${fullName(booking)}? An invoice will be generated (${nights ?? '—'} nights).`,
+      title: isEmergency ? 'Emergency early check out' : 'Check out guest',
+      message: `${isEmergency ? 'Record an emergency early check out for' : 'Check out'} ${fullName(booking)}? An invoice will be generated (${nights ?? '—'} nights).`,
       confirmLabel: 'Check Out',
     });
     if (!ok) return;
     try {
-      const resp = await withLoading(() => checkOutBooking(booking._id || booking.id), 'Checking out…');
+      const resp =       await withLoading(() => checkOutBooking(
+        booking._id || booking.id,
+        isEmergency ? 'Emergency' : null,
+      ), 'Checking out…');
       const data = resp.data || {};
       const inv = data.invoice || data.booking?.invoice;
       showToast('Guest checked out. Invoice generated.', 'success');
@@ -327,7 +342,9 @@ async function onAction(event) {
       showToast(err instanceof ApiError ? err.message : 'Check-out failed.', 'error');
     }
     return;
-  }
+}
+
+async function onCancelAction(action) {
   if (action === 'cancel') {
     document.getElementById('cancel-reason').value = '';
     applyFieldErrors(document.getElementById('cancel-form'), {});

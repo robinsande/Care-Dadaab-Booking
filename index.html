@@ -176,7 +176,7 @@
               <div class="form-group"><label class="form-label" for="bc-lastName">Last Name <span class="required">*</span></label><input class="form-control" id="bc-lastName" name="lastName" required><span class="form-error" data-error-for="lastName"></span></div>
               <div class="form-group"><label class="form-label" for="bc-email">Email <span class="required">*</span></label><input class="form-control" type="email" id="bc-email" name="email" required><span class="form-error" data-error-for="email"></span></div>
               <div class="form-group"><label class="form-label" for="bc-phone">Phone <span class="required">*</span></label><input class="form-control" type="tel" id="bc-phone" name="phone" required><span class="form-error" data-error-for="phone"></span></div>
-              <div class="form-group"><label class="form-label" for="bc-organisation">Organisation <span class="required">*</span></label><input class="form-control" id="bc-organisation" name="organisation" required><span class="form-error" data-error-for="organisation"></span></div>
+              <div class="form-group"><label class="form-label" for="bc-organisation">Organisation</label><input class="form-control" id="bc-organisation" name="organisation"><span class="form-error" data-error-for="organisation"></span></div>
               <div class="form-group"><label class="form-label" for="bc-gender">Gender <span class="required">*</span></label><select class="form-control" id="bc-gender" name="gender" required></select><span class="form-error" data-error-for="gender"></span></div>
               <div class="form-group"><label class="form-label" for="bc-contractType">Contract Type <span class="required">*</span></label><select class="form-control" id="bc-contractType" name="contractType" required></select><span class="form-error" data-error-for="contractType"></span></div>
               <div class="form-group" hidden><label class="form-label" for="bc-kenyaOffice">Kenya Office <span class="required">*</span></label><select class="form-control" id="bc-kenyaOffice" name="kenyaOffice"></select><span class="form-error" data-error-for="kenyaOffice"></span></div>
@@ -217,7 +217,7 @@
               <div class="form-group"><label class="form-label" for="be-lastName">Last Name <span class="required">*</span></label><input class="form-control" id="be-lastName" name="lastName" required><span class="form-error" data-error-for="lastName"></span></div>
               <div class="form-group"><label class="form-label" for="be-email">Email <span class="required">*</span></label><input class="form-control" type="email" id="be-email" name="email" required><span class="form-error" data-error-for="email"></span></div>
               <div class="form-group"><label class="form-label" for="be-phone">Phone <span class="required">*</span></label><input class="form-control" type="tel" id="be-phone" name="phone" required><span class="form-error" data-error-for="phone"></span></div>
-              <div class="form-group"><label class="form-label" for="be-organisation">Organisation <span class="required">*</span></label><input class="form-control" id="be-organisation" name="organisation" required><span class="form-error" data-error-for="organisation"></span></div>
+              <div class="form-group"><label class="form-label" for="be-organisation">Organisation</label><input class="form-control" id="be-organisation" name="organisation"><span class="form-error" data-error-for="organisation"></span></div>
               <div class="form-group"><label class="form-label" for="be-gender">Gender <span class="required">*</span></label><select class="form-control" id="be-gender" name="gender" required></select><span class="form-error" data-error-for="gender"></span></div>
               <div class="form-group"><label class="form-label" for="be-contractType">Contract Type <span class="required">*</span></label><select class="form-control" id="be-contractType" name="contractType" required></select><span class="form-error" data-error-for="contractType"></span></div>
               <div class="form-group" hidden><label class="form-label" for="be-kenyaOffice">Kenya Office <span class="required">*</span></label><select class="form-control" id="be-kenyaOffice" name="kenyaOffice"></select><span class="form-error" data-error-for="kenyaOffice"></span></div>
@@ -261,9 +261,9 @@
           <div class="table-wrap">
             <table class="table" aria-label="Invoices">
               <thead>
-                <tr><th>Invoice #</th><th>Booking Ref</th><th>Guest</th><th>Camp</th><th>Total</th><th>Email Status</th></tr>
+                <tr><th>Invoice #</th><th>Booking Ref</th><th>Guest</th><th>Camp</th><th>Total</th><th>Payment</th><th>Email Status</th><th>Action</th></tr>
               </thead>
-              <tbody id="invoices-table-body"><tr><td colspan="6" class="empty-state">Loading…</td></tr></tbody>
+              <tbody id="invoices-table-body"><tr><td colspan="8" class="empty-state">Loading…</td></tr></tbody>
             </table>
           </div>
           <div id="invoices-pagination"></div>
@@ -492,6 +492,7 @@
         <div class="modal-body" id="invoice-detail-body"></div>
         <div class="modal-footer">
           <div id="invoice-email-status" class="invoice-status-actions" style="margin-right:auto;display:flex;align-items:center;gap:var(--space-3);"></div>
+          <label id="invoice-paid-action" class="form-check" hidden><input type="checkbox" id="invoice-paid-checkbox"> <span>Paid</span></label>
           <button type="button" class="btn btn-secondary" id="invoice-print-btn">Print</button>
           <button type="button" class="btn btn-secondary" id="invoice-pdf-btn">Download PDF</button>
           <button type="button" class="btn btn-secondary" data-close-modal="invoice">Close</button>

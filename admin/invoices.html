@@ -45,9 +45,9 @@
         <div class="table-wrap">
           <table class="table" aria-label="Invoices">
             <thead>
-              <tr><th>Invoice #</th><th>Booking Ref</th><th>Guest</th><th>Camp</th><th>Total</th><th>Email Status</th></tr>
+              <tr><th>Invoice #</th><th>Booking Ref</th><th>Guest</th><th>Camp</th><th>Total</th><th>Payment</th><th>Email Status</th><th>Action</th></tr>
             </thead>
-            <tbody id="invoices-table-body"><tr><td colspan="6" class="empty-state">Loading…</td></tr></tbody>
+            <tbody id="invoices-table-body"><tr><td colspan="8" class="empty-state">Loading…</td></tr></tbody>
           </table>
         </div>
         <div id="invoices-pagination"></div>
@@ -63,6 +63,7 @@
       <div class="modal-body" id="invoice-detail-body"></div>
       <div class="modal-footer">
         <div id="invoice-email-status" class="invoice-status-actions" style="margin-right:auto;display:flex;align-items:center;gap:var(--space-3);"></div>
+        <label id="invoice-paid-action" class="form-check" hidden><input type="checkbox" id="invoice-paid-checkbox"> <span>Paid</span></label>
         <button type="button" class="btn btn-secondary" id="invoice-print-btn">Print</button>
         <button type="button" class="btn btn-secondary" id="invoice-pdf-btn">Download PDF</button>
         <button type="button" class="btn btn-secondary" data-close-modal="invoice">Close</button>

@@ -1,4 +1,4 @@
-import { listInvoices, getInvoice, downloadInvoicePdf } from '../api/invoices.js';
+import { listInvoices, getInvoice, downloadInvoicePdf, updateInvoicePaymentStatus } from '../api/invoices.js';
 import { ApiError } from '../api/client.js';
 import { getBrandLogoDataUrl } from '../config.js';
 import { requireAuth } from '../auth/session.js';
@@ -14,6 +14,7 @@ import {
   fullName,
   invoiceEmailStatus,
   emailStatusBadge,
+  paymentStatusBadge,
 } from '../utils/format.js';
 
 const INVOICE_MODAL_ID = 'invoice';
@@ -59,9 +60,11 @@ function boot() {
   });
 
   tableBody.addEventListener('click', (event) => {
+    if (event.target.closest('[data-payment-action]')) return;
     const row = event.target.closest('[data-invoice-id]');
     if (row) openInvoiceDetail(row.dataset.invoiceId);
   });
+  tableBody.addEventListener('change', (event) => handlePaymentChange(event.target));
 
   tableBody.addEventListener('keydown', (event) => {
     if (event.key !== 'Enter' && event.key !== ' ') return;
@@ -74,6 +77,20 @@ function boot() {
   const params = new URLSearchParams(window.location.search);
   if (params.get('id')) {
     openInvoiceDetail(params.get('id'));
+  }
+
+  async function handlePaymentChange(checkbox) {
+    if (!checkbox.matches('[data-payment-action]') || !checkbox.checked) return;
+    checkbox.disabled = true;
+    try {
+      await updateInvoicePaymentStatus(checkbox.dataset.invoiceId, 'Paid');
+      showToast('Invoice marked as paid.', 'success');
+      await loadInvoices();
+    } catch (error) {
+      checkbox.checked = false;
+      checkbox.disabled = false;
+      showToast(error instanceof ApiError ? error.message : 'Unable to update payment status.', 'error');
+    }
   }
   if (params.get('search')) {
     const searchInput = filtersForm?.elements.search;
@@ -117,14 +134,14 @@ async function loadInvoices() {
       },
     );
   } catch (error) {
-    tableBody.innerHTML = `<tr><td colspan="6" class="empty-state">Unable to load invoices.</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="8" class="empty-state">Unable to load invoices.</td></tr>`;
     showToast(error instanceof ApiError ? error.message : 'Unable to load invoices.', 'error');
   }
 }
 
 function renderTable() {
   if (!state.invoices.length) {
-    tableBody.innerHTML = `<tr><td colspan="6" class="empty-state">No invoices found.</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="8" class="empty-state">No invoices found.</td></tr>`;
     return;
   }
 
@@ -134,6 +151,7 @@ function renderTable() {
       const guest = invoice.guest || invoice;
       const currency = invoice.appliedRate?.currency || 'KES';
       const emailStatus = invoiceEmailStatus(invoice);
+      const paid = invoice.paymentStatus === 'Paid';
       return `
         <tr class="table-row-clickable" data-invoice-id="${escapeHtml(id)}" tabindex="0" role="button" aria-label="View invoice ${escapeHtml(invoice.invoiceNumber || '')}">
           <td><strong>${escapeHtml(invoice.invoiceNumber || '—')}</strong></td>
@@ -141,7 +159,9 @@ function renderTable() {
           <td>${escapeHtml(fullName(guest))}</td>
           <td>${escapeHtml(invoice.campName || '—')}</td>
           <td>${escapeHtml(formatMoney(invoice.totalAmount, currency))}</td>
+          <td>${paymentStatusBadge(invoice.paymentStatus)}</td>
           <td>${emailStatusBadge(emailStatus)}</td>
+          <td><label class="form-check"><input type="checkbox" data-payment-action data-invoice-id="${escapeHtml(id)}" ${paid ? 'checked disabled' : ''} aria-label="Mark invoice ${escapeHtml(invoice.invoiceNumber || '')} as paid"><span>Paid</span></label></td>
         </tr>
       `;
     })

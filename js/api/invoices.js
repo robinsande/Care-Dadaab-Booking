@@ -10,6 +10,10 @@ export function getInvoice(id) {
   return api.get(`/invoices/${id}`);
 }
 
+export function updateInvoicePaymentStatus(id, paymentStatus) {
+  return api.patch(`/invoices/${id}/payment-status`, { paymentStatus });
+}
+
 /**
  * Download invoice as PDF via authenticated fetch.
  * Backend: GET /invoices/:id?format=pdf

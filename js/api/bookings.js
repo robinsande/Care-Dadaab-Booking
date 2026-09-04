@@ -24,8 +24,8 @@ export function checkInBooking(id) {
   return api.post(`/bookings/${id}/check-in`);
 }
 
-export function checkOutBooking(id) {
-  return api.post(`/bookings/${id}/check-out`);
+export function checkOutBooking(id, checkoutReason = null) {
+  return api.post(`/bookings/${id}/check-out`, checkoutReason ? { checkoutReason } : {});
 }
 
 export function generateInvoiceForBooking(id) {
