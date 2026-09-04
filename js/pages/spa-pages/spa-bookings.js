@@ -1,5 +1,11 @@
 import { navigate, getCurrentParams } from '../spa-main.js';
-import { listBookings, deleteBooking, checkInBooking, checkOutBooking } from '../../api/bookings.js';
+import {
+  listBookings,
+  deleteBooking,
+  checkInBooking,
+  checkOutBooking,
+  resendBookingEmails,
+} from '../../api/bookings.js';
 import { listCamps } from '../../api/camps.js';
 import { ApiError } from '../../api/client.js';
 import { withLoading, setButtonLoading } from '../../components/loading.js';
@@ -151,6 +157,7 @@ function renderTable(tableBody) {
       const id = booking._id || booking.id;
       const actions = [];
       actions.push(`<a class="btn btn-secondary btn-sm" data-nav-link data-list-action="edit" href="#/booking/edit?id=${escapeHtml(id)}">Edit</a>`);
+      actions.push(`<button type="button" class="btn btn-secondary btn-sm" data-list-action="resend-emails" data-booking-id="${escapeHtml(id)}">Resend Emails</button>`);
       if (booking.invoiceId || booking.invoice?._id || booking.invoice?.id) {
         const invId = booking.invoiceId || booking.invoice?._id || booking.invoice?.id;
         actions.push(`<button type="button" class="btn btn-secondary btn-sm" data-list-action="invoice" data-invoice-id="${escapeHtml(invId)}">Invoice</button>`);
@@ -188,6 +195,35 @@ async function onTableAction(event) {
   const btn = event.target.closest('[data-list-action]');
   if (!btn) return;
   const action = btn.dataset.listAction;
+
+  if (action === 'resend-emails') {
+    const bookingId = btn.dataset.bookingId;
+    const booking = state.bookings.find((item) => String(item._id || item.id) === String(bookingId));
+    const reference = booking?.bookingReference || 'this booking';
+    const confirmed = await confirmDialog({
+      title: 'Resend Booking Emails',
+      message: `Resend the booking confirmation and invoice for ${reference}?`,
+      confirmLabel: 'Resend Emails',
+    });
+    if (!confirmed) return;
+    setButtonLoading(btn, true, 'Sending…');
+    try {
+      const response = await resendBookingEmails(bookingId);
+      const result = response.data || {};
+      const allSent = result.bookingEmailSent && result.invoiceEmailSent;
+      showToast(
+        allSent
+          ? `Booking and invoice emails sent for ${reference}.`
+          : 'Some emails could not be sent. Check the email service logs.',
+        allSent ? 'success' : 'error',
+      );
+    } catch (error) {
+      showToast(error instanceof ApiError ? error.message : 'Unable to resend booking emails.', 'error');
+    } finally {
+      setButtonLoading(btn, false);
+    }
+    return;
+  }
 
   if (action === 'check-in') {
     if (event.type !== 'change' || !btn.checked) return;

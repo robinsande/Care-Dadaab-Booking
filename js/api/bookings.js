@@ -32,6 +32,10 @@ export function generateInvoiceForBooking(id) {
   return api.post(`/bookings/${id}/generate-invoice`);
 }
 
+export function resendBookingEmails(id) {
+  return api.post(`/bookings/${id}/resend-emails`);
+}
+
 export function deleteBooking(id) {
   return api.delete(`/bookings/${id}`);
 }
