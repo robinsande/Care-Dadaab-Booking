@@ -1,5 +1,6 @@
 import {
   listBookings,
+  deleteBooking,
   checkInBooking,
   checkOutBooking,
 } from '../api/bookings.js';
@@ -8,9 +9,12 @@ import { ApiError } from '../api/client.js';
 import { requireAuth } from '../auth/session.js';
 import { initAdminShell } from '../components/shell.js';
 import { withLoading } from '../components/loading.js';
+import { setButtonLoading } from '../components/loading.js';
 import { showToast } from '../components/toast.js';
+import { confirmDialog } from '../components/modal.js';
 import { renderPagination } from '../components/pagination.js';
 import { constants, fillSelect } from '../utils/constants.js';
+import { isSuperAdmin } from '../auth/session.js';
 import {
   escapeHtml,
   formatDate,
@@ -137,6 +141,10 @@ function renderTable() {
   tableBody.innerHTML = state.bookings
     .map((booking) => {
       const id = booking._id || booking.id;
+      const actions = [`<a class="btn btn-secondary btn-sm" href="booking-edit.html?id=${escapeHtml(id)}">Edit</a>`];
+      if (isSuperAdmin()) {
+        actions.push(`<button type="button" class="btn btn-danger btn-sm" data-action="delete" data-booking-id="${escapeHtml(id)}">Delete</button>`);
+      }
       return `
         <tr data-id="${escapeHtml(id)}">
           <td><a href="booking-edit.html?id=${escapeHtml(id)}"><strong>${escapeHtml(booking.bookingReference || '—')}</strong></a></td>
@@ -147,7 +155,8 @@ function renderTable() {
           <td>${escapeHtml(booking.stayType || '—')}</td>
           <td>${statusBadge(booking.status)}</td>
           <td>${escapeHtml(roomLabel(booking.room, booking))}</td>
-          <td>
+          <td><div class="button-group" style="gap:var(--space-2);flex-wrap:wrap;">
+            ${actions.join(' ')}
             ${booking.status === 'Booked'
               ? `<label class="form-check" title="Check in visitor">
                    <input type="checkbox" data-action="check-in" aria-label="Check in ${escapeHtml(booking.bookingReference || 'visitor')}" />
@@ -157,7 +166,7 @@ function renderTable() {
            ${booking.status === 'Checked In'
              ? `<button type="button" class="btn btn-secondary btn-sm" data-action="early-check-out" data-booking-id="${escapeHtml(id)}">Emergency Early Check Out</button>`
              : ''}
-          </td>
+          </div></td>
         </tr>
       `;
     })
@@ -165,6 +174,30 @@ function renderTable() {
 }
 
 async function onTableAction(event) {
+  const deleteButton = event.target.closest('button[data-action="delete"]');
+  if (deleteButton) {
+    const booking = state.bookings.find((item) => String(item._id || item.id) === String(deleteButton.dataset.bookingId));
+    const reference = booking?.bookingReference || '';
+    const confirmed = await confirmDialog({
+      title: 'Delete Booking',
+      message: `Permanently delete booking ${reference || 'this booking'}? This cannot be undone.`,
+      confirmLabel: 'Delete Permanently',
+      destructive: true,
+    });
+    if (!confirmed) return;
+    setButtonLoading(deleteButton, true, '…');
+    try {
+      await deleteBooking(deleteButton.dataset.bookingId);
+      showToast(`Booking ${reference} deleted.`, 'success');
+      await loadBookings();
+    } catch (error) {
+      showToast(error instanceof ApiError ? error.message : 'Unable to delete booking.', 'error');
+    } finally {
+      setButtonLoading(deleteButton, false);
+    }
+    return;
+  }
+
   const checkbox = event.target.closest('input[data-action="check-in"]');
   const earlyCheckout = event.target.closest('[data-action="early-check-out"]');
   if (earlyCheckout) {
