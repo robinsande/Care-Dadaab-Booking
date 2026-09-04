@@ -209,14 +209,7 @@ async function onTableAction(event) {
     setButtonLoading(btn, true, 'Sending…');
     try {
       const response = await resendBookingEmails(bookingId);
-      const result = response.data || {};
-      const allSent = result.bookingEmailSent && result.invoiceEmailSent;
-      showToast(
-        allSent
-          ? `Booking and invoice emails sent for ${reference}.`
-          : 'Some emails could not be sent. Check the email service logs.',
-        allSent ? 'success' : 'error',
-      );
+      showToast(`Booking and invoice emails queued for ${reference}.`, 'success');
     } catch (error) {
       showToast(error instanceof ApiError ? error.message : 'Unable to resend booking emails.', 'error');
     } finally {
