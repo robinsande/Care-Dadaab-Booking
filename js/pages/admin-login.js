@@ -41,6 +41,11 @@ form.addEventListener('submit', async (event) => {
     }
 
     setSession(token, user);
+    if (user.mustChangePassword) {
+      showToast('Your password was reset. Please change it now.', 'info');
+      window.location.href = 'change-password.html';
+      return;
+    }
     showToast('Signed in successfully.', 'success');
 
     const params = new URLSearchParams(window.location.search);

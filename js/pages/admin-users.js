@@ -4,6 +4,7 @@ import {
   updateUser,
   deactivateUser,
   reactivateUser,
+  resetUserPassword,
 } from '../api/users.js';
 import { ApiError } from '../api/client.js';
 import { requireAuth } from '../auth/session.js';
@@ -81,6 +82,7 @@ function renderTable() {
           <td>
             <div class="table-actions">
               <button type="button" class="btn btn-secondary btn-sm" data-action="edit" data-id="${escapeHtml(id)}">Edit</button>
+              ${active ? `<button type="button" class="btn btn-secondary btn-sm" data-action="reset-password" data-id="${escapeHtml(id)}">Reset Password</button>` : ''}
               ${toggleButton}
             </div>
           </td>
@@ -195,6 +197,22 @@ async function onTableClick(event) {
         error instanceof ApiError ? error.message : 'Unable to deactivate user.',
         'error',
       );
+    }
+    return;
+  }
+
+  if (action === 'reset-password') {
+    const confirmed = await confirmDialog({
+      title: 'Reset user password',
+      message: `Generate a temporary password for ${fullName(item)}? They must change it when they next sign in.`,
+      confirmLabel: 'Reset Password',
+    });
+    if (!confirmed) return;
+    try {
+      const response = await withLoading(() => resetUserPassword(id), 'Resetting password…');
+      showToast(`Temporary password: ${response.data?.temporaryPassword}`, 'info', { duration: 12000 });
+    } catch (error) {
+      showToast(error instanceof ApiError ? error.message : 'Unable to reset password.', 'error');
     }
     return;
   }

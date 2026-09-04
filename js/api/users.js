@@ -12,6 +12,10 @@ export function updateUser(id, payload) {
   return api.put(`/users/${id}`, payload);
 }
 
+export function resetUserPassword(id) {
+  return api.post(`/users/${id}/reset-password`);
+}
+
 /**
  * Deactivate a user. The backend soft-deletes (sets isActive=false) so audit
  * history stays intact; the account is never hard-removed.

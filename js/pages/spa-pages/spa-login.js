@@ -38,6 +38,11 @@ export async function init() {
       const user = response.data?.user || response.user;
       if (!token || !user) throw new ApiError('Login succeeded but session data was incomplete.');
       setSession(token, user);
+      if (user.mustChangePassword) {
+        showToast('Your password was reset. Please change it now.', 'info');
+        navigate('#/change-password');
+        return;
+      }
       showToast('Signed in successfully.', 'success');
       navigate('#/dashboard');
     } catch (error) {
