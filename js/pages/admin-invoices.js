@@ -82,19 +82,6 @@ function boot() {
     openInvoiceDetail(params.get('id'));
   }
 
-  async function handlePaymentChange(checkbox) {
-    if (!checkbox.matches('[data-payment-action]') || !checkbox.checked) return;
-    checkbox.disabled = true;
-    try {
-      await updateInvoicePaymentStatus(checkbox.dataset.invoiceId, 'Paid');
-      showToast('Invoice marked as paid.', 'success');
-      await loadInvoices();
-    } catch (error) {
-      checkbox.checked = false;
-      checkbox.disabled = false;
-      showToast(error instanceof ApiError ? error.message : 'Unable to update payment status.', 'error');
-    }
-  }
   if (params.get('search')) {
     const searchInput = filtersForm?.elements.search;
     if (searchInput) {

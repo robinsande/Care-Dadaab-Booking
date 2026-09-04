@@ -33,7 +33,6 @@ export async function init() {
     const row = e.target.closest('[data-invoice-id]');
     if (row) openInvoiceDetailModal(row.dataset.invoiceId);
   });
-  tableBody.addEventListener('change', (e) => handlePaymentChange(e.target));
   tableBody.addEventListener('keydown', (e) => {
     if (e.key !== 'Enter' && e.key !== ' ') return;
     const row = e.target.closest('[data-invoice-id]');
