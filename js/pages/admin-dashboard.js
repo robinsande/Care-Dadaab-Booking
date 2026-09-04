@@ -55,6 +55,7 @@ async function loadDashboard() {
     renderRoomStatuses(data.roomStatuses || []);
     renderRecentBookings(data.recentBookings || []);
   } catch (error) {
+    showDashboardError();
     showToast(
       error instanceof ApiError ? error.message : 'Unable to load dashboard.',
       'error',
@@ -62,6 +63,20 @@ async function loadDashboard() {
   } finally {
     dashboardRequestActive = false;
   }
+}
+
+function showDashboardError() {
+  const messages = [
+    ['room-status-body', 4],
+    ['camp-stats-body', 2],
+    ['recent-bookings-body', 6],
+  ];
+  messages.forEach(([id, columns]) => {
+    const tbody = document.getElementById(id);
+    if (tbody && tbody.querySelector('.empty-state')) {
+      tbody.innerHTML = `<tr><td colspan="${columns}" class="empty-state">Dashboard data is temporarily unavailable. Refresh to try again.</td></tr>`;
+    }
+  });
 }
 
 function renderRoomStatuses(rooms) {
