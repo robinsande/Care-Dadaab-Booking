@@ -7,13 +7,14 @@ import { escapeHtml, formatDate, fullName, campLabel, statusBadge } from '../../
 
 let initialized = false;
 let refreshTimer;
+let dashboardRequestActive = false;
 
 export async function init() {
   if (initialized) return;
   initialized = true;
   await loadDashboard();
   refreshTimer = window.setInterval(() => {
-    if (!document.hidden) loadDashboard();
+    if (!document.hidden) loadDashboard({ showLoading: false });
   }, 15000);
   document.addEventListener('visibilitychange', onVisibilityChange);
 }
@@ -23,12 +24,17 @@ export async function refresh() {
 }
 
 function onVisibilityChange() {
-  if (!document.hidden) loadDashboard();
+  if (!document.hidden) loadDashboard({ showLoading: false });
 }
 
-async function loadDashboard() {
+async function loadDashboard({ showLoading = true } = {}) {
+  if (dashboardRequestActive) return;
+  dashboardRequestActive = true;
   try {
-    const response = await withLoading(() => getDashboardStats(), 'Loading dashboard…');
+    const request = () => getDashboardStats();
+    const response = showLoading
+      ? await withLoading(request, 'Loading dashboard…')
+      : await request();
     const data = response.data || {};
 
     const mapping = {
@@ -54,6 +60,8 @@ async function loadDashboard() {
     renderRecentBookings(data.recentBookings || []);
   } catch (error) {
     showToast(error instanceof ApiError ? error.message : 'Unable to load dashboard.', 'error');
+  } finally {
+    dashboardRequestActive = false;
   }
 }
 

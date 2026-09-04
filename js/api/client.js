@@ -50,6 +50,7 @@ export async function apiRequest(path, options = {}) {
     body,
     query,
     auth = true,
+    signal,
     headers = {},
     ...rest
   } = options;
@@ -71,6 +72,8 @@ export async function apiRequest(path, options = {}) {
   }
 
   let response;
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), 20000);
   try {
     response = await fetch(buildUrl(path, query), {
       method,
@@ -80,10 +83,16 @@ export async function apiRequest(path, options = {}) {
         : body instanceof FormData
           ? body
           : JSON.stringify(body),
-      ...rest,
+    signal: signal || controller.signal,
+    ...rest,
     });
-  } catch {
+  } catch (error) {
+    if (error.name === 'AbortError') {
+    throw new ApiError('The server took too long to respond. Please try again.');
+    }
     throw new ApiError('Unable to reach the server. Please check your connection and try again.');
+  } finally {
+    window.clearTimeout(timeoutId);
   }
 
   const payload = await parseBody(response);
