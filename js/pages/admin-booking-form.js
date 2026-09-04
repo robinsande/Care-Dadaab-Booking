@@ -25,12 +25,24 @@ export function initGuestFieldSelects(form) {
   });
   fillSelect(form.elements.kenyaOffice, constants.KENYA_OFFICES, { placeholder: 'Select Kenya office' });
   const internationalGroup = form.elements.internationalCountry?.closest('.form-group');
+  let organisationAutoFilled = false;
   const updateInternationalVisibility = () => {
     const isInternational = form.elements.departureCountry?.value === 'International';
     if (internationalGroup) internationalGroup.hidden = !isInternational;
     if (form.elements.internationalCountry) {
       form.elements.internationalCountry.required = isInternational;
       if (!isInternational) form.elements.internationalCountry.value = '';
+    }
+  };
+  const updateOrganisationDefault = () => {
+    const organisation = form.elements.organisation;
+    const isLocalKenyan = form.elements.departureCountry?.value === 'Local (Kenyan)';
+    if (organisation && isLocalKenyan && !organisation.value.trim()) {
+      organisation.value = 'Individual';
+      organisationAutoFilled = true;
+    } else if (organisation && !isLocalKenyan && organisationAutoFilled) {
+      organisation.value = '';
+      organisationAutoFilled = false;
     }
   };
   const updateOfficeVisibility = () => {
@@ -43,6 +55,7 @@ export function initGuestFieldSelects(form) {
       if (!isKenyaStaff) form.elements.kenyaOffice.value = '';
     }
     updateInternationalVisibility();
+    updateOrganisationDefault();
   };
   form.elements.contractType?.addEventListener('change', updateOfficeVisibility);
   form.elements.departureCountry?.addEventListener('change', updateOfficeVisibility);
