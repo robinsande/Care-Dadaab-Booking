@@ -1,5 +1,5 @@
 import { navigate, getCurrentParams } from '../spa-main.js';
-import { listBookings, deleteBooking } from '../../api/bookings.js';
+import { listBookings, deleteBooking, checkInBooking } from '../../api/bookings.js';
 import { listCamps } from '../../api/camps.js';
 import { ApiError } from '../../api/client.js';
 import { withLoading, setButtonLoading } from '../../components/loading.js';
@@ -61,6 +61,7 @@ export async function init() {
   });
 
   tableBody.addEventListener('click', onTableAction);
+  tableBody.addEventListener('change', onTableAction);
   await loadCampsForFilter();
   loadBookings(tableBody, paginationEl);
 }
@@ -157,6 +158,12 @@ function renderTable(tableBody) {
       if (canDelete) {
         actions.push(`<button type="button" class="btn btn-danger btn-sm" data-list-action="delete" data-booking-id="${escapeHtml(id)}">Delete</button>`);
       }
+      if (booking.status === 'Booked') {
+        actions.push(`<label class="form-check" title="Check in visitor">
+          <input type="checkbox" data-list-action="check-in" data-booking-id="${escapeHtml(id)}" aria-label="Check in ${escapeHtml(booking.bookingReference || 'visitor')}" />
+          <span>Check in</span>
+        </label>`);
+      }
       return `
         <tr data-id="${escapeHtml(id)}">
           <td><a data-nav-link href="#/booking/edit?id=${escapeHtml(id)}"><strong>${escapeHtml(booking.bookingReference || '—')}</strong></a></td>
@@ -178,6 +185,25 @@ async function onTableAction(event) {
   const btn = event.target.closest('[data-list-action]');
   if (!btn) return;
   const action = btn.dataset.listAction;
+
+  if (action === 'check-in') {
+    if (event.type !== 'change' || !btn.checked) return;
+    const bookingId = btn.dataset.bookingId;
+    btn.disabled = true;
+    try {
+      await checkInBooking(bookingId);
+      showToast('Visitor checked in successfully.', 'success');
+      await refresh();
+    } catch (error) {
+      btn.checked = false;
+      btn.disabled = false;
+      showToast(
+        error instanceof ApiError ? error.message : 'Unable to check in visitor.',
+        'error',
+      );
+    }
+    return;
+  }
 
   if (action === 'invoice') {
     const invId = btn.dataset.invoiceId;
