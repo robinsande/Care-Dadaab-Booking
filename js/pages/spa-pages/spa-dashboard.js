@@ -6,15 +6,24 @@ import { showToast } from '../../components/toast.js';
 import { escapeHtml, formatDate, fullName, campLabel, statusBadge } from '../../utils/format.js';
 
 let initialized = false;
+let refreshTimer;
 
 export async function init() {
   if (initialized) return;
   initialized = true;
   await loadDashboard();
+  refreshTimer = window.setInterval(() => {
+    if (!document.hidden) loadDashboard();
+  }, 15000);
+  document.addEventListener('visibilitychange', onVisibilityChange);
 }
 
 export async function refresh() {
   await loadDashboard();
+}
+
+function onVisibilityChange() {
+  if (!document.hidden) loadDashboard();
 }
 
 async function loadDashboard() {

@@ -18,6 +18,12 @@ if (!user) {
 } else {
   initAdminShell();
   loadDashboard();
+  window.setInterval(() => {
+    if (!document.hidden) loadDashboard();
+  }, 15000);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) loadDashboard();
+  });
 }
 
 async function loadDashboard() {
