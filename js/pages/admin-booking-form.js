@@ -19,9 +19,24 @@ function sliceDate(value) {
 
 export function initGuestFieldSelects(form) {
   fillSelect(form.elements.gender, constants.GENDERS, { placeholder: 'Select gender' });
+  fillSelect(form.elements.departureCountry, constants.DEPARTURE_COUNTRIES, { placeholder: 'Select country of origin' });
   fillSelect(form.elements.contractType, constants.CONTRACT_TYPES, {
     placeholder: 'Select contract type',
   });
+  fillSelect(form.elements.kenyaOffice, constants.KENYA_OFFICES, { placeholder: 'Select Kenya office' });
+  const updateOfficeVisibility = () => {
+    const group = form.elements.kenyaOffice?.closest('.form-group');
+    const isKenyaStaff = form.elements.contractType?.value === 'CARE Staff'
+      && form.elements.departureCountry?.value.trim().toLowerCase() === 'local (kenyan)';
+    if (group) group.hidden = !isKenyaStaff;
+    if (form.elements.kenyaOffice) {
+      form.elements.kenyaOffice.required = isKenyaStaff;
+      if (!isKenyaStaff) form.elements.kenyaOffice.value = '';
+    }
+  };
+  form.elements.contractType?.addEventListener('change', updateOfficeVisibility);
+  form.elements.departureCountry?.addEventListener('change', updateOfficeVisibility);
+  updateOfficeVisibility();
   fillSelect(form.elements.stayType, constants.STAY_TYPES, { placeholder: 'Select stay type' });
 }
 
@@ -52,6 +67,7 @@ export function buildBookingPayload(values) {
     organisation: values.organisation || '',
     gender: values.gender,
     contractType: values.contractType || '',
+    kenyaOffice: values.kenyaOffice || '',
     reasonForVisit: values.reasonForVisit || '',
     arrivalDate: values.arrivalDate,
     departureDate: values.departureDate,
@@ -74,12 +90,18 @@ export function populateGuestFields(form, booking) {
   form.elements.organisation.value = guest.organisation || booking.organisation || '';
   form.elements.gender.value = guest.gender || booking.gender || '';
   form.elements.contractType.value = guest.contractType || booking.contractType || '';
+  form.elements.kenyaOffice.value = guest.kenyaOffice || booking.kenyaOffice || '';
   form.elements.reasonForVisit.value = booking.reasonForVisit || '';
   form.elements.arrivalDate.value = sliceDate(booking.arrivalDate);
   form.elements.departureDate.value = sliceDate(booking.departureDate);
   form.elements.driverPickup.checked = Boolean(booking.driverPickup);
-  form.elements.departureCountry.value = guest.departureCountry || booking.departureCountry || '';
+  const departureCountry = guest.departureCountry || booking.departureCountry || '';
+  form.elements.departureCountry.value = departureCountry === 'Kenya' || departureCountry === 'Kenyan'
+    ? 'Local (Kenyan)'
+    : departureCountry;
   form.elements.remarks.value = booking.remarks || '';
+  form.elements.contractType?.dispatchEvent(new Event('change'));
+  form.elements.departureCountry?.dispatchEvent(new Event('change'));
 }
 
 export function validateBookingForm(form, values, { requireLocation = true } = {}) {

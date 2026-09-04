@@ -22,6 +22,10 @@ let lastParams = {};
 
 function boot() {
   fillSelect(reportTypeSelect, constants.REPORT_TYPES, { placeholder: 'Select report' });
+  const requestedType = new URLSearchParams(window.location.search).get('type');
+  if (requestedType && constants.REPORT_TYPES.some((item) => item.value === requestedType)) {
+    reportTypeSelect.value = requestedType;
+  }
   fillSelect(form.elements.stayType, constants.STAY_TYPES, { placeholder: 'All stay types' });
 
   form.addEventListener('submit', (event) => {
@@ -83,6 +87,13 @@ async function generateReport() {
     const report = response.data || {};
     const rows = report.rows || [];
 
+    if (reportType === 'reservation-log') {
+      renderReservationLog(rows);
+      resultsEl.hidden = false;
+      setExportEnabled(true);
+      return;
+    }
+
     if (!rows.length) {
       resultsEl.hidden = false;
       resultsHead.innerHTML = '';
@@ -113,6 +124,20 @@ async function generateReport() {
   } finally {
     setButtonLoading(generateBtn, false);
   }
+}
+
+function renderReservationLog(rows) {
+  const printableRows = [...rows];
+  while (printableRows.length < 20) printableRows.push({});
+  resultsEl.classList.add('reservation-log-print');
+  resultsEl.innerHTML = `
+    <div class="reservation-log-heading">Reservation Log</div>
+    <div class="reservation-log-date">Date: ${new Date().toLocaleDateString('en-GB')}</div>
+    <table class="table" aria-label="Reservation Log">
+      <thead><tr><th>Table No</th><th>Customer Name</th><th># of Person</th><th>Phone #</th><th>Arrival Time</th><th>Checkout Time</th><th>Status</th></tr></thead>
+      <tbody>${printableRows.map((row) => `<tr><td>${escapeHtml(row.tableNo ?? '')}</td><td>${escapeHtml(row.customerName ?? '')}</td><td>${escapeHtml(row.persons ?? '')}</td><td>${escapeHtml(row.phoneNumber ?? '')}</td><td>${escapeHtml(row.arrivalTime ?? '')}</td><td>${escapeHtml(row.checkoutTime ?? '')}</td><td>${escapeHtml(row.status ?? '')}</td></tr>`).join('')}</tbody>
+    </table>
+  `;
 }
 
 function inferColumns(rows) {

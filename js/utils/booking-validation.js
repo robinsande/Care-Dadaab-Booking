@@ -30,6 +30,13 @@ export function validateGuestFields(values, { requireLocation = true } = {}) {
           : 'Departure date must be after arrival date.',
     },
     departureCountry: { required: true, label: 'Departure Country' },
+    kenyaOffice: {
+      custom: (value, all) => {
+        const needsOffice = all.contractType === 'CARE Staff'
+          && String(all.departureCountry || '').trim().toLowerCase() === 'local (kenyan)';
+        return needsOffice && !value ? 'Kenya Office is required for CARE Staff.' : null;
+      },
+    },
   };
 
   if (requireLocation) {

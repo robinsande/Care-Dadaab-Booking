@@ -6,6 +6,8 @@ const STAY_TYPES = ['Short Stay', 'Long Stay'];
 
 const GENDERS = ['Male', 'Female', 'Other', 'Prefer not to say'];
 
+const DEPARTURE_COUNTRIES = ['Local (Kenyan)', 'International'];
+
 const CONTRACT_TYPES = [
   'CARE Staff',
   'Consultant',
@@ -13,6 +15,8 @@ const CONTRACT_TYPES = [
   'Visitor',
   'Other',
 ];
+
+const KENYA_OFFICES = ['Nakuru', 'Nairobi', 'Kisumu', 'Regional Office'];
 
 const USER_ROLES = ['Accommodation Officer', 'Super Admin'];
 
@@ -26,6 +30,7 @@ const REPORT_TYPES = [
   { value: 'outstanding-invoices', label: 'Outstanding Invoices' },
   { value: 'arrivals', label: 'Arrivals' },
   { value: 'departures', label: 'Departures' },
+  { value: 'reservation-log', label: 'Reservation Log' },
 ];
 
 export const constants = {
@@ -33,7 +38,9 @@ export const constants = {
   ROOM_STATUSES,
   STAY_TYPES,
   GENDERS,
+  DEPARTURE_COUNTRIES,
   CONTRACT_TYPES,
+  KENYA_OFFICES,
   USER_ROLES,
   REPORT_TYPES,
 };

@@ -32,6 +32,7 @@ const SPA_NAV = [
   { hash: '#/rates', label: 'Rates', route: 'rates', superAdmin: true },
   { hash: '#/invoices', label: 'Invoices', route: 'invoices' },
   { hash: '#/reports', label: 'Reports', route: 'reports', superAdmin: true },
+  { hash: '#/reports?type=reservation-log', label: 'Reservation Log', route: 'reports', superAdmin: true },
   { hash: '#/users', label: 'Users', route: 'users', superAdmin: true },
   { hash: '#/settings', label: 'Settings', route: 'settings', superAdmin: true },
 ];

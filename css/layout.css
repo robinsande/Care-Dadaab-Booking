@@ -541,6 +541,48 @@
     display: block !important;
   }
 
+  .reservation-log-heading {
+    display: block;
+    background: #173b63;
+    color: #ffff00;
+    font: 700 22px/1.2 Arial, sans-serif;
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 8px;
+  }
+
+  .reservation-log-date {
+    display: block;
+    color: #111827;
+    font: 9px Arial, sans-serif;
+    margin-bottom: 10px;
+  }
+
+  .reservation-log-print .table {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 7px;
+  }
+
+  .reservation-log-print .table th,
+  .reservation-log-print .table td {
+    display: table-cell;
+    height: 22px;
+    padding: 4px 2px;
+    border: 1px solid #111827;
+    text-align: center;
+    vertical-align: middle;
+    overflow: hidden;
+  }
+
+  .reservation-log-print .table th {
+    background: #173b63;
+    color: #ffff00;
+    font-weight: 700;
+  }
+
   .admin-main {
     margin: 0;
   }

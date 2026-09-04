@@ -13,6 +13,7 @@ export const ADMIN_NAV = [
   { href: 'rates.html', label: 'Rates', superAdmin: true },
   { href: 'invoices.html', label: 'Invoices' },
   { href: 'reports.html', label: 'Reports', superAdmin: true },
+  { href: 'reports.html?type=reservation-log', label: 'Reservation Log', superAdmin: true },
   { href: 'users.html', label: 'Users', superAdmin: true },
   { href: 'settings.html', label: 'Settings', superAdmin: true },
 ];
