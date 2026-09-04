@@ -206,24 +206,25 @@ async function onTableAction(event) {
       );
     }
 
-    if (action === 'early-check-out') {
-      const reason = window.prompt('Reason for emergency early check out:');
-      if (reason === null || !reason.trim()) {
-        showToast('A reason is required for an emergency early check out.', 'error');
-        return;
-      }
-      const confirmed = window.confirm(`Check out this visitor early due to an emergency?\nReason: ${reason.trim()}`);
-      if (!confirmed) return;
-      btn.disabled = true;
-      try {
-        await checkOutBooking(btn.dataset.bookingId, reason.trim());
-        showToast('Visitor checked out early due to emergency.', 'success');
-        await refresh();
-      } catch (error) {
-        btn.disabled = false;
-        showToast(error instanceof ApiError ? error.message : 'Unable to check out visitor.', 'error');
-      }
+    return;
+  }
+
+  if (action === 'early-check-out') {
+    const reason = window.prompt('Reason for emergency early check out:');
+    if (reason === null || !reason.trim()) {
+      showToast('A reason is required for an emergency early check out.', 'error');
       return;
+    }
+    const confirmed = window.confirm(`Check out this visitor early due to an emergency?\nReason: ${reason.trim()}`);
+    if (!confirmed) return;
+    btn.disabled = true;
+    try {
+      await checkOutBooking(btn.dataset.bookingId, reason.trim());
+      showToast('Visitor checked out early due to emergency.', 'success');
+      await refresh();
+    } catch (error) {
+      btn.disabled = false;
+      showToast(error instanceof ApiError ? error.message : 'Unable to check out visitor.', 'error');
     }
     return;
   }

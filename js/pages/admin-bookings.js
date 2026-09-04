@@ -57,6 +57,7 @@ function boot() {
     loadBookings();
   });
 
+  tableBody.addEventListener('click', onTableAction);
   tableBody.addEventListener('change', onTableAction);
   loadCampsForFilter();
   loadBookings();
