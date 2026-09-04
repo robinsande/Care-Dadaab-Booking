@@ -4,7 +4,7 @@ const ROOM_STATUSES = ['Available', 'Booked', 'Occupied', 'Maintenance'];
 
 const STAY_TYPES = ['Short Stay', 'Long Stay'];
 
-const GENDERS = ['Male', 'Female', 'Other', 'Prefer not to say'];
+const GENDERS = ['Male', 'Female'];
 
 const DEPARTURE_COUNTRIES = [
   { value: 'Local (Kenyan)', label: 'Local (Kenyan)' },
