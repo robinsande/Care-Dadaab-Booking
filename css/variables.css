@@ -4,6 +4,9 @@
   --color-brand-dark: #c45e12;
   --color-brand-soft: #fff4eb;
   --color-brand-accent: #f9b233;
+  --color-purple: #54206f;
+  --color-purple-dark: #351347;
+  --color-purple-soft: #f2eafa;
 
   /* Neutrals */
   --color-ink: #1f2933;
@@ -11,8 +14,8 @@
   --color-border: #d9e2ec;
   --color-surface: #ffffff;
   --color-surface-muted: #f7f9fc;
-  --color-bg: #f5f7fa;
-  --color-bg-accent: #fff8f2;
+  --color-bg: #f6f0fa;
+  --color-bg-accent: #fff3e8;
 
   /* Semantic */
   --color-success: #1b7a4e;

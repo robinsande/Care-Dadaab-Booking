@@ -246,7 +246,9 @@
 
 /* Admin layout */
 .admin-body {
-  background: var(--color-bg);
+  background:
+    radial-gradient(circle at 92% 8%, rgba(232, 114, 30, 0.2), transparent 24rem),
+    linear-gradient(135deg, var(--color-purple-soft) 0%, var(--color-bg-accent) 58%, #fff 100%);
 }
 
 .admin-shell {
@@ -256,9 +258,9 @@
 }
 
 .admin-sidebar {
-  background: var(--color-surface);
-  color: var(--color-ink);
-  border-right: 1px solid var(--color-border);
+  background: linear-gradient(180deg, var(--color-purple-dark) 0%, var(--color-purple) 72%, var(--color-brand-dark) 100%);
+  color: #fff;
+  border-right: 0;
   padding: var(--space-5);
   display: none;
   flex-direction: column;
@@ -266,11 +268,11 @@
 }
 
 .admin-sidebar .brand {
-  color: var(--color-ink);
+  color: #fff;
 }
 
 .admin-sidebar .brand-text span {
-  color: var(--color-ink-muted);
+  color: rgba(255, 255, 255, 0.72);
 }
 
 .admin-nav {
@@ -280,7 +282,7 @@
 }
 
 .admin-nav a {
-  color: var(--color-ink-muted);
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   font-size: var(--text-sm);
   font-weight: 600;
@@ -290,8 +292,8 @@
 
 .admin-nav a:hover,
 .admin-nav a[aria-current="page"] {
-  background: var(--color-brand-soft);
-  color: var(--color-brand-dark);
+  background: var(--color-brand);
+  color: #fff;
   text-decoration: none;
 }
 
