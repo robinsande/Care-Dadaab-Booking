@@ -37,6 +37,11 @@ export function validateGuestFields(values, { requireLocation = true } = {}) {
         return needsOffice && !value ? 'Kenya Office is required for CARE Staff.' : null;
       },
     },
+    internationalCountry: {
+      custom: (value, all) => all.departureCountry === 'International' && !value
+        ? 'Country of Origin is required for International visitors.'
+        : null,
+    },
   };
 
   if (requireLocation) {

@@ -24,6 +24,15 @@ export function initGuestFieldSelects(form) {
     placeholder: 'Select contract type',
   });
   fillSelect(form.elements.kenyaOffice, constants.KENYA_OFFICES, { placeholder: 'Select Kenya office' });
+  const internationalGroup = form.elements.internationalCountry?.closest('.form-group');
+  const updateInternationalVisibility = () => {
+    const isInternational = form.elements.departureCountry?.value === 'International';
+    if (internationalGroup) internationalGroup.hidden = !isInternational;
+    if (form.elements.internationalCountry) {
+      form.elements.internationalCountry.required = isInternational;
+      if (!isInternational) form.elements.internationalCountry.value = '';
+    }
+  };
   const updateOfficeVisibility = () => {
     const group = form.elements.kenyaOffice?.closest('.form-group');
     const isKenyaStaff = form.elements.contractType?.value === 'CARE Staff'
@@ -33,6 +42,7 @@ export function initGuestFieldSelects(form) {
       form.elements.kenyaOffice.required = isKenyaStaff;
       if (!isKenyaStaff) form.elements.kenyaOffice.value = '';
     }
+    updateInternationalVisibility();
   };
   form.elements.contractType?.addEventListener('change', updateOfficeVisibility);
   form.elements.departureCountry?.addEventListener('change', updateOfficeVisibility);
@@ -68,6 +78,7 @@ export function buildBookingPayload(values) {
     gender: values.gender,
     contractType: values.contractType || '',
     kenyaOffice: values.kenyaOffice || '',
+    internationalCountry: values.internationalCountry || '',
     reasonForVisit: values.reasonForVisit || '',
     arrivalDate: values.arrivalDate,
     departureDate: values.departureDate,
@@ -91,6 +102,7 @@ export function populateGuestFields(form, booking) {
   form.elements.gender.value = guest.gender || booking.gender || '';
   form.elements.contractType.value = guest.contractType || booking.contractType || '';
   form.elements.kenyaOffice.value = guest.kenyaOffice || booking.kenyaOffice || '';
+  form.elements.internationalCountry.value = guest.internationalCountry || booking.internationalCountry || '';
   form.elements.reasonForVisit.value = booking.reasonForVisit || '';
   form.elements.arrivalDate.value = sliceDate(booking.arrivalDate);
   form.elements.departureDate.value = sliceDate(booking.departureDate);

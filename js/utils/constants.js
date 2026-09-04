@@ -6,7 +6,10 @@ const STAY_TYPES = ['Short Stay', 'Long Stay'];
 
 const GENDERS = ['Male', 'Female', 'Other', 'Prefer not to say'];
 
-const DEPARTURE_COUNTRIES = ['Local (Kenyan)', 'International'];
+const DEPARTURE_COUNTRIES = [
+  { value: 'Local (Kenyan)', label: 'Local (Kenyan)' },
+  { value: 'International', label: 'International' },
+];
 
 const CONTRACT_TYPES = [
   'CARE Staff',
