@@ -43,6 +43,11 @@ async function loadDashboard() {
       const el = document.querySelector(`[data-stat="${key}"]`);
       if (el) el.textContent = String(value);
     });
+    const dashboardName = document.querySelector('[data-dashboard-name]');
+    const currentUserName = document.querySelector('[data-admin-name]')?.textContent;
+    if (dashboardName && currentUserName && currentUserName !== '—') dashboardName.textContent = currentUserName.split(' ')[0];
+    const updated = document.querySelector('[data-dashboard-updated]');
+    if (updated) updated.textContent = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' }).format(new Date());
 
     renderCampStats(data.bookingsByCamp || []);
     renderRoomStatuses(data.roomStatuses || []);

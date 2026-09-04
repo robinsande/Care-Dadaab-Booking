@@ -39,17 +39,24 @@
       </header>
 
       <div class="admin-content">
-        <div class="page-header">
-          <h2 style="font-size:var(--text-xl);">Overview</h2>
-          <p>Today's activity and facility occupancy across CARE accommodation camps.</p>
+        <div class="dashboard-hero">
+          <div>
+            <span class="dashboard-eyebrow">Operations overview</span>
+            <h2>Good day, <span data-dashboard-name>team</span></h2>
+            <p>Monitor arrivals, departures, occupancy and booking activity across CARE accommodation camps.</p>
+          </div>
+          <div class="dashboard-live">
+            <span class="live-dot" aria-hidden="true"></span>
+            <span>Live dashboard</span>
+            <small>Updated <time data-dashboard-updated>—</time></small>
+          </div>
         </div>
-
         <div class="stats-grid" id="stats-grid" aria-live="polite">
-          <div class="stat"><div class="stat-label">Today's Arrivals</div><div class="stat-value" data-stat="todayArrivals">—</div></div>
-          <div class="stat"><div class="stat-label">Today's Departures</div><div class="stat-value" data-stat="todayDepartures">—</div></div>
-          <div class="stat"><div class="stat-label">Occupied Rooms</div><div class="stat-value" data-stat="occupiedRooms">—</div></div>
-          <div class="stat"><div class="stat-label">Available Rooms</div><div class="stat-value" data-stat="availableRooms">—</div></div>
-          <div class="stat"><div class="stat-label">Outstanding Invoices</div><div class="stat-value" data-stat="outstandingInvoices">—</div></div>
+          <div class="stat stat-arrivals"><div class="stat-icon" aria-hidden="true">↗</div><div><div class="stat-label">Today's Arrivals</div><div class="stat-value" data-stat="todayArrivals">—</div><div class="stat-note">Expected today</div></div></div>
+          <div class="stat stat-departures"><div class="stat-icon" aria-hidden="true">↘</div><div><div class="stat-label">Today's Departures</div><div class="stat-value" data-stat="todayDepartures">—</div><div class="stat-note">Due to depart</div></div></div>
+          <div class="stat stat-occupied"><div class="stat-icon" aria-hidden="true">●</div><div><div class="stat-label">Occupied Rooms</div><div class="stat-value" data-stat="occupiedRooms">—</div><div class="stat-note">Currently in use</div></div></div>
+          <div class="stat stat-available"><div class="stat-icon" aria-hidden="true">✓</div><div><div class="stat-label">Available Rooms</div><div class="stat-value" data-stat="availableRooms">—</div><div class="stat-note">Ready for booking</div></div></div>
+          <div class="stat stat-invoices"><div class="stat-icon" aria-hidden="true">₵</div><div><div class="stat-label">Outstanding Invoices</div><div class="stat-value" data-stat="outstandingInvoices">—</div><div class="stat-note">Needs attention</div></div></div>
         </div>
 
         <div class="form-actions">
@@ -57,8 +64,9 @@
           <a class="btn btn-secondary" href="bookings.html">View All Bookings</a>
         </div>
 
-        <div class="panel" style="margin-top:var(--space-6);">
-          <h3 style="font-size:var(--text-lg);margin-bottom:var(--space-4);">Room Status by Camp and Block</h3>
+        <div class="dashboard-grid">
+        <div class="panel dashboard-panel">
+          <div class="dashboard-panel-header"><div><span class="panel-kicker">Accommodation</span><h3>Room status</h3></div><span class="panel-caption">By camp and block</span></div>
           <div class="table-wrap">
             <table class="table" aria-label="Room status by camp and block">
               <thead><tr><th>Camp</th><th>Block</th><th>Room</th><th>Status</th></tr></thead>
@@ -67,8 +75,8 @@
           </div>
         </div>
 
-        <div class="panel" style="margin-top:var(--space-6);">
-          <h3 style="font-size:var(--text-lg);margin-bottom:var(--space-4);">Bookings by Camp</h3>
+        <div class="panel dashboard-panel">
+          <div class="dashboard-panel-header"><div><span class="panel-kicker">Distribution</span><h3>Bookings by camp</h3></div><span class="panel-caption">Active bookings</span></div>
           <div class="table-wrap">
             <table class="table" aria-label="Bookings by camp">
               <thead>
@@ -84,8 +92,8 @@
           </div>
         </div>
 
-        <div class="panel" style="margin-top:var(--space-6);">
-          <h3 style="font-size:var(--text-lg);margin-bottom:var(--space-4);">Recent Bookings</h3>
+        <div class="panel dashboard-panel dashboard-panel-wide">
+          <div class="dashboard-panel-header"><div><span class="panel-kicker">Activity</span><h3>Recent bookings</h3></div><span class="panel-caption">Latest reservations</span></div>
           <div class="table-wrap">
             <table class="table" aria-label="Recent bookings">
               <thead>
@@ -102,6 +110,7 @@
                 <tr><td colspan="6" class="empty-state">Loading…</td></tr>
               </tbody>
             </table>
+          </div>
           </div>
         </div>
       </div>
