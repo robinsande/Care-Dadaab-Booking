@@ -8,6 +8,7 @@ import { initModals, openModal } from '../components/modal.js';
 import { withLoading } from '../components/loading.js';
 import { showToast } from '../components/toast.js';
 import { renderPagination } from '../components/pagination.js';
+import { confirmDialog } from '../components/modal.js';
 import {
   escapeHtml,
   formatMoney,
@@ -60,11 +61,13 @@ function boot() {
   });
 
   tableBody.addEventListener('click', (event) => {
-    if (event.target.closest('[data-payment-action]')) return;
+    if (event.target.closest('[data-payment-action]')) {
+      handlePaymentChange(event.target);
+      return;
+    }
     const row = event.target.closest('[data-invoice-id]');
     if (row) openInvoiceDetail(row.dataset.invoiceId);
   });
-  tableBody.addEventListener('change', (event) => handlePaymentChange(event.target));
 
   tableBody.addEventListener('keydown', (event) => {
     if (event.key !== 'Enter' && event.key !== ' ') return;
@@ -161,11 +164,30 @@ function renderTable() {
           <td>${escapeHtml(formatMoney(invoice.totalAmount, currency))}</td>
           <td>${paymentStatusBadge(invoice.paymentStatus)}</td>
           <td>${emailStatusBadge(emailStatus)}</td>
-          <td><label class="form-check"><input type="checkbox" data-payment-action data-invoice-id="${escapeHtml(id)}" ${paid ? 'checked disabled' : ''} aria-label="Mark invoice ${escapeHtml(invoice.invoiceNumber || '')} as paid"><span>Paid</span></label></td>
+          <td>${paid ? 'Paid' : `<button type="button" class="btn btn-primary btn-sm" data-payment-action data-invoice-id="${escapeHtml(id)}">Paid</button>`}</td>
         </tr>
       `;
     })
     .join('');
+}
+
+async function handlePaymentChange(button) {
+  if (!button.matches('[data-payment-action]')) return;
+  const confirmed = await confirmDialog({
+    title: 'Confirm payment',
+    message: 'Mark this invoice as paid?',
+    confirmLabel: 'Yes, mark paid',
+  });
+  if (!confirmed) return;
+  button.disabled = true;
+  try {
+    await updateInvoicePaymentStatus(button.dataset.invoiceId, 'Paid');
+    showToast('Invoice marked as paid.', 'success');
+    await loadInvoices();
+  } catch (error) {
+    button.disabled = false;
+    showToast(error instanceof ApiError ? error.message : 'Unable to update payment status.', 'error');
+  }
 }
 
 async function printInvoice() {
