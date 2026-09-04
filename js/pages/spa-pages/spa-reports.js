@@ -25,7 +25,9 @@ export async function init() {
 
   fillSelect(reportTypeSelect, constants.REPORT_TYPES, { placeholder: 'Select report' });
   const hashQuery = window.location.hash.split('?')[1] || '';
-  const requestedType = new URLSearchParams(hashQuery).get('type');
+  const requestedType = window.location.hash.split('/')[1] === 'reservation-log'
+    ? 'reservation-log'
+    : new URLSearchParams(hashQuery).get('type');
   if (requestedType && constants.REPORT_TYPES.some((item) => item.value === requestedType)) {
     reportTypeSelect.value = requestedType;
   }

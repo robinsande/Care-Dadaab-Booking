@@ -15,12 +15,13 @@ const PAGE_TITLES = {
   rooms: 'Rooms',
   rates: 'Rates',
   reports: 'Reports',
+  'reservation-log': 'Reservation Log',
   users: 'Users',
   settings: 'Settings',
   'change-password': 'Change Password',
 };
 
-const SUPER_ADMIN_ROUTES = ['camps', 'blocks', 'rates', 'reports', 'users', 'settings'];
+const SUPER_ADMIN_ROUTES = ['camps', 'blocks', 'rates', 'reports', 'reservation-log', 'users', 'settings'];
 
 const SPA_NAV = [
   { hash: '#/dashboard', label: 'Dashboard', route: 'dashboard' },
@@ -32,7 +33,7 @@ const SPA_NAV = [
   { hash: '#/rates', label: 'Rates', route: 'rates', superAdmin: true },
   { hash: '#/invoices', label: 'Invoices', route: 'invoices' },
   { hash: '#/reports', label: 'Reports', route: 'reports', superAdmin: true },
-  { hash: '#/reports?type=reservation-log', label: 'Reservation Log', route: 'reports', superAdmin: true },
+  { hash: '#/reservation-log', label: 'Reservation Log', route: 'reservation-log', superAdmin: true },
   { hash: '#/users', label: 'Users', route: 'users', superAdmin: true },
   { hash: '#/settings', label: 'Settings', route: 'settings', superAdmin: true },
 ];
@@ -188,6 +189,7 @@ async function loadPageModule(route) {
     rooms: './spa-pages/spa-rooms.js',
     rates: './spa-pages/spa-rates.js',
     reports: './spa-pages/spa-reports.js',
+    'reservation-log': './spa-pages/spa-reports.js',
     users: './spa-pages/spa-users.js',
     settings: './spa-pages/spa-settings.js',
     'change-password': './spa-pages/spa-change-password.js',
