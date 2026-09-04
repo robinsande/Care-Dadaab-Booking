@@ -432,8 +432,9 @@
   place-items: center;
   padding: var(--space-6);
   background:
-    radial-gradient(ellipse at top, rgba(232, 114, 30, 0.12), transparent 50%),
-    linear-gradient(180deg, #fff8f2, #ffffff);
+    radial-gradient(circle at 12% 18%, rgba(232, 114, 30, 0.42), transparent 34%),
+    radial-gradient(circle at 88% 82%, rgba(84, 32, 111, 0.34), transparent 38%),
+    linear-gradient(135deg, var(--color-brand-soft) 0%, var(--color-purple-soft) 100%);
 }
 
 .login-panel {
