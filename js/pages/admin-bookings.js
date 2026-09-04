@@ -1,6 +1,7 @@
 import {
   listBookings,
   checkInBooking,
+  checkOutBooking,
 } from '../api/bookings.js';
 import { listCamps } from '../api/camps.js';
 import { ApiError } from '../api/client.js';
@@ -152,6 +153,9 @@ function renderTable() {
                    <span>Check in</span>
                  </label>`
               : '—'}
+           ${booking.status === 'Checked In'
+             ? `<button type="button" class="btn btn-secondary btn-sm" data-action="early-check-out" data-booking-id="${escapeHtml(id)}">Emergency Early Check Out</button>`
+             : ''}
           </td>
         </tr>
       `;
@@ -161,6 +165,25 @@ function renderTable() {
 
 async function onTableAction(event) {
   const checkbox = event.target.closest('input[data-action="check-in"]');
+  const earlyCheckout = event.target.closest('[data-action="early-check-out"]');
+  if (earlyCheckout) {
+    const reason = window.prompt('Reason for emergency early check out:');
+    if (reason === null || !reason.trim()) {
+      showToast('A reason is required for an emergency early check out.', 'error');
+      return;
+    }
+    if (!window.confirm(`Check out this visitor early due to an emergency?\nReason: ${reason.trim()}`)) return;
+    earlyCheckout.disabled = true;
+    try {
+      await checkOutBooking(earlyCheckout.dataset.bookingId, reason.trim());
+      showToast('Visitor checked out early due to emergency.', 'success');
+      await loadBookings();
+    } catch (error) {
+      earlyCheckout.disabled = false;
+      showToast(error instanceof ApiError ? error.message : 'Unable to check out visitor.', 'error');
+    }
+    return;
+  }
   if (!checkbox || !checkbox.checked) return;
 
   const row = checkbox.closest('tr');
