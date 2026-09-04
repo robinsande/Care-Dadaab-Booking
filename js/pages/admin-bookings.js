@@ -1,5 +1,6 @@
 import {
   listBookings,
+  checkInBooking,
 } from '../api/bookings.js';
 import { listCamps } from '../api/camps.js';
 import { ApiError } from '../api/client.js';
@@ -55,7 +56,7 @@ function boot() {
     loadBookings();
   });
 
-  tableBody.addEventListener('click', onTableAction);
+  tableBody.addEventListener('change', onTableAction);
   loadCampsForFilter();
   loadBookings();
 }
@@ -117,7 +118,7 @@ async function loadBookings() {
       },
     );
   } catch (error) {
-    tableBody.innerHTML = `<tr><td colspan="8" class="empty-state">Unable to load bookings.</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="9" class="empty-state">Unable to load bookings.</td></tr>`;
     showToast(
       error instanceof ApiError ? error.message : 'Unable to load bookings.',
       'error',
@@ -127,7 +128,7 @@ async function loadBookings() {
 
 function renderTable() {
   if (!state.bookings.length) {
-    tableBody.innerHTML = `<tr><td colspan="8" class="empty-state">No bookings found.</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="9" class="empty-state">No bookings found.</td></tr>`;
     return;
   }
 
@@ -144,14 +145,41 @@ function renderTable() {
           <td>${escapeHtml(booking.stayType || '—')}</td>
           <td>${statusBadge(booking.status)}</td>
           <td>${escapeHtml(roomLabel(booking.room, booking))}</td>
+          <td>
+            ${booking.status === 'Booked'
+              ? `<label class="form-check" title="Check in visitor">
+                   <input type="checkbox" data-action="check-in" aria-label="Check in ${escapeHtml(booking.bookingReference || 'visitor')}" />
+                   <span>Check in</span>
+                 </label>`
+              : '—'}
+          </td>
         </tr>
       `;
     })
     .join('');
 }
 
-function onTableAction() {
-  /* navigation via row links */
+async function onTableAction(event) {
+  const checkbox = event.target.closest('input[data-action="check-in"]');
+  if (!checkbox || !checkbox.checked) return;
+
+  const row = checkbox.closest('tr');
+  const id = row?.dataset.id;
+  if (!id) return;
+
+  checkbox.disabled = true;
+  try {
+    await checkInBooking(id);
+    showToast('Visitor checked in successfully.', 'success');
+    await loadBookings();
+  } catch (error) {
+    checkbox.checked = false;
+    checkbox.disabled = false;
+    showToast(
+      error instanceof ApiError ? error.message : 'Unable to check in visitor.',
+      'error',
+    );
+  }
 }
 
 const user = requireAuth();
