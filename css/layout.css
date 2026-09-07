@@ -366,7 +366,6 @@
   display: block;
   width: 100%;
   overflow: visible;
-  animation: reservation-log-walk-cycle 1.2s ease-in-out infinite;
 }
 
 .reservation-log-ground {
@@ -385,18 +384,11 @@
   stroke-width: 6;
 }
 
-.reservation-log-body {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: reservation-log-step 1.2s ease-in-out infinite;
-}
-
 .reservation-log-head {
   fill: var(--color-purple);
   stroke-width: 2;
   transform-box: fill-box;
   transform-origin: center;
-  animation: reservation-log-walk 1.8s ease-in-out infinite;
 }
 
 .reservation-log-bag-strap,
@@ -413,12 +405,6 @@
   stroke-width: 3;
   transform-box: fill-box;
   transform-origin: center;
-  animation: reservation-log-bag-sway 1.8s ease-in-out infinite;
-}
-
-.reservation-log-bag-handle,
-.reservation-log-paper {
-  animation: reservation-log-bag-sway 1.8s ease-in-out infinite;
 }
 
 .login-form-reveal {
@@ -430,6 +416,41 @@
   stroke: #fff;
   stroke-linecap: round;
   stroke-width: 2;
+}
+
+.login-entry-bag .reservation-log-illustration svg {
+  animation: reservation-log-walk-cycle 1.1s ease-in-out infinite;
+}
+
+.login-entry-bag .reservation-log-head {
+  animation: reservation-log-walk 1.1s ease-in-out infinite;
+}
+
+.login-entry-bag .reservation-log-bag,
+.login-entry-bag .reservation-log-bag-handle,
+.login-entry-bag .reservation-log-paper {
+  animation: reservation-log-bag-sway 1.1s ease-in-out infinite;
+}
+
+.login-walk-arm,
+.login-walk-leg {
+  fill: none;
+  stroke: var(--color-purple);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 6;
+  transform-box: fill-box;
+  transform-origin: top center;
+}
+
+.login-walk-arm-back,
+.login-walk-leg-front {
+  animation: login-walk-back 1.1s ease-in-out infinite;
+}
+
+.login-walk-arm-front,
+.login-walk-leg-back {
+  animation: login-walk-front 1.1s ease-in-out infinite;
 }
 
 .reservation-log-bag-label {
@@ -460,9 +481,14 @@
   50% { transform: translateX(3px) rotate(1deg); }
 }
 
-@keyframes reservation-log-step {
-  0%, 100% { transform: rotate(-2deg) translateY(1px); }
-  50% { transform: rotate(2deg) translateY(-2px); }
+@keyframes login-walk-front {
+  0%, 100% { transform: rotate(18deg); }
+  50% { transform: rotate(-18deg); }
+}
+
+@keyframes login-walk-back {
+  0%, 100% { transform: rotate(-18deg); }
+  50% { transform: rotate(18deg); }
 }
 
 @keyframes login-form-reveal {
@@ -477,12 +503,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reservation-log-head,
-  .reservation-log-body,
-  .reservation-log-illustration svg,
-  .reservation-log-bag,
-  .reservation-log-bag-handle,
-  .reservation-log-paper,
+  .login-entry-bag .reservation-log-head,
+  .login-entry-bag .reservation-log-illustration svg,
+  .login-entry-bag .reservation-log-bag,
+  .login-entry-bag .reservation-log-bag-handle,
+  .login-entry-bag .reservation-log-paper,
+  .login-entry-bag .login-walk-arm,
+  .login-entry-bag .login-walk-leg,
   .login-form-reveal {
     animation: none;
   }
