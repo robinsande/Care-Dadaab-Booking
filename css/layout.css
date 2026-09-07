@@ -625,6 +625,10 @@
 
   .login-page::before,
   .login-page::after,
+  .scenery-sun,
+  .scenery-mountain,
+  .scenery-tree,
+  .scenery-mist,
   .login-galaxy::before,
   .login-galaxy::after,
   .galaxy-star,
@@ -920,8 +924,7 @@
   display: grid;
   place-items: center;
   padding: var(--space-6);
-  background:
-    linear-gradient(110deg, #9b3f0b 0%, #d86b18 24%, #54206f 50%, #71338b 70%, #e8721e 100%);
+  background: linear-gradient(160deg, #ffb14e 0%, #e8721e 36%, #71338b 70%, #29133f 100%);
 }
 
 .login-page::before,
@@ -931,7 +934,7 @@
   width: 24rem;
   height: 24rem;
   border-radius: 50%;
-  opacity: 0.2;
+  opacity: 0.13;
   filter: blur(8px);
   pointer-events: none;
 }
@@ -939,7 +942,7 @@
 .login-page::before {
   top: -12rem;
   left: -8rem;
-  background: var(--color-brand-accent);
+  background: #ffd18a;
   animation: login-orb-drift 12s ease-in-out infinite alternate;
 }
 
@@ -950,10 +953,117 @@
   animation: login-orb-drift 16s ease-in-out infinite alternate-reverse;
 }
 
-.login-leaves {
+.login-scenery {
   position: absolute;
   inset: 0;
   z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(255, 201, 111, 0.2), transparent 45%),
+    linear-gradient(0deg, rgba(35, 12, 55, 0.58), transparent 52%);
+}
+
+.scenery-sun {
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  width: min(28vw, 280px);
+  height: min(28vw, 280px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 236, 179, 0.94) 0 18%, rgba(255, 159, 69, 0.42) 42%, transparent 70%);
+  transform: translateX(-50%);
+  filter: blur(2px);
+  animation: login-orb-drift 14s ease-in-out infinite alternate;
+}
+
+.scenery-mountain {
+  position: absolute;
+  right: -8%;
+  bottom: 5%;
+  width: 120%;
+  height: 48%;
+  clip-path: polygon(0 100%, 13% 48%, 23% 67%, 39% 17%, 53% 63%, 67% 28%, 79% 69%, 91% 38%, 100% 68%, 100% 100%);
+}
+
+.scenery-mountain-back {
+  background: linear-gradient(145deg, rgba(190, 116, 176, 0.9), rgba(71, 30, 101, 0.97));
+  opacity: 0.82;
+  transform: translateX(4%);
+}
+
+.scenery-mountain-front {
+  bottom: -7%;
+  height: 42%;
+  background: linear-gradient(155deg, #71338b, #29133f 78%);
+  opacity: 0.94;
+  transform: scaleX(1.12);
+}
+
+.scenery-tree {
+  position: absolute;
+  bottom: 16%;
+  width: 22px;
+  height: 45%;
+  background: linear-gradient(90deg, #3b174d 0 42%, #24102f 42% 58%, #321343 58%);
+  transform-origin: bottom center;
+  opacity: 0.92;
+}
+
+.scenery-tree::before,
+.scenery-tree::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 150px;
+  height: 190px;
+  border-radius: 48% 52% 42% 58%;
+  background: radial-gradient(circle at 35% 28%, #ffb13b 0 12%, #e8721e 34%, #71338b 72%);
+  transform: translateX(-50%);
+  filter: drop-shadow(0 10px 16px rgba(27, 22, 46, 0.25));
+}
+
+.scenery-tree::before {
+  top: -30px;
+}
+
+.scenery-tree::after {
+  top: 90px;
+  left: 75%;
+  width: 104px;
+  height: 130px;
+  opacity: 0.85;
+}
+
+.scenery-tree-left {
+  left: 8%;
+  height: 48%;
+  transform: rotate(-4deg);
+}
+
+.scenery-tree-right {
+  right: 7%;
+  bottom: 11%;
+  height: 54%;
+  transform: rotate(5deg) scale(1.12);
+}
+
+.scenery-mist {
+  position: absolute;
+  right: -10%;
+  bottom: 18%;
+  width: 120%;
+  height: 18%;
+  border-radius: 50%;
+  background: rgba(218, 159, 221, 0.2);
+  filter: blur(22px);
+  animation: login-orb-drift 16s ease-in-out infinite alternate-reverse;
+}
+
+.login-leaves {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
   overflow: hidden;
   pointer-events: none;
 }
@@ -961,10 +1071,10 @@
 .login-galaxy {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 1;
   overflow: hidden;
   pointer-events: none;
-  opacity: 0.75;
+  opacity: 0.32;
 }
 
 .login-galaxy::before,
@@ -1225,8 +1335,37 @@
   z-index: 1;
   width: min(420px, 100%);
   padding: clamp(var(--space-6), 5vw, var(--space-8));
-  border-color: rgba(255, 255, 255, 0.72);
-  box-shadow: 0 24px 70px rgba(32, 12, 44, 0.24);
+  border-color: rgba(255, 255, 255, 0.4);
+  background: linear-gradient(145deg, rgba(69, 24, 87, 0.62), rgba(138, 58, 101, 0.4));
+  box-shadow: 0 24px 70px rgba(39, 13, 51, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(18px);
+  color: #fff;
+}
+
+.login-panel .login-brand h1,
+.login-panel .login-brand p,
+.login-panel .form-label,
+.login-panel .reservation-log-bag-label {
+  color: #fff;
+}
+
+.login-panel .reservation-log-bag-hint {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.login-panel .form-control {
+  border-color: rgba(255, 255, 255, 0.36);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.login-panel .form-control:focus {
+  border-color: #ffd18a;
+  box-shadow: 0 0 0 3px rgba(255, 209, 138, 0.24);
+}
+
+.login-panel .form-control::placeholder {
+  color: rgba(255, 241, 216, 0.72);
 }
 
 .login-brand {
