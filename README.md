@@ -28,6 +28,7 @@ Consumes a private REST API at `/api/v1/`. No backend code lives in this reposit
 | Rooms | `admin/rooms.html` | Staff (manage: Super Admin) |
 | Rates | `admin/rates.html` | Super Admin |
 | Reports | `admin/reports.html` | Super Admin |
+| Reservation Log | `admin/reservation-log.html` | Super Admin |
 | Users | `admin/users.html` | Super Admin |
 | Settings | `admin/settings.html` | Super Admin |
 | Change Password | `admin/change-password.html` | Staff |
@@ -153,4 +154,3 @@ If login fails with **Route not found: POST /api/v1/auth/login**, another app is
 - Settings payment fields: nested under `payment` (`mpesaPaybillNumber`, `bankName`, etc.)
 - Invoices: display email status; use Print or Download PDF in the UI
 - Bookings: backend snapshots `appliedRate` on create; do not send `appliedRate` from the form
-

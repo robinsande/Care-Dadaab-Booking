@@ -231,6 +231,11 @@ async function handleRoute() {
   const authed = isAuthenticated();
   const isSA = isSuperAdmin();
 
+  if (route === 'reservation-log') {
+    window.location.href = 'admin/reservation-log.html';
+    return;
+  }
+
   if (route === 'login') {
     if (authed) {
       navigate('#/dashboard');
