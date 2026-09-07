@@ -39,18 +39,32 @@
       </header>
 
       <div class="admin-content">
-        <div class="dashboard-hero">
-          <div>
-            <span class="dashboard-eyebrow">Operations overview</span>
+        <section class="dashboard-hero">
+          <div class="dashboard-hero-copy">
+            <span class="dashboard-eyebrow">CAMS · Operations command centre</span>
             <h2>Welcome back, <span data-dashboard-name>team</span></h2>
-            <p>Monitor arrivals, departures, occupancy and booking activity across CARE accommodation camps.</p>
+            <p>Make every stay feel effortless. Keep arrivals moving, rooms ready and teams aligned across CARE accommodation.</p>
+            <div class="dashboard-hero-actions">
+              <a class="btn btn-primary" href="booking-create.html">Create a booking <span aria-hidden="true">→</span></a>
+              <a class="dashboard-text-link" href="bookings.html">Explore reservations <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+          <div class="dashboard-hero-visual" aria-hidden="true">
+            <span class="hero-orbit hero-orbit-one"></span>
+            <span class="hero-orbit hero-orbit-two"></span>
+            <span class="hero-spark hero-spark-one"></span>
+            <span class="hero-spark hero-spark-two"></span>
+            <div class="hero-stay-card">
+              <span class="hero-stay-icon">✦</span>
+              <span><strong>CARE stays</strong><small>Thoughtful operations</small></span>
+            </div>
           </div>
           <div class="dashboard-live">
             <span class="live-dot" aria-hidden="true"></span>
             <span>Live dashboard</span>
             <small>Updated <time data-dashboard-updated>—</time></small>
           </div>
-        </div>
+        </section>
         <div class="stats-grid" id="stats-grid" aria-live="polite">
           <div class="stat stat-arrivals"><div class="stat-icon" aria-hidden="true">↗</div><div><div class="stat-label">Today's Arrivals</div><div class="stat-value" data-stat="todayArrivals">—</div><div class="stat-note">Expected today</div></div></div>
           <div class="stat stat-departures"><div class="stat-icon" aria-hidden="true">↘</div><div><div class="stat-label">Today's Departures</div><div class="stat-value" data-stat="todayDepartures">—</div><div class="stat-note">Due to depart</div></div></div>
@@ -59,9 +73,10 @@
           <div class="stat stat-invoices"><div class="stat-icon" aria-hidden="true">₵</div><div><div class="stat-label">Outstanding Invoices</div><div class="stat-value" data-stat="outstandingInvoices">—</div><div class="stat-note">Needs attention</div></div></div>
         </div>
 
-        <div class="form-actions">
-          <a class="btn btn-primary" href="booking-create.html">Create Booking</a>
-          <a class="btn btn-secondary" href="bookings.html">View All Bookings</a>
+        <div class="dashboard-quick-links" aria-label="Quick actions">
+          <a class="quick-link quick-link-orange" href="booking-create.html"><span class="quick-link-icon">＋</span><span><strong>New booking</strong><small>Reserve accommodation</small></span><span class="quick-link-arrow">→</span></a>
+          <a class="quick-link quick-link-purple" href="bookings.html"><span class="quick-link-icon">▤</span><span><strong>Reservations</strong><small>Review guest stays</small></span><span class="quick-link-arrow">→</span></a>
+          <a class="quick-link quick-link-sand" href="reports.html"><span class="quick-link-icon">◒</span><span><strong>Insights</strong><small>View operations reports</small></span><span class="quick-link-arrow">→</span></a>
         </div>
 
         <div class="dashboard-grid">
@@ -117,6 +132,6 @@
     </div>
   </div>
 
-  <script type="module" src="../js/pages/admin-dashboard.js?v=20260904-3"></script>
+  <script type="module" src="../js/pages/admin-dashboard.js?v=20260907-1"></script>
 </body>
 </html>
