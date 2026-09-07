@@ -540,6 +540,10 @@
   background: #fff;
 }
 
+.mfa-login-panel [hidden] {
+  display: none !important;
+}
+
 .mfa-manual-key {
   overflow-wrap: anywhere;
   font-family: monospace;
