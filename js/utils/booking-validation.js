@@ -11,7 +11,7 @@ export function validateGuestFields(values, { requireLocation = true } = {}) {
     lastName: { required: true, label: 'Last Name' },
     email: { required: true, email: true, label: 'Email' },
     phone: { required: true, phone: true, label: 'Phone' },
-    organisation: { required: false, label: 'Organisation' },
+    organisation: { required: true, label: 'Organisation' },
     gender: { required: true, label: 'Gender' },
     contractType: { required: true, label: 'Contract Type' },
     reasonForVisit: { required: true, label: 'Reason for Visit' },
