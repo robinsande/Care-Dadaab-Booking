@@ -22,9 +22,6 @@ export async function init() {
   const resultsEl = document.getElementById('report-results');
   const resultsHead = document.getElementById('report-results-head');
   const resultsBody = document.getElementById('report-results-body');
-  const isReservationLog = window.location.hash.split('?')[0] === '#/reservation-log';
-  const reservationLogBag = document.getElementById('spa-open-reservation-log');
-
   fillSelect(reportTypeSelect, constants.REPORT_TYPES, { placeholder: 'Select report' });
   const hashQuery = window.location.hash.split('?')[1] || '';
   const requestedType = window.location.hash.split('/')[1] === 'reservation-log'
@@ -43,17 +40,6 @@ export async function init() {
   exportPdfBtn.addEventListener('click', () => exportReport(reportTypeSelect, 'pdf'));
   exportExcelBtn.addEventListener('click', () => exportReport(reportTypeSelect, 'excel'));
   printBtn.addEventListener('click', () => window.print());
-
-  if (isReservationLog) {
-    form.hidden = true;
-    reservationLogBag.hidden = false;
-    reservationLogBag.addEventListener('click', () => {
-      form.hidden = false;
-      reservationLogBag.hidden = true;
-      reservationLogBag.setAttribute('aria-expanded', 'true');
-      form.querySelector('#rp-campId')?.focus();
-    });
-  }
 
   loadCamps(form);
 }
