@@ -340,6 +340,10 @@
   transition: transform var(--transition), box-shadow var(--transition);
 }
 
+.reservation-log-bag[hidden] {
+  display: none;
+}
+
 .login-entry-bag {
   width: 100%;
   margin: 0 0 var(--space-5);
