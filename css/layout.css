@@ -1904,7 +1904,7 @@
 }
 
 .scenery-mountain-back {
-  background: linear-gradient(145deg, rgba(255, 190, 76, 0.9), rgba(176, 73, 26, 0.97));
+  background: linear-gradient(145deg, rgba(177, 91, 169, 0.9), rgba(77, 32, 104, 0.97));
   opacity: 0.82;
   transform: translateX(4%);
 }
@@ -1912,7 +1912,7 @@
 .scenery-mountain-front {
   bottom: -7%;
   height: 42%;
-  background: linear-gradient(155deg, #e8721e, #9b3d22 78%);
+  background: linear-gradient(155deg, #71338b, #29133f 78%);
   opacity: 0.94;
   transform: scaleX(1.12);
 }
