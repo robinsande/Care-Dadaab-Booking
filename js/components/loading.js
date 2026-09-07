@@ -10,8 +10,14 @@ function ensureOverlay() {
       overlay.setAttribute('role', 'status');
       overlay.setAttribute('aria-live', 'polite');
       overlay.innerHTML = `
-        <div class="loading-inline">
-          <span class="spinner" aria-hidden="true"></span>
+        <div class="loading-card">
+          <div class="loading-orbit" aria-hidden="true">
+            <span class="loading-orbit-dot"></span>
+            <span class="loading-orbit-dot"></span>
+            <span class="loading-orbit-dot"></span>
+            <span class="loading-core">C</span>
+          </div>
+          <strong class="loading-title">CAMS</strong>
           <span class="loading-text">Loading…</span>
         </div>
       `;
