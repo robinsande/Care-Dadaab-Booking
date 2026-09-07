@@ -437,16 +437,35 @@
   overflow: visible;
   border: 0;
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 42%, #ffb15d 0%, #e8721e 68%, #c45e12 100%);
-  color: var(--color-purple-dark);
-  box-shadow: 0 18px 42px rgba(35, 22, 48, 0.24);
-  outline: 1px solid rgba(255, 255, 255, 0.24);
+  background: radial-gradient(circle at 50% 42%, #fffaf6 0%, #fff0e4 66%, #fbd4b5 100%);
+  color: var(--color-ink);
+  box-shadow: 0 18px 42px rgba(91, 37, 102, 0.22), 0 0 0 8px rgba(232, 114, 30, 0.12);
+  outline: none;
 }
 
 .login-entry-bag::before,
 .login-entry-bag::after {
-  display: none !important;
-  content: none !important;
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.login-entry-bag::before {
+  inset: -10px;
+  padding: 3px;
+  background: conic-gradient(from 0deg, var(--color-brand), var(--color-purple), var(--color-brand), var(--color-purple), var(--color-brand));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: login-entry-orbit 6s linear infinite;
+}
+
+.login-entry-bag::after {
+  inset: -20px;
+  border: 1px dashed rgba(91, 37, 102, 0.3);
+  animation: login-entry-pulse 2.8s ease-in-out infinite;
 }
 
 .login-entry-bag .reservation-log-illustration {
@@ -462,7 +481,7 @@
 
 .login-entry-kicker {
   align-self: center;
-  color: var(--color-purple-dark);
+  color: var(--color-brand-dark);
   font-size: var(--text-xs);
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -502,7 +521,7 @@
 }
 
 .login-entry-bag .reservation-log-bag-label {
-  color: var(--color-purple-dark);
+  color: var(--color-brand-dark);
   font-size: var(--text-lg);
   font-weight: 800;
   letter-spacing: 0.02em;
@@ -510,7 +529,7 @@
 
 .login-entry-bag .reservation-log-bag-hint {
   max-width: 220px;
-  color: var(--color-purple-dark);
+  color: var(--color-brand-dark);
   font-size: var(--text-xs);
 }
 
