@@ -23,6 +23,25 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+@keyframes care-auth-logo-pulse {
+  0%, 100% { transform: scale(0.9); filter: saturate(0.8) brightness(0.9); }
+  50% { transform: scale(1); filter: saturate(1.2) brightness(1.08); }
+}
+
+@keyframes care-auth-ring-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes care-auth-ring-spin-reverse {
+  to { transform: rotate(-360deg); }
+}
+
+@keyframes care-auth-beam-scan {
+  0%, 100% { top: 12%; opacity: 0; }
+  15%, 80% { opacity: 0.9; }
+  50% { top: 78%; }
+}
+
 @keyframes login-orb-drift {
   from { transform: translate3d(-10px, -8px, 0) scale(1); }
   to { transform: translate3d(18px, 14px, 0) scale(1.08); }
@@ -601,6 +620,9 @@
   .galaxy-star,
   .login-leaf,
   .fingerprint-scan-line,
+  .care-auth-logo,
+  .care-auth-ring,
+  .care-auth-scan-beam,
   .login-success-overlay,
   .login-success-card {
     animation: none;
@@ -1056,6 +1078,75 @@
   border: 1px solid rgba(232, 114, 30, 0.22);
   border-radius: 50%;
   background: var(--color-brand-soft);
+}
+
+.care-auth-scanner {
+  position: relative;
+  width: 148px;
+  height: 148px;
+  margin: 0 auto var(--space-3);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(249, 178, 51, 0.22), rgba(185, 135, 209, 0.14) 56%, transparent 57%);
+  isolation: isolate;
+}
+
+.care-auth-logo {
+  position: relative;
+  z-index: 2;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.86), 0 0 24px rgba(232, 114, 30, 0.5);
+  animation: care-auth-logo-pulse 1.8s ease-in-out infinite;
+}
+
+.care-auth-ring {
+  position: absolute;
+  inset: 7px;
+  z-index: 1;
+  border: 2px solid transparent;
+  border-top-color: var(--color-brand);
+  border-right-color: rgba(185, 135, 209, 0.9);
+  border-radius: 50%;
+  animation: care-auth-ring-spin 2.8s linear infinite;
+}
+
+.care-auth-ring-inner {
+  inset: 20px;
+  border-width: 1px;
+  border-top-color: var(--color-purple);
+  border-right-color: rgba(249, 178, 51, 0.85);
+  animation: care-auth-ring-spin-reverse 2s linear infinite;
+}
+
+.care-auth-scan-beam {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  top: 12%;
+  z-index: 3;
+  height: 2px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px 2px var(--color-brand), 0 0 18px 4px rgba(185, 135, 209, 0.75);
+  animation: care-auth-beam-scan 1.5s ease-in-out infinite;
+}
+
+.care-auth-scanner + .fingerprint-scanner {
+  width: 38px;
+  height: 16px;
+  margin: -9px auto var(--space-4);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  opacity: 0.48;
+}
+
+.care-auth-scanner + .fingerprint-scanner svg {
+  display: none;
 }
 
 .fingerprint-scanner svg {
