@@ -33,7 +33,7 @@ const SPA_NAV = [
   { hash: '#/rates', label: 'Rates', route: 'rates', superAdmin: true },
   { hash: '#/invoices', label: 'Invoices', route: 'invoices' },
   { hash: '#/reports', label: 'Reports', route: 'reports', superAdmin: true },
-  { href: 'admin/reservation-log.html', label: 'Reservation Log', route: 'reservation-log', superAdmin: true },
+  { hash: '#/reservation-log', label: 'Reservation Log', route: 'reservation-log', superAdmin: true },
   { hash: '#/users', label: 'Users', route: 'users', superAdmin: true },
   { hash: '#/settings', label: 'Settings', route: 'settings', superAdmin: true },
 ];
@@ -101,7 +101,8 @@ function showPage(route) {
     document.body.classList.remove('login-page');
     document.body.classList.add('admin-body');
 
-    const target = document.querySelector(`[data-route="${route}"]`);
+    const target = document.querySelector(`[data-route="${route}"]`)
+      || (route === 'reservation-log' ? document.querySelector('[data-route="reports"]') : null);
     if (target) {
       target.hidden = false;
       const titleEl = document.getElementById('page-title');
@@ -200,7 +201,7 @@ async function loadPageModule(route) {
     rooms: './spa-pages/spa-rooms.js',
     rates: './spa-pages/spa-rates.js',
     reports: './spa-pages/spa-reports.js',
-    'reservation-log': './spa-pages/spa-reports.js',
+    'reservation-log': './spa-pages/spa-reports.js?reservation-log',
     users: './spa-pages/spa-users.js',
     settings: './spa-pages/spa-settings.js',
     'change-password': './spa-pages/spa-change-password.js',
@@ -232,11 +233,6 @@ async function handleRoute() {
   const { route, params } = parseHash();
   const authed = isAuthenticated();
   const isSA = isSuperAdmin();
-
-  if (route === 'reservation-log') {
-    window.location.href = 'admin/reservation-log.html';
-    return;
-  }
 
   if (route === 'login') {
     if (authed) {
