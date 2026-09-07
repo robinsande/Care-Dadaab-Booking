@@ -19,6 +19,7 @@ import { isSuperAdmin } from '../auth/session.js';
 import {
   escapeHtml,
   formatDate,
+  formatDateTime,
   fullName,
   campLabel,
   roomLabel,
@@ -125,7 +126,7 @@ async function loadBookings() {
       },
     );
   } catch (error) {
-    tableBody.innerHTML = `<tr><td colspan="9" class="empty-state">Unable to load bookings.</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="12" class="empty-state">Unable to load bookings.</td></tr>`;
     showToast(
       error instanceof ApiError ? error.message : 'Unable to load bookings.',
       'error',
@@ -135,7 +136,7 @@ async function loadBookings() {
 
 function renderTable() {
   if (!state.bookings.length) {
-    tableBody.innerHTML = `<tr><td colspan="9" class="empty-state">No bookings found.</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="12" class="empty-state">No bookings found.</td></tr>`;
     return;
   }
 
@@ -154,8 +155,11 @@ function renderTable() {
           <td><a href="booking-edit.html?id=${escapeHtml(id)}"><strong>${escapeHtml(booking.bookingReference || '—')}</strong></a></td>
           <td>${escapeHtml(fullName(booking))}<br><span class="text-muted">${escapeHtml(booking.email || '')}</span></td>
           <td>${escapeHtml(campLabel(booking.camp))}</td>
+          <td>${escapeHtml(formatDateTime(booking.createdAt))}</td>
           <td>${escapeHtml(formatDate(booking.arrivalDate))}</td>
           <td>${escapeHtml(formatDate(booking.departureDate))}</td>
+          <td>${escapeHtml(formatDateTime(booking.checkedInAt))}</td>
+          <td>${escapeHtml(formatDateTime(booking.checkedOutAt))}</td>
           <td>${escapeHtml(booking.stayType || '—')}</td>
           <td>${statusBadge(booking.status)}</td>
           <td>${escapeHtml(roomLabel(booking.room, booking))}</td>

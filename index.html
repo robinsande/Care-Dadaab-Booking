@@ -266,11 +266,11 @@
             <table class="table" aria-label="Bookings">
               <thead>
                 <tr>
-                  <th>Reference</th><th>Guest</th><th>Camp</th><th>Arrival</th><th>Departure</th>
-                  <th>Stay Type</th><th>Status</th><th>Room</th><th>Actions</th>
+                  <th>Reference</th><th>Guest</th><th>Camp</th><th>Booked</th><th>Arrival</th><th>Departure</th>
+                  <th>Check-in</th><th>Check-out</th><th>Stay Type</th><th>Status</th><th>Room</th><th>Actions</th>
                 </tr>
               </thead>
-              <tbody id="bookings-table-body"><tr><td colspan="9" class="empty-state">Loading bookings…</td></tr></tbody>
+              <tbody id="bookings-table-body"><tr><td colspan="12" class="empty-state">Loading bookings…</td></tr></tbody>
             </table>
           </div>
           <div id="bookings-pagination"></div>
@@ -323,6 +323,7 @@
             <div class="table-actions" id="action-bar"></div>
           </div>
           <div id="invoice-link" hidden style="margin-bottom:var(--space-4);"></div>
+          <div class="booking-time-summary" id="booking-time-summary" hidden aria-live="polite"></div>
           <form id="booking-form" class="panel" style="max-width:800px;" novalidate>
             <h3 class="form-section-title">Guest Information</h3>
             <div class="form-grid two-col">

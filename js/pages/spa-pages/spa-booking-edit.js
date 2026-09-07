@@ -63,6 +63,7 @@ export async function init() {
   actionBar?.addEventListener('click', onAction);
 
   const invoiceLinkEl = document.getElementById('invoice-link');
+  const timeSummaryEl = document.getElementById('booking-time-summary');
   invoiceLinkEl?.addEventListener('click', onInvoiceLinkClick);
 
   const params = getCurrentParams();
@@ -93,6 +94,14 @@ async function loadBooking(bId) {
     const statusEl = document.getElementById('booking-status');
     populateGuestFields(form, booking);
     statusEl.innerHTML = statusBadge(booking.status);
+    if (timeSummaryEl) {
+      timeSummaryEl.hidden = false;
+      timeSummaryEl.innerHTML = `
+        <div><strong>Booking created</strong><span>${escapeHtml(formatDateTime(booking.createdAt))}</span></div>
+        <div><strong>Checked in</strong><span>${escapeHtml(formatDateTime(booking.checkedInAt))}</span></div>
+        <div><strong>Checked out</strong><span>${escapeHtml(formatDateTime(booking.checkedOutAt))}</span></div>
+      `;
+    }
     const ids = resolveBookingIds(booking);
     const lockLocation = booking.status !== 'Booked';
     await selectors.init({ campId: ids.campId, blockId: ids.blockId, roomId: ids.roomId, stayType: ids.stayType, lockLocation });

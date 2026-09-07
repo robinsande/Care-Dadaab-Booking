@@ -38,6 +38,7 @@ const priceSummaryEl = document.getElementById('price-summary');
 const statusEl = document.getElementById('booking-status');
 const timelineEl = document.getElementById('booking-timeline');
 const invoiceLink = document.getElementById('invoice-link');
+const timeSummaryEl = document.getElementById('booking-time-summary');
 const actionBar = document.getElementById('action-bar');
 const cancelForm = document.getElementById('cancel-form');
 
@@ -70,6 +71,14 @@ async function loadBooking() {
 
     populateGuestFields(form, booking);
     statusEl.innerHTML = statusBadge(booking.status);
+    if (timeSummaryEl) {
+      timeSummaryEl.hidden = false;
+      timeSummaryEl.innerHTML = `
+        <div><strong>Booking created</strong><span>${escapeHtml(formatDateTime(booking.createdAt))}</span></div>
+        <div><strong>Checked in</strong><span>${escapeHtml(formatDateTime(booking.checkedInAt))}</span></div>
+        <div><strong>Checked out</strong><span>${escapeHtml(formatDateTime(booking.checkedOutAt))}</span></div>
+      `;
+    }
 
     const ids = resolveBookingIds(booking);
     const lockLocation = booking.status !== 'Booked';
