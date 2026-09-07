@@ -671,37 +671,71 @@
   animation: login-lamp-glow 2.4s ease-in-out infinite;
 }
 
+.login-lamp-beam {
+  fill: rgba(255, 248, 199, 0.2);
+  filter: blur(3px);
+  transform-box: fill-box;
+  transform-origin: center top;
+  animation: login-lamp-beam 2.4s ease-in-out infinite;
+}
+
 .login-lamp-shade {
   opacity: 1;
-  fill: #fffdf3;
-  stroke: #e8e1c9;
-  stroke-width: 2;
-  filter: drop-shadow(0 7px 8px rgba(255, 224, 128, 0.45));
+  fill: var(--color-purple);
+  stroke: var(--color-purple-dark);
+  stroke-width: 3;
+  filter: drop-shadow(0 7px 10px rgba(91, 37, 102, 0.55));
   transform-box: fill-box;
   transform-origin: center bottom;
   animation: login-lamp-breathe 2.4s ease-in-out infinite;
 }
 
+.login-lamp-shade::after {
+  content: "";
+}
+
+.login-lamp-glow {
+  opacity: 0.88;
+  filter: blur(2px);
+}
+
 .login-lamp-stem,
 .login-lamp-base {
   opacity: 1;
-  fill: none;
   stroke: #f7f4e8;
-  stroke-linecap: round;
-  stroke-width: 8;
+  filter: drop-shadow(0 0 4px rgba(255, 248, 199, 0.55));
+}
+
+.login-lamp-base {
+  stroke-width: 9;
+}
+
+.login-lamp-stem {
+  stroke-width: 7;
 }
 
 .login-lamp-cord {
-  opacity: 1;
+  stroke: rgba(255, 248, 199, 0.6);
+}
+
+.login-lamp-pull {
+  fill: var(--color-brand);
+  stroke: var(--color-brand-dark);
+  filter: drop-shadow(0 0 4px rgba(255, 194, 117, 0.6));
+}
+
+.login-lamp-stem,
+.login-lamp-base {
   fill: none;
-  stroke: #b7b5a8;
+  stroke-linecap: round;
+}
+
+.login-lamp-cord {
+  fill: none;
   stroke-width: 2;
 }
 
 .login-lamp-pull {
-  opacity: 1;
-  fill: #d7aa6e;
-  stroke: #a77e4d;
   stroke-width: 1;
   transform-box: fill-box;
   transform-origin: center top;
@@ -782,13 +816,18 @@
 }
 
 @keyframes login-lamp-glow {
-  0%, 100% { opacity: 0.55; transform: scale(0.96); }
-  50% { opacity: 0.9; transform: scale(1.04); }
+  0%, 100% { opacity: 0.62; transform: scale(0.94); }
+  50% { opacity: 1; transform: scale(1.07); }
 }
 
 @keyframes login-lamp-breathe {
   0%, 100% { transform: scaleY(1); }
   50% { transform: scaleY(1.03); }
+}
+
+@keyframes login-lamp-beam {
+  0%, 100% { opacity: 0.45; transform: scaleY(0.96); }
+  50% { opacity: 0.95; transform: scaleY(1.04); }
 }
 
 @keyframes login-lamp-pull {
@@ -841,6 +880,7 @@
   .login-entry-bag .login-cartoon-body,
   .login-entry-bag .login-cartoon-shadow,
   .login-entry-bag .login-lamp-glow,
+  .login-entry-bag .login-lamp-beam,
   .login-entry-bag .login-lamp-shade,
   .login-entry-bag .login-lamp-pull,
   .login-entry-bag .reservation-log-illustration svg,
