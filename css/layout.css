@@ -383,6 +383,7 @@
 .login-entry-bag .reservation-log-illustration {
   width: 190px;
   margin: var(--space-2) auto 0;
+  transition: transform 220ms ease;
 }
 
 .login-entry-kicker {
@@ -402,6 +403,28 @@
 
 .login-entry-bag:active {
   transform: translateY(0) scale(0.99);
+}
+
+.login-entry-bag:hover .reservation-log-illustration,
+.login-entry-bag:focus-visible .reservation-log-illustration {
+  transform: translateY(-5px) scale(1.04);
+}
+
+.login-entry-bag:hover .reservation-log-bag,
+.login-entry-bag:focus-visible .reservation-log-bag {
+  animation: login-bag-hover 700ms ease-in-out infinite;
+}
+
+.login-entry-bag:hover .reservation-log-bag-handle,
+.login-entry-bag:hover .reservation-log-paper,
+.login-entry-bag:focus-visible .reservation-log-bag-handle,
+.login-entry-bag:focus-visible .reservation-log-paper {
+  animation: login-bag-hover 700ms ease-in-out infinite;
+}
+
+.login-entry-bag:hover .reservation-log-bag-label,
+.login-entry-bag:focus-visible .reservation-log-bag-label {
+  color: var(--color-brand-dark);
 }
 
 .reservation-log-illustration {
@@ -538,6 +561,11 @@
   50% { transform: rotate(18deg); }
 }
 
+@keyframes login-bag-hover {
+  0%, 100% { transform: rotate(-4deg) translateY(0); }
+  50% { transform: rotate(4deg) translateY(-4px); }
+}
+
 @keyframes login-form-reveal {
   from {
     opacity: 0;
@@ -557,8 +585,13 @@
   .login-entry-bag .reservation-log-paper,
   .login-entry-bag .login-walk-arm,
   .login-entry-bag .login-walk-leg,
+  .login-entry-bag .reservation-log-illustration,
+  .login-entry-bag:hover .reservation-log-bag,
+  .login-entry-bag:hover .reservation-log-bag-handle,
+  .login-entry-bag:hover .reservation-log-paper,
   .login-form-reveal {
     animation: none;
+    transition: none;
   }
 
   .login-page::before,

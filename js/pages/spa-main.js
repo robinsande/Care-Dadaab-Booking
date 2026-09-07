@@ -189,7 +189,7 @@ function initAdminChromeOnce() {
 
 async function loadPageModule(route) {
   const moduleMap = {
-    login: './spa-pages/spa-login.js',
+    login: './spa-pages/spa-login.js?v=20260907-2',
     dashboard: './spa-pages/spa-dashboard.js?v=20260904-3',
     bookings: './spa-pages/spa-bookings.js',
     'booking/create': './spa-pages/spa-booking-create.js',
