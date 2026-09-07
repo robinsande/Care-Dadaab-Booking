@@ -17,6 +17,8 @@ if (isAuthenticated()) {
 const form = document.getElementById('login-form');
 const submitBtn = document.getElementById('login-submit');
 const openLoginButton = document.getElementById('open-login-form');
+const successOverlay = document.getElementById('login-success');
+const successTitle = document.getElementById('login-success-title');
 
 openLoginButton?.addEventListener('click', () => {
   form.hidden = false;
@@ -56,12 +58,16 @@ form.addEventListener('submit', async (event) => {
       return;
     }
     showToast('Signed in successfully.', 'success');
+    successTitle.textContent = `Welcome, ${user.firstName || 'back'}`;
+    successOverlay.hidden = false;
 
     const params = new URLSearchParams(window.location.search);
     const redirect = params.get('redirect');
-    window.location.href = redirect && redirect.startsWith('/admin/')
-      ? redirect
-      : 'dashboard.html';
+    window.setTimeout(() => {
+      window.location.href = redirect && redirect.startsWith('/admin/')
+        ? redirect
+        : 'dashboard.html';
+    }, 1800);
   } catch (error) {
     showToast(
       error instanceof ApiError ? error.message : 'Unable to sign in.',

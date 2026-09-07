@@ -21,6 +21,8 @@ export async function init() {
   const form = $('login-form');
   const submitBtn = $('login-submit');
   const openLoginButton = document.getElementById('spa-open-login-form');
+  const successOverlay = document.getElementById('spa-login-success');
+  const successTitle = document.getElementById('spa-login-success-title');
 
   openLoginButton?.addEventListener('click', () => {
     form.hidden = false;
@@ -53,7 +55,9 @@ export async function init() {
         return;
       }
       showToast('Signed in successfully.', 'success');
-      navigate('#/dashboard');
+      successTitle.textContent = `Welcome, ${user.firstName || 'back'}`;
+      successOverlay.hidden = false;
+      window.setTimeout(() => navigate('#/dashboard'), 1800);
     } catch (error) {
       showToast(error instanceof ApiError ? error.message : 'Unable to sign in.', 'error');
     } finally {
