@@ -2,7 +2,7 @@
 
 Vanilla HTML, CSS, and modular JavaScript frontend for the CARE Kenya internal accommodation management system.
 
-Consumes a private REST API at `/api/v1/`. No backend code lives in this repository.
+Consumes the production private REST API at `/api/v1/`. No backend code lives in this repository.
 
 ## Stack
 
@@ -130,6 +130,8 @@ This frontend targets the CAMS backend at `care-dadaab-accommodation-booking-bac
 |---------|---------------------------|------------------|
 | API base | `https://care-dadaab-booking-backend.onrender.com/api/v1` | `API_PREFIX=/api/v1`, `PORT=5000` |
 | CORS | Any static origin | `CORS_ORIGIN=*` (or your frontend URL) |
+
+Daraja payment credentials and production environment settings belong in the backend deployment only; never add them to this frontend repository.
 
 ### Run both locally
 
