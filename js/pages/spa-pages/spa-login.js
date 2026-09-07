@@ -24,6 +24,9 @@ export function reset() {
   const mfaQrCode = document.getElementById('spa-mfa-qr-code');
   const mfaManualKey = document.getElementById('spa-mfa-manual-key');
   const mfaInstructions = document.getElementById('spa-mfa-instructions');
+  const mfaQrDone = document.getElementById('spa-mfa-qr-done');
+  const mfaCodeLabel = document.getElementById('spa-mfa-code-label');
+  const mfaSubmit = document.getElementById('spa-mfa-submit');
 
   if (form) {
     form.reset();
@@ -31,6 +34,12 @@ export function reset() {
     form.classList.remove('login-form-reveal');
   }
   if (mfaPanel) mfaPanel.hidden = true;
+  if (mfaQrCode) mfaQrCode.hidden = true;
+  if (mfaManualKey) mfaManualKey.hidden = true;
+  if (mfaQrDone) mfaQrDone.hidden = true;
+  if (mfaCodeLabel) mfaCodeLabel.hidden = true;
+  if (mfaCode) mfaCode.hidden = true;
+  if (mfaSubmit) mfaSubmit.hidden = true;
   mfaState = null;
   if (openLoginButton) {
     openLoginButton.hidden = false;
@@ -60,6 +69,20 @@ export async function init() {
   const mfaQrCode = document.getElementById('spa-mfa-qr-code');
   const mfaManualKey = document.getElementById('spa-mfa-manual-key');
   const mfaInstructions = document.getElementById('spa-mfa-instructions');
+  const mfaQrDone = document.getElementById('spa-mfa-qr-done');
+  const mfaCodeLabel = document.getElementById('spa-mfa-code-label');
+  const mfaSubmit = document.getElementById('spa-mfa-submit');
+
+  const showCodeEntry = () => {
+    mfaQrCode.hidden = true;
+    mfaManualKey.hidden = true;
+    mfaQrDone.hidden = true;
+    mfaCodeLabel.hidden = false;
+    mfaCode.hidden = false;
+    mfaSubmit.hidden = false;
+    mfaInstructions.textContent = 'QR code scanned. Enter the six-digit code from Microsoft Authenticator.';
+    mfaCode.focus();
+  };
 
   const finishLogin = (user, token) => {
     setSession(token, user);
@@ -111,12 +134,21 @@ export async function init() {
           mfaQrCode.hidden = false;
           mfaManualKey.textContent = `Can't scan? Use this key: ${data.manualKey}`;
           mfaManualKey.hidden = false;
+          mfaQrDone.hidden = false;
+          mfaCodeLabel.hidden = true;
+          mfaCode.hidden = true;
+          mfaSubmit.hidden = true;
+          mfaInstructions.textContent = 'Scan this QR code in Microsoft Authenticator, then confirm below.';
         } else {
           mfaQrCode.hidden = true;
           mfaManualKey.hidden = true;
+          mfaQrDone.hidden = true;
+          mfaCodeLabel.hidden = false;
+          mfaCode.hidden = false;
+          mfaSubmit.hidden = false;
           mfaInstructions.textContent = 'Open Microsoft Authenticator and enter the current six-digit code.';
+          mfaCode.focus();
         }
-        mfaCode.focus();
         return;
       }
       if (!data.token || !data.user) throw new ApiError('Login succeeded but session data was incomplete.');
@@ -127,6 +159,8 @@ export async function init() {
       setButtonLoading(submitBtn, false);
     }
   });
+
+  mfaQrDone.addEventListener('click', showCodeEntry);
 
   mfaSubmit.addEventListener('click', async () => {
     if (!mfaState || !/^\d{6}$/.test(mfaCode.value.trim())) {

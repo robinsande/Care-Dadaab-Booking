@@ -26,7 +26,20 @@ const mfaCode = document.getElementById('mfa-code');
 const mfaQrCode = document.getElementById('mfa-qr-code');
 const mfaManualKey = document.getElementById('mfa-manual-key');
 const mfaInstructions = document.getElementById('mfa-instructions');
+const mfaQrDone = document.getElementById('mfa-qr-done');
+const mfaCodeLabel = document.getElementById('mfa-code-label');
 let mfaState = null;
+
+function showCodeEntry() {
+  mfaQrCode.hidden = true;
+  mfaManualKey.hidden = true;
+  mfaQrDone.hidden = true;
+  mfaCodeLabel.hidden = false;
+  mfaCode.hidden = false;
+  mfaSubmit.hidden = false;
+  mfaInstructions.textContent = 'QR code scanned. Enter the six-digit code from Microsoft Authenticator.';
+  mfaCode.focus();
+}
 
 function finishLogin(user, token) {
   setSession(token, user);
@@ -87,12 +100,21 @@ form.addEventListener('submit', async (event) => {
         mfaQrCode.hidden = false;
         mfaManualKey.textContent = `Can't scan? Use this key: ${data.manualKey}`;
         mfaManualKey.hidden = false;
+        mfaQrDone.hidden = false;
+        mfaCodeLabel.hidden = true;
+        mfaCode.hidden = true;
+        mfaSubmit.hidden = true;
+        mfaInstructions.textContent = 'Scan this QR code in Microsoft Authenticator, then confirm below.';
       } else {
         mfaQrCode.hidden = true;
         mfaManualKey.hidden = true;
+        mfaQrDone.hidden = true;
+        mfaCodeLabel.hidden = false;
+        mfaCode.hidden = false;
+        mfaSubmit.hidden = false;
         mfaInstructions.textContent = 'Open Microsoft Authenticator and enter the current six-digit code.';
+        mfaCode.focus();
       }
-      mfaCode.focus();
       return;
     }
     const token = data.token;
@@ -110,6 +132,8 @@ form.addEventListener('submit', async (event) => {
     setButtonLoading(submitBtn, false);
   }
 });
+
+mfaQrDone.addEventListener('click', showCodeEntry);
 
 mfaSubmit.addEventListener('click', async () => {
   if (!mfaState || !/^\d{6}$/.test(mfaCode.value.trim())) {
