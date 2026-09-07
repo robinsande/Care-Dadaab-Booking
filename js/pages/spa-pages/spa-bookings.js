@@ -146,6 +146,31 @@ async function loadBookings(tableBody, paginationEl) {
   }
 }
 
+function collectExtensionDetails(booking) {
+  return new Promise((resolve) => {
+    const backdrop = document.createElement('div');
+    backdrop.className = 'modal-backdrop';
+    backdrop.innerHTML = `<div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-header"><h2>Extend Stay</h2><button type="button" class="modal-close" data-extension-cancel aria-label="Close">&times;</button></div>
+      <form><div class="modal-body">
+        <div class="form-group"><label class="form-label">New departure date <span class="required">*</span></label><input class="form-control" type="date" name="newDepartureDate" min="${String(booking.departureDate).slice(0, 10)}" required></div>
+        <div class="form-group"><label class="form-label">Reason for extension <span class="required">*</span></label><textarea class="form-control" name="reason" rows="4" required></textarea></div>
+        <div class="form-group"><label class="form-label">Additional cost (KES) <span class="required">*</span></label><input class="form-control" type="number" name="additionalCost" min="0" step="0.01" value="0" required></div>
+      </div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-extension-cancel>Cancel</button><button type="submit" class="btn btn-primary">Extend Stay</button></div></form>
+    </div>`;
+    document.body.appendChild(backdrop);
+    const form = backdrop.querySelector('form');
+    const finish = (value) => { backdrop.remove(); resolve(value); };
+    backdrop.querySelectorAll('[data-extension-cancel]').forEach((button) => button.addEventListener('click', () => finish(null)));
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const data = new FormData(form);
+      finish({ newDepartureDate: data.get('newDepartureDate'), reason: data.get('reason')?.trim(), additionalCost: Number(data.get('additionalCost')) });
+    });
+    form.querySelector('[name="newDepartureDate"]').focus();
+  });
+}
+
 function renderTable(tableBody) {
   if (!state.bookings.length) {
     tableBody.innerHTML = `<tr><td colspan="12" class="empty-state">No bookings found.</td></tr>`;
@@ -230,6 +255,7 @@ async function onTableAction(event) {
     } finally {
       setButtonLoading(btn, false);
     }
+
     return;
   }
 
@@ -275,21 +301,12 @@ async function onTableAction(event) {
 
   if (action === 'extend-stay') {
     const booking = state.bookings.find((item) => String(item._id || item.id) === String(btn.dataset.bookingId));
-    const newDepartureDate = window.prompt(`New departure date (YYYY-MM-DD). Current: ${String(booking?.departureDate || '').slice(0, 10)}:`);
-    const reason = newDepartureDate && window.prompt('Reason for extending the stay:');
-    const additionalCost = reason && window.prompt('Additional cost (KES):', '0');
-    if (!newDepartureDate?.trim() || !reason?.trim() || additionalCost === null
-      || !Number.isFinite(Number(additionalCost)) || Number(additionalCost) < 0) {
-      if (newDepartureDate !== null) showToast('Enter a new date, reason, and valid additional cost.', 'error');
-      return;
-    }
-    if (!window.confirm(`Extend ${booking?.bookingReference || 'this booking'} until ${newDepartureDate.trim()}?`)) return;
+    const details = await collectExtensionDetails(booking);
+    if (!details) return;
     btn.disabled = true;
     try {
       await extendBookingStay(btn.dataset.bookingId, {
-        newDepartureDate: newDepartureDate.trim(),
-        reason: reason.trim(),
-        additionalCost: Number(additionalCost),
+        ...details,
       });
       showToast('Stay extended, invoice updated, and email sent.', 'success');
       await refresh();
