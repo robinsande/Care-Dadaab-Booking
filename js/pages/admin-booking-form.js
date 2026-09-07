@@ -68,10 +68,27 @@ export function setupDateInputs(arrivalInput, departureInput) {
   arrivalInput.min = minDate;
   departureInput.min = minDate;
 
-  arrivalInput.addEventListener('change', () => {
-    if (arrivalInput.value) {
-      departureInput.min = arrivalInput.value;
+  const updateStayDateLimits = () => {
+    if (!arrivalInput.value) return;
+    departureInput.min = arrivalInput.value;
+    if (arrivalInput.form?.elements.stayType?.value === 'Long Stay') {
+      const minimum = new Date(`${arrivalInput.value}T00:00:00`);
+      minimum.setMonth(minimum.getMonth() + 1);
+      minimum.setDate(minimum.getDate() + 1);
+      const maximum = new Date(`${arrivalInput.value}T00:00:00`);
+      maximum.setMonth(maximum.getMonth() + 12);
+      departureInput.min = minimum.toISOString().slice(0, 10);
+      departureInput.max = maximum.toISOString().slice(0, 10);
+    } else {
+      departureInput.removeAttribute('max');
     }
+  };
+
+  arrivalInput.addEventListener('change', () => {
+    updateStayDateLimits();
+  });
+  arrivalInput.form?.elements.stayType?.addEventListener('change', () => {
+    updateStayDateLimits();
   });
 }
 

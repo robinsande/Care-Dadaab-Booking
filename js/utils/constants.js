@@ -2,7 +2,10 @@ const BOOKING_STATUSES = ['Booked', 'Checked In', 'Checked Out', 'Cancelled'];
 
 const ROOM_STATUSES = ['Available', 'Booked', 'Occupied', 'Maintenance'];
 
-const STAY_TYPES = ['Short Stay', 'Long Stay'];
+const STAY_TYPES = [
+  { value: 'Short Stay', label: 'Short Stay' },
+  { value: 'Long Stay', label: 'Long Stay (over 1 month, up to 12 months)' },
+];
 
 const GENDERS = ['Male', 'Female'];
 

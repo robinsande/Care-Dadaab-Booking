@@ -11,7 +11,7 @@ export function validateGuestFields(values, { requireLocation = true } = {}) {
     lastName: { required: true, label: 'Last Name' },
     email: { required: true, email: true, label: 'Email' },
     phone: { required: true, phone: true, label: 'Phone' },
-    organisation: { required: true, label: 'Organisation' },
+    organisation: { required: false, label: 'Organisation' },
     gender: { required: true, label: 'Gender' },
     contractType: { required: true, label: 'Contract Type' },
     reasonForVisit: { required: true, label: 'Reason for Visit' },
@@ -25,9 +25,21 @@ export function validateGuestFields(values, { requireLocation = true } = {}) {
       required: true,
       label: 'Departure Date',
       custom: (value, all) =>
-        isDepartureAfterArrival(all.arrivalDate, value)
-          ? null
-          : 'Departure date must be after arrival date.',
+        (() => {
+          if (!isDepartureAfterArrival(all.arrivalDate, value)) {
+            return 'Departure date must be after arrival date.';
+          }
+          if (all.stayType !== 'Long Stay') return null;
+          const arrival = new Date(`${all.arrivalDate}T00:00:00`);
+          const departure = new Date(`${value}T00:00:00`);
+          const minimum = new Date(arrival);
+          minimum.setMonth(minimum.getMonth() + 1);
+          const maximum = new Date(arrival);
+          maximum.setMonth(maximum.getMonth() + 12);
+          if (departure <= minimum) return 'Long Stay must be more than one month.';
+          if (departure > maximum) return 'Long Stay cannot exceed 12 months.';
+          return null;
+        })(),
     },
     departureCountry: { required: true, label: 'Departure Country' },
     kenyaOffice: {
