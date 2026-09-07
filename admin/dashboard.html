@@ -65,6 +65,20 @@
             <small>Updated <time data-dashboard-updated>—</time></small>
           </div>
         </section>
+        <section class="booking-search-panel" aria-labelledby="booking-search-title">
+          <div class="booking-search-heading">
+            <span class="panel-kicker">Reservation workspace</span>
+            <h3 id="booking-search-title">Where can we arrange a stay?</h3>
+            <p>Start a new accommodation request with the essential details.</p>
+          </div>
+          <div class="booking-search-fields">
+            <div class="booking-search-field"><span class="booking-search-icon">⌖</span><span><small>Destination</small><strong>Choose a camp</strong></span></div>
+            <div class="booking-search-field"><span class="booking-search-icon">↗</span><span><small>Arrival</small><strong>Select date</strong></span></div>
+            <div class="booking-search-field"><span class="booking-search-icon">↘</span><span><small>Departure</small><strong>Select date</strong></span></div>
+            <div class="booking-search-field"><span class="booking-search-icon">♙</span><span><small>Guests</small><strong>1 guest</strong></span></div>
+            <a class="booking-search-button" href="booking-create.html">Start booking <span aria-hidden="true">→</span></a>
+          </div>
+        </section>
         <div class="stats-grid" id="stats-grid" aria-live="polite">
           <div class="stat stat-arrivals"><div class="stat-icon" aria-hidden="true">↗</div><div><div class="stat-label">Today's Arrivals</div><div class="stat-value" data-stat="todayArrivals">—</div><div class="stat-note">Expected today</div></div></div>
           <div class="stat stat-departures"><div class="stat-icon" aria-hidden="true">↘</div><div><div class="stat-label">Today's Departures</div><div class="stat-value" data-stat="todayDepartures">—</div><div class="stat-note">Due to depart</div></div></div>
@@ -132,6 +146,6 @@
     </div>
   </div>
 
-  <script type="module" src="../js/pages/admin-dashboard.js?v=20260907-1"></script>
+  <script type="module" src="../js/pages/admin-dashboard.js?v=20260907-2"></script>
 </body>
 </html>
