@@ -24,6 +24,7 @@ export async function init() {
 
   openLoginButton?.addEventListener('click', () => {
     form.hidden = false;
+    form.classList.add('login-form-reveal');
     openLoginButton.hidden = true;
     openLoginButton.setAttribute('aria-expanded', 'true');
     $('login-email')?.focus();

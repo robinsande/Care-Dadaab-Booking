@@ -20,6 +20,7 @@ const openLoginButton = document.getElementById('open-login-form');
 
 openLoginButton?.addEventListener('click', () => {
   form.hidden = false;
+  form.classList.add('login-form-reveal');
   openLoginButton.hidden = true;
   openLoginButton.setAttribute('aria-expanded', 'true');
   form.querySelector('#email')?.focus();
