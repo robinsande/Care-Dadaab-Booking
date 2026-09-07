@@ -98,13 +98,6 @@ export function initAdminShell() {
     toggle?.setAttribute('aria-expanded', 'false');
   });
 
-  sidebar?.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      sidebar.classList.remove('is-open');
-      toggle?.setAttribute('aria-expanded', 'false');
-    });
-  });
-
   document.querySelector('[data-logout]')?.addEventListener('click', (event) => {
     event.preventDefault();
     clearSession();
