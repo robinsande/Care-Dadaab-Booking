@@ -3,6 +3,7 @@ import {
   deleteBooking,
   checkInBooking,
   checkOutBooking,
+  extendBookingStay,
   resendBookingEmails,
 } from '../api/bookings.js';
 import { listCamps } from '../api/camps.js';
@@ -174,6 +175,9 @@ function renderTable() {
            ${booking.status === 'Checked In'
              ? `<button type="button" class="btn btn-secondary btn-sm" data-action="early-check-out" data-booking-id="${escapeHtml(id)}">Emergency Early Check Out</button>`
              : ''}
+           ${['Booked', 'Checked In'].includes(booking.status)
+             ? `<button type="button" class="btn btn-secondary btn-sm" data-list-action="extend-stay" data-booking-id="${escapeHtml(id)}">Extend Stay</button>`
+             : ''}
           </div></td>
         </tr>
       `;
@@ -237,6 +241,33 @@ async function onTableAction(event) {
 
   const checkbox = event.target.closest('input[data-action="check-in"]');
   const earlyCheckout = event.target.closest('[data-action="early-check-out"]');
+  const extendButton = event.target.closest('[data-list-action="extend-stay"]');
+  if (extendButton) {
+    const booking = state.bookings.find((item) => String(item._id || item.id) === String(extendButton.dataset.bookingId));
+    const newDepartureDate = window.prompt(`New departure date (YYYY-MM-DD). Current: ${String(booking?.departureDate || '').slice(0, 10)}:`);
+    const reason = newDepartureDate && window.prompt('Reason for extending the stay:');
+    const additionalCost = reason && window.prompt('Additional cost (KES):', '0');
+    if (!newDepartureDate?.trim() || !reason?.trim() || additionalCost === null
+      || !Number.isFinite(Number(additionalCost)) || Number(additionalCost) < 0) {
+      if (newDepartureDate !== null) showToast('Enter a new date, reason, and valid additional cost.', 'error');
+      return;
+    }
+    if (!window.confirm(`Extend ${booking?.bookingReference || 'this booking'} until ${newDepartureDate.trim()}?`)) return;
+    extendButton.disabled = true;
+    try {
+      await extendBookingStay(extendButton.dataset.bookingId, {
+        newDepartureDate: newDepartureDate.trim(),
+        reason: reason.trim(),
+        additionalCost: Number(additionalCost),
+      });
+      showToast('Stay extended, invoice updated, and email sent.', 'success');
+      await loadBookings(tableBody, paginationEl);
+    } catch (error) {
+      extendButton.disabled = false;
+      showToast(error instanceof ApiError ? error.message : 'Unable to extend stay.', 'error');
+    }
+    return;
+  }
   if (earlyCheckout) {
     const reason = window.prompt('Reason for emergency early check out:');
     if (reason === null || !reason.trim()) {

@@ -4,6 +4,7 @@ import {
   deleteBooking,
   checkInBooking,
   checkOutBooking,
+  extendBookingStay,
   resendBookingEmails,
 } from '../../api/bookings.js';
 import { listCamps } from '../../api/camps.js';
@@ -175,6 +176,9 @@ function renderTable(tableBody) {
       if (booking.status === 'Checked In') {
         actions.push(`<button type="button" class="btn btn-secondary btn-sm" data-list-action="early-check-out" data-booking-id="${escapeHtml(id)}">Emergency Early Check Out</button>`);
       }
+      if (['Booked', 'Checked In'].includes(booking.status)) {
+        actions.push(`<button type="button" class="btn btn-secondary btn-sm" data-list-action="extend-stay" data-booking-id="${escapeHtml(id)}">Extend Stay</button>`);
+      }
       return `
         <tr data-id="${escapeHtml(id)}">
           <td><a data-nav-link href="#/booking/edit?id=${escapeHtml(id)}"><strong>${escapeHtml(booking.bookingReference || '—')}</strong></a></td>
@@ -265,6 +269,33 @@ async function onTableAction(event) {
     } catch (error) {
       btn.disabled = false;
       showToast(error instanceof ApiError ? error.message : 'Unable to check out visitor.', 'error');
+    }
+    return;
+  }
+
+  if (action === 'extend-stay') {
+    const booking = state.bookings.find((item) => String(item._id || item.id) === String(btn.dataset.bookingId));
+    const newDepartureDate = window.prompt(`New departure date (YYYY-MM-DD). Current: ${String(booking?.departureDate || '').slice(0, 10)}:`);
+    const reason = newDepartureDate && window.prompt('Reason for extending the stay:');
+    const additionalCost = reason && window.prompt('Additional cost (KES):', '0');
+    if (!newDepartureDate?.trim() || !reason?.trim() || additionalCost === null
+      || !Number.isFinite(Number(additionalCost)) || Number(additionalCost) < 0) {
+      if (newDepartureDate !== null) showToast('Enter a new date, reason, and valid additional cost.', 'error');
+      return;
+    }
+    if (!window.confirm(`Extend ${booking?.bookingReference || 'this booking'} until ${newDepartureDate.trim()}?`)) return;
+    btn.disabled = true;
+    try {
+      await extendBookingStay(btn.dataset.bookingId, {
+        newDepartureDate: newDepartureDate.trim(),
+        reason: reason.trim(),
+        additionalCost: Number(additionalCost),
+      });
+      showToast('Stay extended, invoice updated, and email sent.', 'success');
+      await refresh();
+    } catch (error) {
+      btn.disabled = false;
+      showToast(error instanceof ApiError ? error.message : 'Unable to extend stay.', 'error');
     }
     return;
   }
