@@ -443,6 +443,12 @@
   outline: 1px solid rgba(255, 255, 255, 0.24);
 }
 
+.login-entry-bag::before,
+.login-entry-bag::after {
+  display: none !important;
+  content: none !important;
+}
+
 .login-entry-bag .reservation-log-illustration {
   position: relative;
   width: min(72%, 190px);
