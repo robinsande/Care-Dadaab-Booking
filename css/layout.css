@@ -357,6 +357,33 @@
   display: none;
 }
 
+.sidebar-collapse-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: auto;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.82);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-align: left;
+}
+
+.sidebar-collapse-toggle:hover {
+  background: var(--color-brand);
+  color: #fff;
+}
+
+.sidebar-collapse-toggle > span:first-child {
+  font-size: 1.25rem;
+  line-height: 0.7;
+}
+
 .admin-main {
   display: flex;
   flex-direction: column;
@@ -791,6 +818,42 @@
 
   .admin-content {
     padding: var(--space-8);
+  }
+
+  .admin-shell.sidebar-collapsed {
+    grid-template-columns: 84px 1fr;
+  }
+
+  .admin-shell.sidebar-collapsed .admin-sidebar {
+    align-items: center;
+    padding: var(--space-4) 0.65rem;
+  }
+
+  .admin-shell.sidebar-collapsed .brand {
+    justify-content: center;
+  }
+
+  .admin-shell.sidebar-collapsed .brand-text,
+  .admin-shell.sidebar-collapsed .admin-nav a {
+    display: none;
+  }
+
+  .admin-shell.sidebar-collapsed .admin-nav {
+    width: 100%;
+  }
+
+  .admin-shell.sidebar-collapsed .sidebar-collapse-toggle {
+    justify-content: center;
+    width: 100%;
+    padding-inline: 0.4rem;
+  }
+
+  .admin-shell.sidebar-collapsed .sidebar-collapse-toggle > span:last-child {
+    display: none;
+  }
+
+  .admin-shell.sidebar-collapsed .sidebar-collapse-toggle > span:first-child {
+    transform: rotate(180deg);
   }
 }
 

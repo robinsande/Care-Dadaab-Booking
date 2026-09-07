@@ -43,8 +43,28 @@ export function initAdminShell() {
   const roleEl = document.querySelector('[data-admin-role]');
   const toggle = document.querySelector('[data-admin-menu-toggle]');
   const sidebar = document.querySelector('[data-admin-sidebar]');
+  const shell = document.querySelector('.admin-shell');
+  const collapseToggle = document.querySelector('[data-admin-collapse-toggle]');
 
   renderAdminNav(user);
+
+  const collapsed = window.localStorage.getItem('cams.sidebarCollapsed') === 'true';
+  shell?.classList.toggle('sidebar-collapsed', collapsed);
+  collapseToggle?.setAttribute('aria-expanded', String(!collapsed));
+  collapseToggle?.setAttribute('aria-label', collapsed ? 'Show navigation' : 'Hide navigation');
+  if (collapseToggle) collapseToggle.querySelector('span:last-child').textContent = collapsed ? 'Show navigation' : 'Hide navigation';
+  collapseToggle?.addEventListener('click', () => {
+    if (window.innerWidth < 960) {
+      sidebar?.classList.remove('is-open');
+      document.querySelector('[data-admin-menu-toggle]')?.setAttribute('aria-expanded', 'false');
+      return;
+    }
+    const isCollapsed = shell?.classList.toggle('sidebar-collapsed') || false;
+    window.localStorage.setItem('cams.sidebarCollapsed', String(isCollapsed));
+    collapseToggle.setAttribute('aria-expanded', String(!isCollapsed));
+    collapseToggle.setAttribute('aria-label', isCollapsed ? 'Show navigation' : 'Hide navigation');
+    collapseToggle.querySelector('span:last-child').textContent = isCollapsed ? 'Show navigation' : 'Hide navigation';
+  });
 
   if (nameEl && user) {
     nameEl.textContent = [user.firstName, user.lastName].filter(Boolean).join(' ') || user.email;
