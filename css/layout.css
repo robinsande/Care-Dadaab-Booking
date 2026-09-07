@@ -596,6 +596,9 @@
 
   .login-page::before,
   .login-page::after,
+  .login-galaxy::before,
+  .login-galaxy::after,
+  .galaxy-star,
   .login-leaf,
   .fingerprint-scan-line,
   .login-success-overlay,
@@ -919,6 +922,77 @@
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
+}
+
+.login-galaxy {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.login-galaxy::before,
+.login-galaxy::after {
+  content: "";
+  position: absolute;
+  width: 70vw;
+  height: 18vw;
+  min-height: 150px;
+  max-height: 260px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, transparent, rgba(249, 178, 51, 0.18), rgba(185, 135, 209, 0.22), transparent);
+  filter: blur(24px);
+  transform: rotate(-24deg);
+  animation: galaxy-nebula-drift 18s ease-in-out infinite alternate;
+}
+
+.login-galaxy::before {
+  top: 14%;
+  left: -18%;
+}
+
+.login-galaxy::after {
+  right: -20%;
+  bottom: 12%;
+  transform: rotate(22deg);
+  animation-delay: -9s;
+}
+
+.galaxy-star {
+  position: absolute;
+  top: var(--star-top);
+  left: var(--star-left);
+  width: var(--star-size);
+  height: var(--star-size);
+  border-radius: 50%;
+  background: var(--star-color);
+  box-shadow: 0 0 9px var(--star-color);
+  animation: galaxy-twinkle var(--star-duration) ease-in-out var(--star-delay) infinite;
+}
+
+.galaxy-star:nth-child(1) { --star-top: 12%; --star-left: 8%; --star-size: 3px; --star-color: #fff; --star-duration: 2.8s; --star-delay: -1s; }
+.galaxy-star:nth-child(2) { --star-top: 22%; --star-left: 22%; --star-size: 2px; --star-color: #f9b233; --star-duration: 3.6s; --star-delay: -2s; }
+.galaxy-star:nth-child(3) { --star-top: 9%; --star-left: 39%; --star-size: 4px; --star-color: #fff; --star-duration: 4.2s; --star-delay: -3s; }
+.galaxy-star:nth-child(4) { --star-top: 31%; --star-left: 55%; --star-size: 2px; --star-color: #b7d98a; --star-duration: 3.1s; --star-delay: -1.5s; }
+.galaxy-star:nth-child(5) { --star-top: 16%; --star-left: 78%; --star-size: 3px; --star-color: #f3c969; --star-duration: 4.8s; --star-delay: -2.5s; }
+.galaxy-star:nth-child(6) { --star-top: 42%; --star-left: 91%; --star-size: 2px; --star-color: #fff; --star-duration: 3.4s; --star-delay: -0.5s; }
+.galaxy-star:nth-child(7) { --star-top: 68%; --star-left: 12%; --star-size: 2px; --star-color: #b7d98a; --star-duration: 4.4s; --star-delay: -3.2s; }
+.galaxy-star:nth-child(8) { --star-top: 78%; --star-left: 28%; --star-size: 3px; --star-color: #f9b233; --star-duration: 3.8s; --star-delay: -1.8s; }
+.galaxy-star:nth-child(9) { --star-top: 64%; --star-left: 48%; --star-size: 2px; --star-color: #fff; --star-duration: 2.9s; --star-delay: -2.2s; }
+.galaxy-star:nth-child(10) { --star-top: 82%; --star-left: 66%; --star-size: 4px; --star-color: #f3c969; --star-duration: 4.6s; --star-delay: -3.6s; }
+.galaxy-star:nth-child(11) { --star-top: 57%; --star-left: 83%; --star-size: 2px; --star-color: #b7d98a; --star-duration: 3.3s; --star-delay: -1.2s; }
+.galaxy-star:nth-child(12) { --star-top: 91%; --star-left: 94%; --star-size: 3px; --star-color: #fff; --star-duration: 4s; --star-delay: -2.8s; }
+
+@keyframes galaxy-nebula-drift {
+  from { transform: translate3d(-2%, -4%, 0) rotate(-24deg) scale(1); }
+  to { transform: translate3d(7%, 5%, 0) rotate(-18deg) scale(1.08); }
+}
+
+@keyframes galaxy-twinkle {
+  0%, 100% { opacity: 0.25; transform: scale(0.7); }
+  50% { opacity: 1; transform: scale(1.35); }
 }
 
 .login-leaf {
