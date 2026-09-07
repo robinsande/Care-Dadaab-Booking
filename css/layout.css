@@ -1922,9 +1922,9 @@
   bottom: 16%;
   width: 22px;
   height: 45%;
-  background: linear-gradient(90deg, #a74a25 0 42%, #71311f 42% 58%, #8d3c22 58%);
+  background: linear-gradient(90deg, #6f2b88 0 42%, #32103f 42% 58%, #54206b 58%);
   transform-origin: bottom center;
-  opacity: 0.92;
+  opacity: 1;
 }
 
 .scenery-tree::before,
@@ -1935,7 +1935,7 @@
   width: 150px;
   height: 190px;
   border-radius: 48% 52% 42% 58%;
-  background: radial-gradient(circle at 35% 28%, #ffe08a 0 12%, #f9b233 34%, #c85a26 72%);
+  background: radial-gradient(circle at 35% 28%, #efc8ff 0 12%, #a951c2 34%, #642078 72%);
   transform: translateX(-50%);
   filter: drop-shadow(0 10px 16px rgba(27, 22, 46, 0.25));
 }
