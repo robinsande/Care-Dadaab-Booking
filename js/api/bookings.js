@@ -28,6 +28,10 @@ export function checkOutBooking(id, checkoutReason = null) {
   return api.post(`/bookings/${id}/check-out`, checkoutReason ? { checkoutReason } : {});
 }
 
+export function extendBookingStay(id, payload) {
+  return api.post(`/bookings/${id}/extend`, payload);
+}
+
 export function generateInvoiceForBooking(id) {
   return api.post(`/bookings/${id}/generate-invoice`);
 }

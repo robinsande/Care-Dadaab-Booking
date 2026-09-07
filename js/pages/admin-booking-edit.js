@@ -1,4 +1,4 @@
-import { getBooking, updateBooking, cancelBooking, checkInBooking, checkOutBooking } from '../api/bookings.js';
+import { getBooking, updateBooking, cancelBooking, checkInBooking, checkOutBooking, extendBookingStay } from '../api/bookings.js';
 import { ApiError } from '../api/client.js';
 import { requireAuth } from '../auth/session.js';
 import { initAdminShell } from '../components/shell.js';
@@ -187,6 +187,9 @@ function renderActions(b) {
     buttons.push(`<button type="button" class="btn btn-secondary btn-sm" data-action="early-check-out">Emergency Early Check Out</button>`);
     buttons.push(`<button type="button" class="btn btn-danger btn-sm" data-action="cancel">Cancel Booking</button>`);
   }
+  if (['Booked', 'Checked In'].includes(b.status)) {
+    buttons.push(`<button type="button" class="btn btn-secondary btn-sm" data-action="extend-stay">Extend Stay</button>`);
+  }
 
   actionBar.innerHTML = buttons.join('');
 }
@@ -281,6 +284,44 @@ async function onAction(event) {
       await loadBooking();
     } catch (error) {
       showToast(error instanceof ApiError ? error.message : 'Check-out failed.', 'error');
+    }
+    return;
+  }
+
+  if (action === 'extend-stay') {
+    const newDepartureDate = window.prompt(
+      `Enter the new departure date (YYYY-MM-DD). Current: ${String(booking.departureDate).slice(0, 10)}:`,
+    );
+    if (newDepartureDate === null || !newDepartureDate.trim()) return;
+    const reason = window.prompt('Reason for extending the stay:');
+    if (reason === null || !reason.trim()) {
+      showToast('A reason is required for the stay extension.', 'error');
+      return;
+    }
+    const additionalCost = window.prompt('Additional cost for the extension (KES):', '0');
+    if (additionalCost === null || !Number.isFinite(Number(additionalCost)) || Number(additionalCost) < 0) {
+      showToast('Enter a valid non-negative additional cost.', 'error');
+      return;
+    }
+    const ok = await confirmDialog({
+      title: 'Extend stay',
+      message: `Extend ${fullName(booking)} until ${newDepartureDate.trim()} for ${Number(additionalCost).toFixed(2)} KES?`,
+      confirmLabel: 'Extend stay',
+    });
+    if (!ok) return;
+    try {
+      await withLoading(
+        () => extendBookingStay(bookingId, {
+          newDepartureDate: newDepartureDate.trim(),
+          reason: reason.trim(),
+          additionalCost: Number(additionalCost),
+        }),
+        'Extending stay…',
+      );
+      showToast('Stay extended. Updated invoice and email notification sent.', 'success');
+      await loadBooking();
+    } catch (error) {
+      showToast(error instanceof ApiError ? error.message : 'Unable to extend stay.', 'error');
     }
     return;
   }
