@@ -435,7 +435,7 @@
 .login-entry-bag {
   position: relative;
   isolation: isolate;
-  width: min(100%, 328px);
+  width: min(100%, 280px);
   aspect-ratio: 1;
   margin: 0 auto var(--space-6);
   padding: var(--space-5);
@@ -2254,8 +2254,8 @@
 .login-panel {
   position: relative;
   z-index: 1;
-  width: min(420px, 100%);
-  padding: clamp(var(--space-6), 5vw, var(--space-8));
+  width: min(340px, 100%);
+  padding: clamp(1.25rem, 4vw, 1.5rem);
   border-color: rgba(255, 255, 255, 0.36);
   background: linear-gradient(145deg, #97381c, #c85a26);
   box-shadow: 0 24px 70px rgba(104, 34, 19, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.2);
