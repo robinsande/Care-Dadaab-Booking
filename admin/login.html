@@ -20,7 +20,22 @@
       <p class="mb-0">CARE Accommodation Management System</p>
     </div>
 
-    <form id="login-form" novalidate>
+    <button type="button" class="reservation-log-bag login-entry-bag" id="open-login-form" aria-controls="login-form" aria-expanded="false">
+      <span class="reservation-log-illustration" aria-hidden="true">
+        <svg viewBox="0 0 180 150" role="presentation">
+          <path class="reservation-log-ground" d="M24 132h132" />
+          <circle class="reservation-log-head" cx="72" cy="35" r="13" />
+          <path class="reservation-log-body" d="M72 49v43m0-30-25 20m25-20 24 17m-24 13-19 40m19-40 24 40" />
+          <path class="reservation-log-bag-strap" d="M91 60c14-8 28-5 38 8" />
+          <path class="reservation-log-bag" d="M119 67h35l-4 39h-27z" />
+          <path class="reservation-log-bag-handle" d="M127 67c0-12 19-12 19 0" />
+          <path class="reservation-log-paper" d="M126 79h20m-17 8h14m-11 8h10" />
+        </svg>
+      </span>
+      <span class="reservation-log-bag-label">Open Staff Login</span>
+      <span class="reservation-log-bag-hint">Click the bag to sign in</span>
+    </button>
+    <form id="login-form" novalidate hidden>
       <div class="form-grid">
         <div class="form-group">
           <label class="form-label" for="email">Email <span class="required" aria-hidden="true">*</span></label>

@@ -340,6 +340,17 @@
   transition: transform var(--transition), box-shadow var(--transition);
 }
 
+.login-entry-bag {
+  width: 100%;
+  margin: 0 0 var(--space-5);
+  padding: var(--space-4);
+  background: var(--color-brand-soft);
+}
+
+.login-entry-bag .reservation-log-illustration {
+  width: 180px;
+}
+
 .reservation-log-bag:hover,
 .reservation-log-bag:focus-visible {
   transform: translateY(-3px);

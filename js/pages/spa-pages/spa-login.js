@@ -20,6 +20,14 @@ export async function init() {
 
   const form = $('login-form');
   const submitBtn = $('login-submit');
+  const openLoginButton = document.getElementById('spa-open-login-form');
+
+  openLoginButton?.addEventListener('click', () => {
+    form.hidden = false;
+    openLoginButton.hidden = true;
+    openLoginButton.setAttribute('aria-expanded', 'true');
+    $('login-email')?.focus();
+  });
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();

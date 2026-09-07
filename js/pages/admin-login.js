@@ -16,6 +16,14 @@ if (isAuthenticated()) {
 
 const form = document.getElementById('login-form');
 const submitBtn = document.getElementById('login-submit');
+const openLoginButton = document.getElementById('open-login-form');
+
+openLoginButton?.addEventListener('click', () => {
+  form.hidden = false;
+  openLoginButton.hidden = true;
+  openLoginButton.setAttribute('aria-expanded', 'true');
+  form.querySelector('#email')?.focus();
+});
 
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
