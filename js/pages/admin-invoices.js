@@ -67,6 +67,11 @@ function boot() {
   });
 
   tableBody.addEventListener('click', (event) => {
+    const stkButton = event.target.closest('[data-stk-action]');
+    if (stkButton) {
+      handleStkPush(stkButton);
+      return;
+    }
     if (event.target.closest('[data-payment-action]')) {
       handlePaymentChange(event.target);
       return;
