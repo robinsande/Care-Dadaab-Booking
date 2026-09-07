@@ -53,6 +53,10 @@ export async function init() {
   });
 
   const params = getCurrentParams();
+  if (params.get('search')) {
+    state.search = params.get('search');
+    filtersForm.elements.search.value = state.search;
+  }
   if (params.get('status')) {
     document.getElementById('bf-status').value = params.get('status');
     state.status = params.get('status');
@@ -185,6 +189,10 @@ function renderTable(tableBody) {
       const actions = [];
       actions.push(`<a class="btn btn-secondary btn-sm" data-nav-link data-list-action="edit" href="#/booking/edit?id=${escapeHtml(id)}">Edit</a>`);
       actions.push(`<button type="button" class="btn btn-secondary btn-sm" data-list-action="resend-emails" data-booking-id="${escapeHtml(id)}">Resend Emails</button>`);
+      const guestEmail = booking.email || booking.guest?.email || '';
+      if (guestEmail) {
+        actions.push(`<button type="button" class="btn btn-secondary btn-sm" data-list-action="guest-history" data-guest-search="${escapeHtml(guestEmail)}">Guest History</button>`);
+      }
       if (booking.invoiceId || booking.invoice?._id || booking.invoice?.id) {
         const invId = booking.invoiceId || booking.invoice?._id || booking.invoice?.id;
         actions.push(`<button type="button" class="btn btn-secondary btn-sm" data-list-action="invoice" data-invoice-id="${escapeHtml(invId)}">Invoice</button>`);
@@ -228,6 +236,14 @@ async function onTableAction(event) {
   const btn = event.target.closest('[data-list-action]');
   if (!btn) return;
   const action = btn.dataset.listAction;
+
+  if (action === 'guest-history') {
+    state.search = btn.dataset.guestSearch || '';
+    state.page = 1;
+    filtersForm.elements.search.value = state.search;
+    await loadBookings();
+    return;
+  }
 
   if (action === 'resend-emails') {
     const bookingId = btn.dataset.bookingId;

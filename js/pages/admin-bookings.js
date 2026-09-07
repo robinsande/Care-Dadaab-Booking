@@ -49,6 +49,10 @@ function boot() {
   });
 
   const params = new URLSearchParams(window.location.search);
+  if (params.get('search')) {
+    state.search = params.get('search');
+    filtersForm.elements.search.value = state.search;
+  }
   if (params.get('status')) {
     document.getElementById('status').value = params.get('status');
     state.status = params.get('status');
@@ -173,6 +177,10 @@ function renderTable() {
         `<a class="btn btn-secondary btn-sm" href="booking-edit.html?id=${escapeHtml(id)}">Edit</a>`,
         `<button type="button" class="btn btn-secondary btn-sm" data-action="resend-emails" data-booking-id="${escapeHtml(id)}">Resend Emails</button>`,
       ];
+      const guestEmail = booking.email || booking.guest?.email || '';
+      if (guestEmail) {
+        actions.push(`<button type="button" class="btn btn-secondary btn-sm" data-action="guest-history" data-guest-search="${escapeHtml(guestEmail)}">Guest History</button>`);
+      }
       if (isSuperAdmin()) {
         actions.push(`<button type="button" class="btn btn-danger btn-sm" data-action="delete" data-booking-id="${escapeHtml(id)}">Delete</button>`);
       }
@@ -211,6 +219,14 @@ function renderTable() {
 }
 
 async function onTableAction(event) {
+  const historyButton = event.target.closest('button[data-action="guest-history"]');
+  if (historyButton) {
+    state.search = historyButton.dataset.guestSearch || '';
+    state.page = 1;
+    document.getElementById('search').value = state.search;
+    await loadBookings();
+    return;
+  }
   const resendButton = event.target.closest('button[data-action="resend-emails"]');
   if (resendButton) {
     const booking = state.bookings.find((item) => String(item._id || item.id) === String(resendButton.dataset.bookingId));
