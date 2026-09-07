@@ -1845,9 +1845,7 @@
   display: grid;
   place-items: center;
   padding: var(--space-6);
-  background:
-    linear-gradient(90deg, #d8782d 0 3%, transparent 3% 97%, #d8782d 97%),
-    linear-gradient(180deg, #b85b2c 0%, #d8782d 48%, #f3a12f 100%);
+  background: linear-gradient(180deg, #b85b2c 0%, #d8782d 48%, #f3a12f 100%);
 }
 
 .login-page::before,
