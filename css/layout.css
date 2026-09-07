@@ -459,7 +459,7 @@
 .login-entry-bag::before {
   inset: -10px;
   padding: 3px;
-  background: conic-gradient(from 0deg, var(--color-brand), var(--color-purple), var(--color-brand), var(--color-purple), var(--color-brand));
+  background: conic-gradient(from 0deg, #ffd166, var(--color-brand), #ffd166, var(--color-brand), #ffd166);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -467,9 +467,7 @@
 }
 
 .login-entry-bag::after {
-  inset: -20px;
-  border: 1px dashed rgba(91, 37, 102, 0.3);
-  animation: login-entry-pulse 2.8s ease-in-out infinite;
+  display: none;
 }
 
 .login-entry-bag .reservation-log-illustration {
