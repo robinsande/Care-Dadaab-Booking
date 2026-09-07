@@ -648,6 +648,16 @@ textarea.form-control {
   display: none;
 }
 
+@media (min-width: 960px) {
+  .admin-body .loading-overlay {
+    left: var(--sidebar-width);
+  }
+
+  .admin-body .admin-shell.sidebar-collapsed ~ .loading-overlay {
+    left: 84px;
+  }
+}
+
 .spinner {
   width: 36px;
   height: 36px;
