@@ -33,7 +33,7 @@ const SPA_NAV = [
   { hash: '#/rates', label: 'Rates', route: 'rates', superAdmin: true },
   { hash: '#/invoices', label: 'Invoices', route: 'invoices' },
   { hash: '#/reports', label: 'Reports', route: 'reports', superAdmin: true },
-  { hash: '#/reservation-log', label: 'Reservation Log', route: 'reservation-log', superAdmin: true },
+  { href: 'admin/reservation-log.html', label: 'Reservation Log', route: 'reservation-log', superAdmin: true },
   { hash: '#/users', label: 'Users', route: 'users', superAdmin: true },
   { hash: '#/settings', label: 'Settings', route: 'settings', superAdmin: true },
 ];
@@ -75,7 +75,9 @@ function buildNav(user) {
         (item.route === 'bookings' && route === 'booking/edit');
       const activeAttr = isActive ? ' aria-current="page"' : '';
       const superAttr = item.superAdmin ? ' data-super-admin-only' : '';
-      return `<a href="${item.hash}"${activeAttr}${superAttr} data-nav-link>${item.label}</a>`;
+      const href = item.href || item.hash;
+      const navAttr = item.hash ? ' data-nav-link' : '';
+      return `<a href="${href}"${activeAttr}${superAttr}${navAttr}>${item.label}</a>`;
     })
     .join('');
 }
