@@ -636,7 +636,12 @@ textarea.form-control {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1800;
+  z-index: 40;
+}
+
+.modal-backdrop,
+.admin-sidebar.is-open {
+  z-index: 1500;
 }
 
 .loading-overlay[hidden] {

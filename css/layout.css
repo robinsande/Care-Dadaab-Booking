@@ -805,6 +805,7 @@
     display: flex;
     position: sticky;
     top: 0;
+    z-index: 60;
     height: 100vh;
   }
 
