@@ -23,6 +23,7 @@ export async function init() {
   const openLoginButton = document.getElementById('spa-open-login-form');
   const successOverlay = document.getElementById('spa-login-success');
   const successTitle = document.getElementById('spa-login-success-title');
+  const authStatus = document.getElementById('spa-login-auth-status');
 
   openLoginButton?.addEventListener('click', () => {
     form.hidden = false;
@@ -57,7 +58,13 @@ export async function init() {
       showToast('Signed in successfully.', 'success');
       successTitle.textContent = `Welcome, ${user.firstName || 'back'}`;
       successOverlay.hidden = false;
-      window.setTimeout(() => navigate('#/dashboard'), 1800);
+      authStatus.textContent = 'Scanning CARE identity';
+      window.setTimeout(() => { authStatus.textContent = 'Verifying secure access'; }, 700);
+      window.setTimeout(() => {
+        authStatus.textContent = 'CARE identity verified';
+        successOverlay.classList.add('care-auth-verified');
+      }, 1450);
+      window.setTimeout(() => navigate('#/dashboard'), 2600);
     } catch (error) {
       showToast(error instanceof ApiError ? error.message : 'Unable to sign in.', 'error');
     } finally {

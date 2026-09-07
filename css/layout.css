@@ -42,6 +42,16 @@
   50% { top: 78%; }
 }
 
+@keyframes care-auth-check-in {
+  from { opacity: 0; transform: scale(0.4) rotate(-20deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+@keyframes care-auth-status-pulse {
+  0%, 100% { opacity: 0.58; }
+  50% { opacity: 1; }
+}
+
 @keyframes login-orb-drift {
   from { transform: translate3d(-10px, -8px, 0) scale(1); }
   to { transform: translate3d(18px, 14px, 0) scale(1.08); }
@@ -623,6 +633,8 @@
   .care-auth-logo,
   .care-auth-ring,
   .care-auth-scan-beam,
+  .care-auth-check,
+  .care-auth-status,
   .login-success-overlay,
   .login-success-card {
     animation: none;
@@ -1082,30 +1094,32 @@
 
 .care-auth-scanner {
   position: relative;
-  width: 148px;
-  height: 148px;
-  margin: 0 auto var(--space-3);
+  width: 190px;
+  height: 190px;
+  margin: 0 auto var(--space-4);
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(249, 178, 51, 0.22), rgba(185, 135, 209, 0.14) 56%, transparent 57%);
+  background: radial-gradient(circle, rgba(249, 178, 51, 0.2), rgba(185, 135, 209, 0.12) 48%, transparent 68%);
   isolation: isolate;
 }
 
 .care-auth-logo {
   position: relative;
   z-index: 2;
-  width: 76px;
-  height: 76px;
-  border-radius: 50%;
-  object-fit: cover;
+  width: 124px;
+  height: auto;
+  max-height: 124px;
+  border-radius: 12px;
+  object-fit: contain;
+  background: #fff;
   box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.86), 0 0 24px rgba(232, 114, 30, 0.5);
   animation: care-auth-logo-pulse 1.8s ease-in-out infinite;
 }
 
 .care-auth-ring {
   position: absolute;
-  inset: 7px;
+  inset: 5px;
   z-index: 1;
   border: 2px solid transparent;
   border-top-color: var(--color-brand);
@@ -1115,7 +1129,7 @@
 }
 
 .care-auth-ring-inner {
-  inset: 20px;
+  inset: 27px;
   border-width: 1px;
   border-top-color: var(--color-purple);
   border-right-color: rgba(249, 178, 51, 0.85);
@@ -1124,29 +1138,47 @@
 
 .care-auth-scan-beam {
   position: absolute;
-  left: 18px;
-  right: 18px;
+  left: 22px;
+  right: 22px;
   top: 12%;
   z-index: 3;
   height: 2px;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 0 8px 2px var(--color-brand), 0 0 18px 4px rgba(185, 135, 209, 0.75);
+  box-shadow: 0 0 8px 2px var(--color-brand), 0 0 22px 5px rgba(185, 135, 209, 0.75);
   animation: care-auth-beam-scan 1.5s ease-in-out infinite;
 }
 
-.care-auth-scanner + .fingerprint-scanner {
-  width: 38px;
-  height: 16px;
-  margin: -9px auto var(--space-4);
-  padding: 0;
-  border: 0;
-  background: transparent;
-  opacity: 0.48;
+.care-auth-check {
+  position: absolute;
+  right: 27px;
+  bottom: 26px;
+  z-index: 4;
+  display: grid;
+  width: 31px;
+  height: 31px;
+  place-items: center;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: var(--color-success);
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(28, 125, 72, 0.35);
+  opacity: 0;
 }
 
-.care-auth-scanner + .fingerprint-scanner svg {
-  display: none;
+.care-auth-verified .care-auth-check {
+  animation: care-auth-check-in 420ms ease-out 80ms both;
+}
+
+.care-auth-status {
+  margin: 0 0 var(--space-3);
+  color: var(--color-purple-dark);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  animation: care-auth-status-pulse 1.2s ease-in-out infinite;
 }
 
 .fingerprint-scanner svg {

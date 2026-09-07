@@ -19,6 +19,7 @@ const submitBtn = document.getElementById('login-submit');
 const openLoginButton = document.getElementById('open-login-form');
 const successOverlay = document.getElementById('login-success');
 const successTitle = document.getElementById('login-success-title');
+const authStatus = document.getElementById('login-auth-status');
 
 openLoginButton?.addEventListener('click', () => {
   form.hidden = false;
@@ -60,6 +61,12 @@ form.addEventListener('submit', async (event) => {
     showToast('Signed in successfully.', 'success');
     successTitle.textContent = `Welcome, ${user.firstName || 'back'}`;
     successOverlay.hidden = false;
+    authStatus.textContent = 'Scanning CARE identity';
+    window.setTimeout(() => { authStatus.textContent = 'Verifying secure access'; }, 700);
+    window.setTimeout(() => {
+      authStatus.textContent = 'CARE identity verified';
+      successOverlay.classList.add('care-auth-verified');
+    }, 1450);
 
     const params = new URLSearchParams(window.location.search);
     const redirect = params.get('redirect');
@@ -67,7 +74,7 @@ form.addEventListener('submit', async (event) => {
       window.location.href = redirect && redirect.startsWith('/admin/')
         ? redirect
         : 'dashboard.html';
-    }, 1800);
+    }, 2600);
   } catch (error) {
     showToast(
       error instanceof ApiError ? error.message : 'Unable to sign in.',

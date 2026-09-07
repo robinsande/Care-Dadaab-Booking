@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../css/variables.css">
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/components.css">
-  <link rel="stylesheet" href="../css/layout.css?v=20260907-3">
+  <link rel="stylesheet" href="../css/layout.css?v=20260907-4">
 </head>
 <body class="login-page">
   <div class="login-galaxy" aria-hidden="true">
@@ -76,20 +76,16 @@
         <span class="care-auth-ring care-auth-ring-outer"></span>
         <span class="care-auth-ring care-auth-ring-inner"></span>
         <span class="care-auth-scan-beam"></span>
-        <img class="care-auth-logo" src="/assets/care-logo.jpg" alt="">
+        <img class="care-auth-logo" src="/assets/care-logo.png" alt="CARE">
+        <span class="care-auth-check">✓</span>
       </div>
-      <div class="fingerprint-scanner" aria-hidden="true">
-        <svg viewBox="0 0 120 120" role="presentation">
-          <path d="M60 16c-22 0-39 17-39 39m78 0c0-22-17-39-39-39M31 60c0-16 13-29 29-29s29 13 29 29m-49 0c0-11 9-20 20-20s20 9 20 20m-31 0c0-6 5-11 11-11s11 5 11 11m-22 0c0 13 3 25 10 35m12-35c0 20-4 32-12 43m25-43c0 15-2 25-7 35m-35-35c0 20 5 32 15 42" />
-          <path class="fingerprint-scan-line" d="M22 60h76" />
-        </svg>
-      </div>
-      <p class="login-success-kicker">CARE identity verified</p>
+      <p class="care-auth-status" id="login-auth-status">Scanning CARE identity</p>
+      <p class="login-success-kicker">Secure access granted</p>
       <h2 class="login-success-title" id="login-success-title">Welcome</h2>
       <p class="login-success-copy">Preparing your CAMS workspace…</p>
     </div>
   </div>
 
-  <script type="module" src="../js/pages/admin-login.js?v=20260907-3"></script>
+  <script type="module" src="../js/pages/admin-login.js?v=20260907-4"></script>
 </body>
 </html>
