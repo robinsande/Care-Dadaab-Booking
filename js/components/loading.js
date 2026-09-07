@@ -21,7 +21,8 @@ function ensureOverlay() {
           <span class="loading-text">Loading…</span>
         </div>
       `;
-      document.body.appendChild(overlay);
+      const loadingHost = document.querySelector('.admin-main') || document.body;
+      loadingHost.appendChild(overlay);
     }
   }
   return overlay;

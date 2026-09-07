@@ -639,6 +639,16 @@ textarea.form-control {
   z-index: 40;
 }
 
+.admin-main {
+  position: relative;
+}
+
+.admin-main > .loading-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+}
+
 .modal-backdrop,
 .admin-sidebar.is-open {
   z-index: 1500;
@@ -649,12 +659,8 @@ textarea.form-control {
 }
 
 @media (min-width: 960px) {
-  .admin-body .loading-overlay {
-    left: var(--sidebar-width);
-  }
-
-  .admin-body .admin-shell.sidebar-collapsed ~ .loading-overlay {
-    left: 84px;
+  .admin-main > .loading-overlay {
+    left: 0;
   }
 }
 

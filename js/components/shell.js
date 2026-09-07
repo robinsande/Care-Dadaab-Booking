@@ -98,12 +98,14 @@ export function initAdminShell() {
     if (window.innerWidth >= 960 || !sidebar?.classList.contains('is-open')) return;
     if (sidebar.contains(event.target) || toggle?.contains(event.target)) return;
     sidebar.classList.remove('is-open');
+    window.localStorage.setItem('cams.sidebarOpen', 'false');
     toggle?.setAttribute('aria-expanded', 'false');
   });
 
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape' || window.innerWidth >= 960) return;
     sidebar?.classList.remove('is-open');
+    window.localStorage.setItem('cams.sidebarOpen', 'false');
     toggle?.setAttribute('aria-expanded', 'false');
   });
 
@@ -142,7 +144,7 @@ export function adminPageHead(title) {
     <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;650;700;750&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/components.css">
-    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css?v=20260907-13">
+    <link rel="stylesheet" href="../css/layout.css?v=20260907-13">
   `;
 }

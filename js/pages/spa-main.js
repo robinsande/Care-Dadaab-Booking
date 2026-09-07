@@ -177,12 +177,14 @@ function initAdminChromeOnce() {
     if (window.innerWidth >= 960 || !sidebar?.classList.contains('is-open')) return;
     if (sidebar.contains(event.target) || toggle?.contains(event.target)) return;
     sidebar.classList.remove('is-open');
+    window.localStorage.setItem('cams.sidebarOpen', 'false');
     toggle?.setAttribute('aria-expanded', 'false');
   });
 
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape' || window.innerWidth >= 960) return;
     sidebar?.classList.remove('is-open');
+    window.localStorage.setItem('cams.sidebarOpen', 'false');
     toggle?.setAttribute('aria-expanded', 'false');
   });
 
