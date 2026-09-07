@@ -35,8 +35,23 @@
           <h2 style="font-size:var(--text-xl);">Reservation Log</h2>
           <p>Review and export the reservation log for the selected period.</p>
         </div>
-        <form class="panel" id="report-filters" style="margin-bottom:var(--space-6);">
-          <select id="reportType" name="reportType" hidden>
+        <button type="button" class="reservation-log-bag" id="open-reservation-log" aria-controls="report-filters" aria-expanded="false">
+          <span class="reservation-log-illustration" aria-hidden="true">
+            <svg viewBox="0 0 180 150" role="presentation">
+              <path class="reservation-log-ground" d="M24 132h132" />
+              <circle class="reservation-log-head" cx="72" cy="35" r="13" />
+              <path class="reservation-log-body" d="M72 49v43m0-30-25 20m25-20 24 17m-24 13-19 40m19-40 24 40" />
+              <path class="reservation-log-bag-strap" d="M91 60c14-8 28-5 38 8" />
+              <path class="reservation-log-bag" d="M119 67h35l-4 39h-27z" />
+              <path class="reservation-log-bag-handle" d="M127 67c0-12 19-12 19 0" />
+              <path class="reservation-log-paper" d="M126 79h20m-17 8h14m-11 8h10" />
+            </svg>
+          </span>
+          <span class="reservation-log-bag-label">Open Reservation Log</span>
+          <span class="reservation-log-bag-hint">Click the bag to view the log form</span>
+        </button>
+        <form class="panel" id="report-filters" style="margin-bottom:var(--space-6);" hidden>
+          <select id="reportType" name="reportType" data-fixed-type="reservation-log" hidden>
             <option value="reservation-log" selected>Reservation Log</option>
           </select>
           <div class="form-grid two-col">

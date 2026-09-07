@@ -21,7 +21,9 @@ const resultsBody = document.getElementById('report-results-body');
 let lastParams = {};
 
 function boot() {
-  fillSelect(reportTypeSelect, constants.REPORT_TYPES, { placeholder: 'Select report' });
+  if (reportTypeSelect.dataset.fixedType !== 'reservation-log') {
+    fillSelect(reportTypeSelect, constants.REPORT_TYPES, { placeholder: 'Select report' });
+  }
   const requestedType = new URLSearchParams(window.location.search).get('type');
   if (requestedType && constants.REPORT_TYPES.some((item) => item.value === requestedType)) {
     reportTypeSelect.value = requestedType;
@@ -36,6 +38,14 @@ function boot() {
   exportPdfBtn.addEventListener('click', () => exportReport('pdf'));
   exportExcelBtn.addEventListener('click', () => exportReport('excel'));
   printBtn.addEventListener('click', () => window.print());
+
+  const openButton = document.getElementById('open-reservation-log');
+  openButton?.addEventListener('click', () => {
+    form.hidden = false;
+    openButton.hidden = true;
+    openButton.setAttribute('aria-expanded', 'true');
+    form.querySelector('#campId')?.focus();
+  });
 
   loadCamps();
 }
