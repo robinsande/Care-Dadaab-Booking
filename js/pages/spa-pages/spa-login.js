@@ -26,7 +26,6 @@ export function reset() {
   const mfaInstructions = document.getElementById('spa-mfa-instructions');
   const mfaQrDone = document.getElementById('spa-mfa-qr-done');
   const mfaCodeLabel = document.getElementById('spa-mfa-code-label');
-  const mfaSubmit = document.getElementById('spa-mfa-submit');
 
   if (form) {
     form.reset();

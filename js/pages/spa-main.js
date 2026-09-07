@@ -154,7 +154,7 @@ function initAdminChromeOnce() {
   logoutBtn?.addEventListener('click', (event) => {
     event.preventDefault();
     clearSession();
-    import('./spa-pages/spa-login.js?v=20260907-3')
+    import('./spa-pages/spa-login.js?v=20260907-4')
       .then((module) => module.reset?.())
       .catch((error) => console.error('[SPA] Failed to reset login view:', error));
     navigate('#/login');
@@ -192,7 +192,7 @@ function initAdminChromeOnce() {
 
 async function loadPageModule(route) {
   const moduleMap = {
-    login: './spa-pages/spa-login.js?v=20260907-3',
+    login: './spa-pages/spa-login.js?v=20260907-4',
     dashboard: './spa-pages/spa-dashboard.js?v=20260904-3',
     bookings: './spa-pages/spa-bookings.js',
     'booking/create': './spa-pages/spa-booking-create.js',
