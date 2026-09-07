@@ -144,7 +144,7 @@ function collectExtensionDetails(booking) {
       <form><div class="modal-body">
         <div class="form-group"><label class="form-label">New departure date <span class="required">*</span></label><input class="form-control" type="date" name="newDepartureDate" min="${String(booking.departureDate).slice(0, 10)}" required></div>
         <div class="form-group"><label class="form-label">Reason for extension <span class="required">*</span></label><textarea class="form-control" name="reason" rows="4" required></textarea></div>
-        <div class="form-group"><label class="form-label">Additional cost (KES) <span class="required">*</span></label><input class="form-control" type="number" name="additionalCost" min="0" step="0.01" value="0" required></div>
+        <p class="text-muted">The additional charge is calculated automatically from the booking rate for the extra nights.</p>
       </div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-extension-cancel>Cancel</button><button type="submit" class="btn btn-primary">Extend Stay</button></div></form>
     </div>`;
     document.body.appendChild(backdrop);
@@ -154,7 +154,7 @@ function collectExtensionDetails(booking) {
     form.addEventListener('submit', (event) => {
       event.preventDefault();
       const data = new FormData(form);
-      finish({ newDepartureDate: data.get('newDepartureDate'), reason: data.get('reason')?.trim(), additionalCost: Number(data.get('additionalCost')) });
+      finish({ newDepartureDate: data.get('newDepartureDate'), reason: data.get('reason')?.trim() });
     });
     form.querySelector('[name="newDepartureDate"]').focus();
   });

@@ -338,14 +338,11 @@ async function onAction(event) {
       showToast('A reason is required for the stay extension.', 'error');
       return;
     }
-    const additionalCost = window.prompt('Additional cost for the extension (KES):', '0');
-    if (additionalCost === null || !Number.isFinite(Number(additionalCost)) || Number(additionalCost) < 0) {
-      showToast('Enter a valid non-negative additional cost.', 'error');
-      return;
-    }
+    const extensionNights = nightsBetween(booking.departureDate, newDepartureDate.trim());
+    const additionalCost = extensionNights * Number(booking.appliedRate?.amount || 0);
     const ok = await confirmDialog({
       title: 'Extend stay',
-      message: `Extend ${fullName(booking)} until ${newDepartureDate.trim()} for ${Number(additionalCost).toFixed(2)} KES?`,
+      message: `Extend ${fullName(booking)} until ${newDepartureDate.trim()}? The ${extensionNights} additional night(s) will be billed at ${Number(additionalCost).toFixed(2)} ${booking.appliedRate?.currency || 'KES'}.`,
       confirmLabel: 'Extend stay',
     });
     if (!ok) return;
@@ -354,7 +351,6 @@ async function onAction(event) {
         () => extendBookingStay(bookingId, {
           newDepartureDate: newDepartureDate.trim(),
           reason: reason.trim(),
-          additionalCost: Number(additionalCost),
         }),
         'Extending stay…',
       );
