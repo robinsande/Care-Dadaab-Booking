@@ -41,9 +41,9 @@
         <div class="table-wrap">
           <table class="table" aria-label="Rooms">
             <thead>
-              <tr><th>Camp</th><th>Block</th><th>Room Number</th><th>Current Guest</th><th>Capacity</th><th>Room Status</th><th>Active</th><th>Actions</th></tr>
+              <tr><th>Camp</th><th>Block</th><th>Room Number</th><th>Current Guest</th><th>Capacity</th><th>Room Status</th><th>Housekeeping</th><th>Active</th><th>Actions</th></tr>
             </thead>
-            <tbody id="rooms-table-body"><tr><td colspan="8" class="empty-state">Loading…</td></tr></tbody>
+            <tbody id="rooms-table-body"><tr><td colspan="9" class="empty-state">Loading…</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -64,6 +64,7 @@
             <div class="form-group"><label class="form-label" for="roomNumber">Room Number <span class="required">*</span></label><input class="form-control" id="roomNumber" name="roomNumber" required><span class="form-error" data-error-for="roomNumber"></span></div>
             <div class="form-group"><label class="form-label" for="capacity">Capacity <span class="required">*</span></label><input class="form-control" type="number" id="capacity" name="capacity" min="1" required><span class="form-error" data-error-for="capacity"></span></div>
             <div class="form-group"><label class="form-label" for="status">Status <span class="required">*</span></label><select class="form-control" id="status" name="status" required></select><span class="form-error" data-error-for="status"></span></div>
+            <div class="form-group"><label class="form-label" for="housekeepingStatus">Housekeeping <span class="required">*</span></label><select class="form-control" id="housekeepingStatus" name="housekeepingStatus" required></select><span class="form-error" data-error-for="housekeepingStatus"></span></div>
           </div>
         </div>
         <div class="modal-footer">

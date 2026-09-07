@@ -1,6 +1,7 @@
 const BOOKING_STATUSES = ['Booked', 'Checked In', 'Checked Out', 'Cancelled'];
 
 const ROOM_STATUSES = ['Available', 'Booked', 'Occupied', 'Maintenance'];
+const HOUSEKEEPING_STATUSES = ['Clean', 'Dirty', 'Inspected'];
 
 const STAY_TYPES = [
   { value: 'Short Stay', label: 'Short Stay' },
@@ -42,6 +43,7 @@ const REPORT_TYPES = [
 export const constants = {
   BOOKING_STATUSES,
   ROOM_STATUSES,
+  HOUSEKEEPING_STATUSES,
   STAY_TYPES,
   GENDERS,
   DEPARTURE_COUNTRIES,

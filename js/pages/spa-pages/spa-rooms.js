@@ -81,6 +81,9 @@ export async function init() {
   fillSelect(document.getElementById('room-status'), constants.ROOM_STATUSES, {
     placeholder: 'Select status',
   });
+  fillSelect(document.getElementById('room-housekeepingStatus'), constants.HOUSEKEEPING_STATUSES, {
+    placeholder: 'Select housekeeping status',
+  });
 
   if (canManage) {
     addBtn?.addEventListener('click', () => openRoomModal(titleEl, filterCamp, filterBlock, formCampSelect, formBlockSelect));
@@ -205,7 +208,7 @@ async function runLoadRooms(filterCamp, filterBlock, tableBody) {
     renderTable(tableBody);
   } catch (error) {
     if (seq !== loadRoomsSeq) return;
-    tableBody.innerHTML = `<tr><td colspan="8" class="empty-state">Unable to load rooms.</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="9" class="empty-state">Unable to load rooms.</td></tr>`;
     const message = error instanceof ApiError ? error.message : 'Unable to load rooms.';
     showToast(message, 'error');
   }
@@ -223,7 +226,7 @@ function filteredRooms() {
 function renderTable(tableBody) {
   const visible = filteredRooms();
   if (!visible.length) {
-    tableBody.innerHTML = `<tr><td colspan="8" class="empty-state">No rooms found.</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="9" class="empty-state">No rooms found.</td></tr>`;
     return;
   }
 
@@ -262,6 +265,7 @@ function renderTable(tableBody) {
           <td>${escapeHtml(guestForRoom(room))}</td>
           <td>${escapeHtml(room.capacity)}</td>
           <td>${statusBadge(room.status)}</td>
+          <td>${statusBadge(room.housekeepingStatus || 'Clean')}</td>
           <td>${recordBadge}</td>
           <td>${actions || '—'}</td>
         </tr>
@@ -285,6 +289,7 @@ async function openRoomModal(titleEl, filterCamp, filterBlock, formCampSelect, f
     document.getElementById('room-roomNumber').value = room.roomNumber || '';
     document.getElementById('room-capacity').value = room.capacity ?? '';
     document.getElementById('room-status').value = room.status || '';
+    document.getElementById('room-housekeepingStatus').value = room.housekeepingStatus || 'Clean';
   } else {
     titleEl.textContent = 'Add Room';
     document.getElementById('room-id').value = '';
@@ -311,6 +316,7 @@ async function onSave(event, form, submitBtn, filterCamp, filterBlock, formCampS
       custom: (value) => (Number(value) >= 1 ? null : 'Capacity must be at least 1.'),
     },
     status: { required: true, label: 'Status' },
+    housekeepingStatus: { required: true, label: 'Housekeeping status' },
   });
 
   applyFieldErrors(form, errors);
@@ -322,6 +328,7 @@ async function onSave(event, form, submitBtn, filterCamp, filterBlock, formCampS
     roomNumber: values.roomNumber,
     capacity: Number(values.capacity),
     status: values.status,
+    housekeepingStatus: values.housekeepingStatus,
   };
 
   setButtonLoading(submitBtn, true, 'Saving…');

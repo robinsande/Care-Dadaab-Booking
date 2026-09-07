@@ -75,6 +75,9 @@ function boot() {
   fillSelect(document.getElementById('status'), constants.ROOM_STATUSES, {
     placeholder: 'Select status',
   });
+  fillSelect(document.getElementById('housekeepingStatus'), constants.HOUSEKEEPING_STATUSES, {
+    placeholder: 'Select housekeeping status',
+  });
 
   if (canManage) {
     addBtn?.addEventListener('click', () => openRoomModal());
@@ -188,7 +191,7 @@ async function runLoadRooms() {
     renderTable();
   } catch (error) {
     if (seq !== loadRoomsSeq) return;
-    tableBody.innerHTML = `<tr><td colspan="8" class="empty-state">Unable to load rooms.</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="9" class="empty-state">Unable to load rooms.</td></tr>`;
     const message = error instanceof ApiError ? error.message : 'Unable to load rooms.';
     showToast(message, 'error');
   }
@@ -206,7 +209,7 @@ function filteredRooms() {
 function renderTable() {
   const visible = filteredRooms();
   if (!visible.length) {
-    tableBody.innerHTML = `<tr><td colspan="8" class="empty-state">No rooms found.</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="9" class="empty-state">No rooms found.</td></tr>`;
     return;
   }
 
@@ -245,6 +248,7 @@ function renderTable() {
           <td>${escapeHtml(guestForRoom(room))}</td>
           <td>${escapeHtml(room.capacity)}</td>
           <td>${statusBadge(room.status)}</td>
+          <td>${statusBadge(room.housekeepingStatus || 'Clean')}</td>
           <td>${recordBadge}</td>
           <td>${actions || '—'}</td>
         </tr>
@@ -267,6 +271,7 @@ async function openRoomModal(room = null) {
     document.getElementById('roomNumber').value = room.roomNumber || '';
     document.getElementById('capacity').value = room.capacity ?? '';
     document.getElementById('status').value = room.status || '';
+    document.getElementById('housekeepingStatus').value = room.housekeepingStatus || 'Clean';
   } else {
     titleEl.textContent = 'Add Room';
     document.getElementById('room-id').value = '';
@@ -293,6 +298,7 @@ async function onSave(event) {
       custom: (value) => (Number(value) >= 1 ? null : 'Capacity must be at least 1.'),
     },
     status: { required: true, label: 'Status' },
+    housekeepingStatus: { required: true, label: 'Housekeeping status' },
   });
 
   applyFieldErrors(form, errors);
@@ -304,6 +310,7 @@ async function onSave(event) {
     roomNumber: values.roomNumber,
     capacity: Number(values.capacity),
     status: values.status,
+    housekeepingStatus: values.housekeepingStatus,
   };
 
   setButtonLoading(submitBtn, true, 'Saving…');
