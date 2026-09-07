@@ -5,6 +5,7 @@ import {
   deactivateUser,
   reactivateUser,
   resetUserPassword,
+  resetUserMfa,
 } from '../api/users.js';
 import { ApiError } from '../api/client.js';
 import { requireAuth } from '../auth/session.js';
@@ -49,7 +50,7 @@ async function loadUsers() {
     if (!Array.isArray(users)) users = [];
     renderTable();
   } catch (error) {
-    tableBody.innerHTML = `<tr><td colspan="5" class="empty-state">Unable to load users.</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="6" class="empty-state">Unable to load users.</td></tr>`;
     showToast(
       error instanceof ApiError ? error.message : 'Unable to load users.',
       'error',
@@ -59,7 +60,7 @@ async function loadUsers() {
 
 function renderTable() {
   if (!users.length) {
-    tableBody.innerHTML = `<tr><td colspan="5" class="empty-state">No users found.</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="6" class="empty-state">No users found.</td></tr>`;
     return;
   }
 
@@ -70,6 +71,10 @@ function renderTable() {
       const statusBadge = active
         ? '<span class="badge badge-approved">Active</span>'
         : '<span class="badge badge-cancelled">Inactive</span>';
+      const mfaEnabled = item.mfaEnabled === true;
+      const mfaBadge = mfaEnabled
+        ? '<span class="badge badge-approved">Enabled</span>'
+        : '<span class="badge badge-pending">Setup required</span>';
       const toggleButton = active
         ? `<button type="button" class="btn btn-danger btn-sm" data-action="deactivate" data-id="${escapeHtml(id)}">Deactivate</button>`
         : `<button type="button" class="btn btn-primary btn-sm" data-action="reactivate" data-id="${escapeHtml(id)}">Reactivate</button>`;
@@ -79,6 +84,10 @@ function renderTable() {
           <td>${escapeHtml(item.email)}</td>
           <td>${escapeHtml(item.role)}</td>
           <td>${statusBadge}</td>
+          <td>
+            ${mfaBadge}
+            ${mfaEnabled && active ? `<button type="button" class="btn btn-secondary btn-sm" data-action="reset-mfa" data-id="${escapeHtml(id)}">Reset</button>` : ''}
+          </td>
           <td>
             <div class="table-actions">
               <button type="button" class="btn btn-secondary btn-sm" data-action="edit" data-id="${escapeHtml(id)}">Edit</button>
@@ -213,6 +222,23 @@ async function onTableClick(event) {
       showToast(`Temporary password: ${response.data?.temporaryPassword}`, 'info', { duration: 12000 });
     } catch (error) {
       showToast(error instanceof ApiError ? error.message : 'Unable to reset password.', 'error');
+    }
+
+    if (action === 'reset-mfa') {
+      const confirmed = await confirmDialog({
+        title: 'Reset Microsoft Authenticator',
+        message: `Reset MFA for ${fullName(item)}? They will scan a new QR code at their next sign-in.`,
+        confirmLabel: 'Reset MFA',
+      });
+      if (!confirmed) return;
+      try {
+        await withLoading(() => resetUserMfa(id), 'Resetting MFA…');
+        showToast('MFA reset. The user must enroll again at next sign-in.', 'success');
+        loadUsers();
+      } catch (error) {
+        showToast(error instanceof ApiError ? error.message : 'Unable to reset MFA.', 'error');
+      }
+      return;
     }
     return;
   }

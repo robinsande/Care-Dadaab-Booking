@@ -4,6 +4,10 @@ export function login(email, password) {
   return api.post('/auth/login', { email, password }, { auth: false });
 }
 
+export function verifyMfa(mfaToken, code) {
+  return api.post('/auth/mfa/verify', { mfaToken, code }, { auth: false });
+}
+
 export function getCurrentUser() {
   return api.get('/auth/me');
 }

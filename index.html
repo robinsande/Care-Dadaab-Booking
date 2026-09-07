@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/layout.css?v=20260907-5">
+  <link rel="stylesheet" href="css/layout.css?v=20260907-6">
 </head>
 <body>
 
@@ -80,6 +80,16 @@
             <button class="btn btn-primary btn-block" type="submit" id="login-submit">Sign In</button>
           </div>
         </form>
+        <section class="mfa-login-panel" id="spa-mfa-panel" hidden aria-labelledby="spa-mfa-title">
+          <p class="login-success-kicker">Microsoft Authenticator</p>
+          <h2 id="spa-mfa-title">Verify your account</h2>
+          <p id="spa-mfa-instructions">Scan this QR code in Microsoft Authenticator, then enter the six-digit code.</p>
+          <img id="spa-mfa-qr-code" class="mfa-qr-code" alt="Microsoft Authenticator setup QR code" hidden>
+          <p class="mfa-manual-key" id="spa-mfa-manual-key" hidden></p>
+          <label class="form-label" for="spa-mfa-code">Authenticator code</label>
+          <input class="form-control" type="text" id="spa-mfa-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6">
+          <button class="btn btn-primary btn-block" type="button" id="spa-mfa-submit">Verify and continue</button>
+        </section>
       </div>
     </div>
     <div class="login-success-overlay" id="spa-login-success" role="status" aria-live="polite" hidden>

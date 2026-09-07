@@ -16,6 +16,10 @@ export function resetUserPassword(id) {
   return api.post(`/users/${id}/reset-password`);
 }
 
+export function resetUserMfa(id) {
+  return api.post(`/users/${id}/reset-mfa`);
+}
+
 /**
  * Deactivate a user. The backend soft-deletes (sets isActive=false) so audit
  * history stays intact; the account is never hard-removed.
