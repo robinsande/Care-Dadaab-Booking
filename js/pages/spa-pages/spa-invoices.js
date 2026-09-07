@@ -111,7 +111,7 @@ function renderTable() {
         <td>${paymentStatusBadge(inv.paymentStatus)}</td>
         <td>${emailStatusBadge(emailStatus)}</td>
         <td>${paid ? 'Paid' : `
-          <button type="button" class="btn btn-primary btn-sm" data-payment-action data-invoice-id="${escapeHtml(id)}">Paid</button>
+          <button type="button" class="btn btn-primary btn-sm" data-payment-action data-invoice-id="${escapeHtml(id)}">Record cash</button>
           <button type="button" class="btn btn-secondary btn-sm" data-stk-action data-invoice-id="${escapeHtml(id)}">Request payment</button>
         `}</td>
       </tr>
@@ -135,15 +135,15 @@ async function handleStkPush(button) {
 async function handlePaymentChange(button) {
   if (!button.matches('[data-payment-action]')) return;
   const confirmed = await confirmDialog({
-    title: 'Confirm payment',
-    message: 'Mark this invoice as paid?',
-    confirmLabel: 'Yes, mark paid',
+    title: 'Confirm cash payment',
+    message: 'Confirm that this invoice was paid in cash?',
+    confirmLabel: 'Yes, record cash',
   });
   if (!confirmed) return;
   button.disabled = true;
   try {
-    await updateInvoicePaymentStatus(button.dataset.invoiceId, 'Paid');
-    showToast('Invoice marked as paid.', 'success');
+    await updateInvoicePaymentStatus(button.dataset.invoiceId, 'Paid', 'Cash');
+    showToast('Cash payment recorded and invoice marked as paid.', 'success');
     await loadInvoices();
   } catch (error) {
     button.disabled = false;
