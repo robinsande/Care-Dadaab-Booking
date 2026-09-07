@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/layout.css?v=20260907-10">
+  <link rel="stylesheet" href="css/layout.css?v=20260907-11">
 </head>
 <body>
 
@@ -129,6 +129,7 @@
           <button type="button" class="btn btn-secondary btn-sm admin-menu-toggle" data-admin-menu-toggle>Menu</button>
           <h1 id="page-title" style="font-size:var(--text-lg);margin:0;">Dashboard</h1>
           <div class="admin-user">
+            <button type="button" class="btn btn-secondary btn-sm dashboard-sync" data-dashboard-sync><span aria-hidden="true">↻</span> Sync now</button>
             <div class="admin-user-meta">
               <strong data-admin-name>—</strong>
               <span data-admin-role></span>
@@ -184,6 +185,19 @@
             <a class="quick-link quick-link-purple" data-nav-link href="#/bookings"><span class="quick-link-icon">▤</span><span><strong>Reservations</strong><small>Review guest stays</small></span><span class="quick-link-arrow">→</span></a>
             <a class="quick-link quick-link-sand" data-nav-link href="#/reports"><span class="quick-link-icon">◒</span><span><strong>Insights</strong><small>View operations reports</small></span><span class="quick-link-arrow">→</span></a>
           </div>
+          <section class="dashboard-service-strip" aria-label="Today's service pulse">
+            <div class="service-pulse-card service-pulse-primary">
+              <div class="service-pulse-heading"><span class="panel-kicker">Today's service pulse</span><span class="service-pulse-status"><span class="live-dot"></span>Live</span></div>
+              <h3>Keep every arrival effortless</h3><p>Review the next movement through your accommodation desk.</p>
+              <div class="service-pulse-metrics"><span><strong data-stat="todayArrivals">—</strong><small>arrivals</small></span><span><strong data-stat="todayDepartures">—</strong><small>departures</small></span><span><strong data-stat="availableRooms">—</strong><small>rooms ready</small></span></div>
+            </div>
+            <div class="service-occupancy-card"><div class="service-card-heading"><span><span class="panel-kicker">Portfolio health</span><strong>Room availability</strong></span><span class="occupancy-ring" aria-hidden="true"><span>●</span></span></div><div class="occupancy-progress"><span></span></div><div class="occupancy-labels"><span>In use <strong data-stat="occupiedRooms">—</strong></span><span>Available <strong data-stat="availableRooms">—</strong></span></div></div>
+            <div class="service-alert-card"><span class="service-alert-icon">!</span><span><span class="panel-kicker">Attention centre</span><strong>Outstanding invoices</strong><small><b data-stat="outstandingInvoices">—</b> require review</small></span><a data-nav-link href="#/invoices" aria-label="Review invoices">→</a></div>
+          </section>
+          <section class="dashboard-service-menu" aria-label="Operations services">
+            <div><span class="panel-kicker">Your operations desk</span><h3>Everything you need, in one place</h3></div>
+            <div class="service-menu-links"><a data-nav-link href="#/rooms"><span>▦</span>Room inventory <b>→</b></a><a data-nav-link href="#/camps"><span>⌖</span>Accommodation camps <b>→</b></a><a data-nav-link href="#/reservation-log"><span>◷</span>Reservation log <b>→</b></a><a data-nav-link href="#/reports"><span>◒</span>Performance reports <b>→</b></a></div>
+          </section>
           <div class="dashboard-grid">
           <div class="panel dashboard-panel">
             <div class="dashboard-panel-header"><div><span class="panel-kicker">Accommodation</span><h3>Room status</h3></div><span class="panel-caption">By camp and block</span></div>

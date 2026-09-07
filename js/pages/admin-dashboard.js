@@ -13,10 +13,12 @@ import {
 
 const user = requireAuth();
 let dashboardRequestActive = false;
+const syncButton = document.querySelector('[data-dashboard-sync]');
 if (!user) {
   /* redirect in progress */
 } else {
   initAdminShell();
+  syncButton?.addEventListener('click', () => loadDashboard({ manual: true }));
   loadDashboard();
   window.setInterval(() => {
     if (!document.hidden) loadDashboard({ showLoading: false });
@@ -26,9 +28,11 @@ if (!user) {
   });
 }
 
-async function loadDashboard() {
+async function loadDashboard({ manual = false } = {}) {
   if (dashboardRequestActive) return;
   dashboardRequestActive = true;
+  syncButton?.classList.add('is-syncing');
+  if (manual) syncButton?.setAttribute('aria-busy', 'true');
   try {
     const response = await getDashboardStats();
     const data = response.data || {};
@@ -42,8 +46,9 @@ async function loadDashboard() {
     };
 
     Object.entries(mapping).forEach(([key, value]) => {
-      const el = document.querySelector(`[data-stat="${key}"]`);
-      if (el) el.textContent = String(value);
+      document.querySelectorAll(`[data-stat="${key}"]`).forEach((el) => {
+        el.textContent = String(value);
+      });
     });
     const dashboardName = document.querySelector('[data-dashboard-name]');
     const currentUserName = document.querySelector('[data-admin-name]')?.textContent;
@@ -56,12 +61,13 @@ async function loadDashboard() {
     renderRecentBookings(data.recentBookings || []);
   } catch (error) {
     showDashboardError();
-    showToast(
-      error instanceof ApiError ? error.message : 'Unable to load dashboard.',
-      'error',
-    );
+    if (manual) {
+      showToast(error instanceof ApiError ? error.message : 'Unable to sync dashboard.', 'error');
+    }
   } finally {
     dashboardRequestActive = false;
+    syncButton?.classList.remove('is-syncing');
+    syncButton?.removeAttribute('aria-busy');
   }
 }
 
