@@ -65,6 +65,19 @@ export function initAdminShell() {
     toggle.setAttribute('aria-expanded', String(isOpen));
   });
 
+  document.addEventListener('click', (event) => {
+    if (window.innerWidth >= 960 || !sidebar?.classList.contains('is-open')) return;
+    if (sidebar.contains(event.target) || toggle?.contains(event.target)) return;
+    sidebar.classList.remove('is-open');
+    toggle?.setAttribute('aria-expanded', 'false');
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || window.innerWidth >= 960) return;
+    sidebar?.classList.remove('is-open');
+    toggle?.setAttribute('aria-expanded', 'false');
+  });
+
   sidebar?.querySelectorAll('a').forEach((link) => {
     link.addEventListener('click', () => {
       sidebar.classList.remove('is-open');
