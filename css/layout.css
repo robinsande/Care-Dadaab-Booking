@@ -467,7 +467,12 @@
 }
 
 .login-entry-bag .reservation-log-illustration {
+  position: relative;
   width: min(72%, 190px);
+  min-height: 160px;
+  padding: 8px;
+  border-radius: 48%;
+  background: radial-gradient(circle at 50% 38%, rgba(255, 248, 199, 0.2), rgba(38, 31, 48, 0.92) 70%);
   margin: var(--space-2) auto 0;
   transition: transform 220ms ease;
 }
@@ -667,6 +672,7 @@
 }
 
 .login-lamp-shade {
+  opacity: 1;
   fill: #fffdf3;
   stroke: #e8e1c9;
   stroke-width: 2;
@@ -678,6 +684,7 @@
 
 .login-lamp-stem,
 .login-lamp-base {
+  opacity: 1;
   fill: none;
   stroke: #f7f4e8;
   stroke-linecap: round;
@@ -685,12 +692,14 @@
 }
 
 .login-lamp-cord {
+  opacity: 1;
   fill: none;
   stroke: #b7b5a8;
   stroke-width: 2;
 }
 
 .login-lamp-pull {
+  opacity: 1;
   fill: #d7aa6e;
   stroke: #a77e4d;
   stroke-width: 1;
