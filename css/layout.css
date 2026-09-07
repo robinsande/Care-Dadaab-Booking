@@ -560,6 +560,31 @@
   transform-origin: center;
 }
 
+.login-character-hair {
+  fill: var(--color-purple-dark);
+  transform-box: fill-box;
+  transform-origin: center bottom;
+}
+
+.login-character-shirt {
+  fill: var(--color-brand);
+  stroke: var(--color-brand-dark);
+  stroke-width: 2;
+  transform-box: fill-box;
+  transform-origin: center bottom;
+}
+
+.login-character-badge {
+  fill: #fff;
+  opacity: 0.9;
+}
+
+.login-character-hand {
+  fill: #f0b38a;
+  stroke: var(--color-brand-dark);
+  stroke-width: 1.5;
+}
+
 .reservation-log-bag-strap,
 .reservation-log-bag-handle {
   fill: none;
@@ -662,6 +687,16 @@
   animation: login-walk-front 1.1s ease-in-out infinite;
 }
 
+.login-entry-bag .login-character-hair,
+.login-entry-bag .login-character-shirt {
+  animation: login-character-bob 1.1s ease-in-out infinite;
+}
+
+@keyframes login-character-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
 .reservation-log-bag-label {
   margin-top: var(--space-2);
   font-family: var(--font-display);
@@ -735,6 +770,8 @@
   .login-entry-bag .reservation-log-paper,
   .login-entry-bag .login-walk-arm,
   .login-entry-bag .login-walk-leg,
+  .login-entry-bag .login-character-hair,
+  .login-entry-bag .login-character-shirt,
   .login-entry-bag .reservation-log-illustration,
   .login-entry-bag:hover .reservation-log-bag,
   .login-entry-bag:hover .reservation-log-bag-handle,
