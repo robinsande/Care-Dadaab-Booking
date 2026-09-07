@@ -1,4 +1,10 @@
-import { listInvoices, getInvoice, downloadInvoicePdf, updateInvoicePaymentStatus } from '../api/invoices.js';
+import {
+  listInvoices,
+  getInvoice,
+  downloadInvoicePdf,
+  updateInvoicePaymentStatus,
+  initiateInvoiceStkPush,
+} from '../api/invoices.js';
 import { ApiError } from '../api/client.js';
 import { getBrandLogoDataUrl } from '../config.js';
 import { requireAuth } from '../auth/session.js';
@@ -151,11 +157,27 @@ function renderTable() {
           <td>${escapeHtml(formatMoney(invoice.totalAmount, currency))}</td>
           <td>${paymentStatusBadge(invoice.paymentStatus)}</td>
           <td>${emailStatusBadge(emailStatus)}</td>
-          <td>${paid ? 'Paid' : `<button type="button" class="btn btn-primary btn-sm" data-payment-action data-invoice-id="${escapeHtml(id)}">Paid</button>`}</td>
+          <td>${paid ? 'Paid' : `
+            <button type="button" class="btn btn-primary btn-sm" data-payment-action data-invoice-id="${escapeHtml(id)}">Paid</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-stk-action data-invoice-id="${escapeHtml(id)}">Request payment</button>
+          `}</td>
         </tr>
       `;
     })
     .join('');
+}
+
+async function handleStkPush(button) {
+  const phoneNumber = window.prompt('Enter the guest Kenyan phone number for the M-Pesa prompt:');
+  if (!phoneNumber?.trim()) return;
+  button.disabled = true;
+  try {
+    const response = await initiateInvoiceStkPush(button.dataset.invoiceId, phoneNumber.trim());
+    showToast(response.data?.customerMessage || 'M-Pesa prompt sent to the guest.', 'success');
+  } catch (error) {
+    button.disabled = false;
+    showToast(error instanceof ApiError ? error.message : 'Unable to send M-Pesa prompt.', 'error');
+  }
 }
 
 async function handlePaymentChange(button) {

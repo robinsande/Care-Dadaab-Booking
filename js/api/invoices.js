@@ -14,6 +14,10 @@ export function updateInvoicePaymentStatus(id, paymentStatus) {
   return api.patch(`/invoices/${id}/payment-status`, { paymentStatus });
 }
 
+export function initiateInvoiceStkPush(id, phoneNumber) {
+  return api.post(`/mpesa/stk/${id}`, { phoneNumber });
+}
+
 /**
  * Download invoice as PDF via authenticated fetch.
  * Backend: GET /invoices/:id?format=pdf
