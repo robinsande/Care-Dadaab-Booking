@@ -2253,9 +2253,9 @@
   width: min(420px, 100%);
   padding: clamp(var(--space-6), 5vw, var(--space-8));
   border-color: rgba(255, 255, 255, 0.36);
-  background: linear-gradient(145deg, rgba(151, 56, 28, 0.72), rgba(232, 114, 30, 0.5));
+  background: linear-gradient(145deg, #97381c, #c85a26);
   box-shadow: 0 24px 70px rgba(104, 34, 19, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(18px);
+  backdrop-filter: none;
   color: #fff;
 }
 
