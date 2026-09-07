@@ -131,13 +131,18 @@ function initAdminChromeOnce() {
 
   const collapsed = window.localStorage.getItem('cams.sidebarCollapsed') === 'true';
   shell?.classList.toggle('sidebar-collapsed', collapsed);
+  const mobileNavOpen = window.localStorage.getItem('cams.sidebarOpen') === 'true';
+  if (window.innerWidth < 960 && mobileNavOpen) {
+    sidebar?.classList.add('is-open');
+  }
   collapseToggle?.setAttribute('aria-expanded', String(!collapsed));
   collapseToggle?.setAttribute('aria-label', collapsed ? 'Show navigation' : 'Hide navigation');
   if (collapseToggle) collapseToggle.querySelector('span:last-child').textContent = collapsed ? 'Show navigation' : 'Hide navigation';
   collapseToggle?.addEventListener('click', () => {
     if (window.innerWidth < 960) {
-      sidebar?.classList.remove('is-open');
-      toggle?.setAttribute('aria-expanded', 'false');
+      const isOpen = sidebar?.classList.toggle('is-open') || false;
+      window.localStorage.setItem('cams.sidebarOpen', String(isOpen));
+      toggle?.setAttribute('aria-expanded', String(isOpen));
       return;
     }
     const isCollapsed = shell?.classList.toggle('sidebar-collapsed') || false;
@@ -159,8 +164,12 @@ function initAdminChromeOnce() {
   });
 
   toggle?.setAttribute('aria-expanded', 'false');
+  if (window.innerWidth < 960 && sidebar?.classList.contains('is-open')) {
+    toggle.setAttribute('aria-expanded', 'true');
+  }
   toggle?.addEventListener('click', () => {
     const isOpen = sidebar?.classList.toggle('is-open') || false;
+    window.localStorage.setItem('cams.sidebarOpen', String(isOpen));
     toggle.setAttribute('aria-expanded', String(isOpen));
   });
 
