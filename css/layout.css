@@ -659,6 +659,51 @@
   stroke-width: 2;
 }
 
+.login-lamp-glow {
+  opacity: 0.72;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: login-lamp-glow 2.4s ease-in-out infinite;
+}
+
+.login-lamp-shade {
+  fill: #fffdf3;
+  stroke: #e8e1c9;
+  stroke-width: 2;
+  filter: drop-shadow(0 7px 8px rgba(255, 224, 128, 0.45));
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: login-lamp-breathe 2.4s ease-in-out infinite;
+}
+
+.login-lamp-stem,
+.login-lamp-base {
+  fill: none;
+  stroke: #f7f4e8;
+  stroke-linecap: round;
+  stroke-width: 8;
+}
+
+.login-lamp-cord {
+  fill: none;
+  stroke: #b7b5a8;
+  stroke-width: 2;
+}
+
+.login-lamp-pull {
+  fill: #d7aa6e;
+  stroke: #a77e4d;
+  stroke-width: 1;
+  transform-box: fill-box;
+  transform-origin: center top;
+  animation: login-lamp-pull 2.4s ease-in-out infinite;
+}
+
+.login-entry-bag:hover .login-lamp-shade,
+.login-entry-bag:focus-visible .login-lamp-shade {
+  filter: drop-shadow(0 9px 12px rgba(255, 224, 128, 0.72));
+}
+
 .login-entry-bag .reservation-log-illustration svg {
   animation: reservation-log-walk-cycle 1.1s ease-in-out infinite;
 }
@@ -727,6 +772,21 @@
   50% { transform: translateY(-4px); }
 }
 
+@keyframes login-lamp-glow {
+  0%, 100% { opacity: 0.55; transform: scale(0.96); }
+  50% { opacity: 0.9; transform: scale(1.04); }
+}
+
+@keyframes login-lamp-breathe {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.03); }
+}
+
+@keyframes login-lamp-pull {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(4deg); }
+}
+
 @keyframes reservation-log-walk-cycle {
   0%, 100% { transform: translateX(-3px) rotate(-1deg); }
   50% { transform: translateX(3px) rotate(1deg); }
@@ -771,6 +831,9 @@
   .login-entry-bag .reservation-log-head,
   .login-entry-bag .login-cartoon-body,
   .login-entry-bag .login-cartoon-shadow,
+  .login-entry-bag .login-lamp-glow,
+  .login-entry-bag .login-lamp-shade,
+  .login-entry-bag .login-lamp-pull,
   .login-entry-bag .reservation-log-illustration svg,
   .login-entry-bag::before,
   .login-entry-bag::after,
