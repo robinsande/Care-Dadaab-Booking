@@ -1703,6 +1703,10 @@
     margin-bottom: 1rem;
   }
 
+  .login-page .scenery-tree {
+    display: none;
+  }
+
   .login-entry-bag {
     width: min(100%, 286px);
     margin-bottom: 1.25rem;
