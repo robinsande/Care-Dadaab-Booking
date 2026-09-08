@@ -11,7 +11,7 @@ import {
 } from '../utils/validation.js';
 
 if (isAuthenticated()) {
-  window.location.href = 'dashboard.html';
+  window.location.href = '/#/dashboard';
 }
 
 const form = document.getElementById('login-form');
@@ -62,7 +62,7 @@ function finishLogin(user, token) {
   window.setTimeout(() => {
     window.location.href = redirect && redirect.startsWith('/admin/')
       ? redirect
-      : 'dashboard.html';
+      : '/#/dashboard';
   }, 2600);
 }
 

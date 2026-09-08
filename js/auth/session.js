@@ -49,7 +49,7 @@ export function requireAuth({ superAdmin = false } = {}) {
 
   const user = getUser();
   if (superAdmin && !isSuperAdmin(user)) {
-    window.location.href = '/admin/dashboard.html';
+    window.location.href = '/#/dashboard';
     return null;
   }
 

@@ -4,18 +4,18 @@ import { config, applyBrandLogos } from '../config.js';
 import { getUser, clearSession, isSuperAdmin } from '../auth/session.js';
 
 export const ADMIN_NAV = [
-  { href: 'dashboard.html', label: 'Dashboard', icon: 'home' },
-  { href: 'bookings.html', label: 'Bookings', icon: 'calendar' },
-  { href: 'booking-create.html', label: 'Create Booking', icon: 'calendar-plus' },
-  { href: 'camps.html', label: 'Camps', icon: 'map', superAdmin: true },
-  { href: 'blocks.html', label: 'Blocks', icon: 'layout-grid', superAdmin: true },
-  { href: 'rooms.html', label: 'Rooms', icon: 'bed-double' },
-  { href: 'rates.html', label: 'Rates', icon: 'badge-dollar-sign', superAdmin: true },
-  { href: 'invoices.html', label: 'Invoices', icon: 'receipt' },
-  { href: 'reports.html', label: 'Reports', icon: 'chart-no-axes-combined', superAdmin: true },
-  { href: 'reservation-log.html', label: 'Reservation Log', icon: 'history', superAdmin: true },
-  { href: 'users.html', label: 'Users', icon: 'users', superAdmin: true },
-  { href: 'settings.html', label: 'Settings', icon: 'settings', superAdmin: true },
+  { href: '/#/dashboard', label: 'Dashboard', icon: 'home', superAdmin: false },
+  { href: '/#/bookings', label: 'Bookings', icon: 'calendar' },
+  { href: '/#/booking/create', label: 'Create Booking', icon: 'calendar-plus' },
+  { href: '/#/camps', label: 'Camps', icon: 'map', superAdmin: true },
+  { href: '/#/blocks', label: 'Blocks', icon: 'layout-grid', superAdmin: true },
+  { href: '/#/rooms', label: 'Rooms', icon: 'bed-double' },
+  { href: '/#/rates', label: 'Rates', icon: 'badge-dollar-sign', superAdmin: true },
+  { href: '/#/invoices', label: 'Invoices', icon: 'receipt' },
+  { href: '/#/reports', label: 'Reports', icon: 'chart-no-axes-combined', superAdmin: true },
+  { href: '/admin/reservation-log.html', label: 'Reservation Log', icon: 'history', superAdmin: true },
+  { href: '/#/users', label: 'Users', icon: 'users', superAdmin: true },
+  { href: '/#/settings', label: 'Settings', icon: 'settings', superAdmin: true },
 ];
 
 export const NAV_ICONS = {
@@ -43,8 +43,9 @@ export function renderAdminNav(user = getUser()) {
     .filter((item) => !item.superAdmin || isSuperAdmin(user))
     .map((item) => {
       const isActive =
-        currentPage === item.href
-        || (item.href === 'bookings.html' && currentPage === 'booking-edit.html');
+        (item.href === '/#/dashboard' && currentPage === 'dashboard.html')
+        || (item.href === '/#/bookings' && ['bookings.html', 'booking-edit.html'].includes(currentPage))
+        || (item.href === '/admin/reservation-log.html' && currentPage === 'reservation-log.html');
       const attrs = isActive ? ' aria-current="page"' : '';
       const superAttr = item.superAdmin ? ' data-super-admin-only' : '';
       const icon = NAV_ICONS[item.icon] || '';
@@ -143,6 +144,9 @@ export function initAdminShell() {
   }
 
   const brandText = document.querySelector('[data-brand-subtitle]');
+  document.querySelectorAll('.admin-sidebar .brand').forEach((brand) => {
+    brand.setAttribute('href', '/#/dashboard');
+  });
   if (brandText) {
     brandText.textContent = config.APP_NAME;
   }
