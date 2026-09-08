@@ -1854,6 +1854,10 @@
   background: linear-gradient(180deg, rgba(184, 91, 44, 0.12) 0%, rgba(216, 120, 45, 0.08) 48%, rgba(243, 161, 47, 0.04) 100%);
 }
 
+#page-login {
+  width: 100%;
+}
+
 .login-page::before,
 .login-page::after {
   content: "";
