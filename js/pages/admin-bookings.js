@@ -76,7 +76,9 @@ function boot() {
             arrivalDate: request.arrivalDate,
             departureDate: request.departureDate,
           });
-          const available = availableResponse.data?.rooms
+          const available = Array.isArray(availableResponse.data)
+            ? availableResponse.data
+            : availableResponse.data?.rooms
             || availableResponse.data?.items
             || availableResponse.data
             || [];
@@ -96,7 +98,10 @@ function boot() {
       await loadGuestRequests();
       await loadBookings();
     } catch (error) {
-      showToast(error instanceof ApiError ? error.message : (error.message || 'Unable to update guest request.'), 'error');
+      const details = error instanceof ApiError && error.errors?.length
+        ? ` ${error.errors.map((item) => item.message).join(' ')}`
+        : '';
+      showToast(`${error?.message || 'Unable to update guest request.'}${details}`, 'error');
     }
   }
   if (params.get('status')) {
