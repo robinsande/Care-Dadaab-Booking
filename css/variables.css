@@ -27,6 +27,13 @@
   --color-info: #175cd3;
   --color-info-soft: #e8f1fc;
 
+  /* Button tokens */
+  --button-height: 42px;
+  --button-height-sm: 34px;
+  --button-radius: 0.8rem;
+  --button-shadow: 0 10px 24px rgba(84, 32, 111, 0.2);
+  --button-shadow-hover: 0 14px 30px rgba(84, 32, 111, 0.28);
+
   /* Status badges */
   --status-pending: #9a6b00;
   --status-approved: #175cd3;
