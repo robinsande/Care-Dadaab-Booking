@@ -115,7 +115,9 @@ function showPage(route) {
       if (titleEl) {
         titleEl.textContent = PAGE_TITLES[route] || route;
       }
-      document.title = `${PAGE_TITLES[route] || route} · ${config.APP_NAME}`;
+      document.title = route === 'dashboard'
+        ? config.APP_NAME
+        : `${PAGE_TITLES[route] || route} · ${config.APP_NAME}`;
     }
   }
 }
