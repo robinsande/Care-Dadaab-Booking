@@ -1893,7 +1893,7 @@
 .login-scenery {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 2;
   overflow: hidden;
   pointer-events: none;
   background: none;
@@ -1938,7 +1938,7 @@
 .scenery-tree {
   position: absolute;
   bottom: 16%;
-  z-index: 2;
+  z-index: 3;
   width: 22px;
   height: 45%;
   background: linear-gradient(90deg, #6f2b88 0 42%, #32103f 42% 58%, #54206b 58%);
@@ -1999,7 +1999,7 @@
 .login-leaves {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 3;
   overflow: hidden;
   pointer-events: none;
 }
@@ -2007,7 +2007,7 @@
 .login-galaxy {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 3;
   overflow: hidden;
   pointer-events: none;
   opacity: 0;
@@ -2268,7 +2268,7 @@
 
 .login-panel {
   position: relative;
-  z-index: 3;
+  z-index: 4;
   width: min(340px, 100%);
   padding: clamp(1.25rem, 4vw, 1.5rem);
   border-color: rgba(255, 255, 255, 0.36);
