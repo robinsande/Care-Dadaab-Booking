@@ -7,6 +7,8 @@ import {
   resendBookingEmails,
 } from '../api/bookings.js';
 import { listCamps } from '../api/camps.js';
+import { listBlocks } from '../api/blocks.js';
+import { listRooms } from '../api/rooms.js';
 import { ApiError } from '../api/client.js';
 import { requireAuth } from '../auth/session.js';
 import { initAdminShell } from '../components/shell.js';
@@ -17,7 +19,7 @@ import { confirmDialog } from '../components/modal.js';
 import { renderPagination } from '../components/pagination.js';
 import { constants, fillSelect } from '../utils/constants.js';
 import { isSuperAdmin } from '../auth/session.js';
-import { listStaffGuestRequests, resolveGuestRequest, listCampRoomsForGuestRequest } from '../api/guest.js';
+import { listStaffGuestRequests, resolveGuestRequest } from '../api/guest.js';
 import {
   escapeHtml,
   formatDate,
@@ -45,6 +47,68 @@ const tableBody = document.getElementById('bookings-table-body');
 const paginationEl = document.getElementById('bookings-pagination');
 const guestRequestsEl = document.getElementById('guest-requests');
 
+async function collectGuestRoomAssignment(campId) {
+  const blocksResponse = await listBlocks(campId);
+  const blocksData = blocksResponse.data;
+  const blocks = blocksData?.blocks || blocksData?.items || blocksData || [];
+  if (!Array.isArray(blocks) || !blocks.length) throw new Error('No active blocks exist in the selected camp.');
+
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `<div class="modal" role="dialog" aria-modal="true" aria-labelledby="guest-room-title">
+    <div class="modal-header"><h2 id="guest-room-title">Assign guest room</h2><button type="button" class="modal-close" data-assignment-cancel aria-label="Close">&times;</button></div>
+    <div class="modal-body">
+      <p class="text-muted">Choose a block first. The rooms under that block will then be displayed.</p>
+      <div class="form-group"><label class="form-label" for="guest-assignment-block">Block</label><select class="form-control" id="guest-assignment-block"><option value="">Select block</option>${blocks.map((block) => `<option value="${escapeHtml(block._id || block.id)}">${escapeHtml(block.name || block.blockName || block.block)}</option>`).join('')}</select></div>
+      <div class="form-group"><label class="form-label" for="guest-assignment-room">Room</label><select class="form-control" id="guest-assignment-room" disabled><option value="">Select a block first</option></select></div>
+    </div>
+    <div class="modal-footer"><button type="button" class="btn btn-secondary" data-assignment-cancel>Cancel</button><button type="button" class="btn btn-primary" data-assignment-confirm disabled>Assign room</button></div>
+  </div>`;
+  document.body.appendChild(backdrop);
+  const blockSelect = backdrop.querySelector('#guest-assignment-block');
+  const roomSelect = backdrop.querySelector('#guest-assignment-room');
+  const confirmButton = backdrop.querySelector('[data-assignment-confirm]');
+
+  try {
+    return await new Promise((resolve, reject) => {
+      const finish = (result) => {
+        backdrop.remove();
+        resolve(result);
+      };
+      const cancel = () => {
+        backdrop.remove();
+        reject(new Error('Room assignment cancelled.'));
+      };
+      backdrop.querySelectorAll('[data-assignment-cancel]').forEach((button) => button.addEventListener('click', cancel));
+      blockSelect.addEventListener('change', async () => {
+        roomSelect.disabled = true;
+        confirmButton.disabled = true;
+        roomSelect.innerHTML = '<option value="">Loading rooms…</option>';
+        if (!blockSelect.value) {
+          roomSelect.innerHTML = '<option value="">Select a block first</option>';
+          return;
+        }
+        try {
+          const response = await listRooms({ campId, blockId: blockSelect.value });
+          const data = response.data;
+          const rooms = data?.rooms || data?.items || data || [];
+          roomSelect.innerHTML = rooms.length
+            ? `<option value="">Select room</option>${rooms.map((room) => `<option value="${escapeHtml(room._id || room.id)}">${escapeHtml(`Room ${room.roomNumber}${room.status ? ` (${room.status})` : ''}`)}</option>`).join('')}`
+            : '<option value="">No rooms in this block</option>';
+          roomSelect.disabled = !rooms.length;
+        } catch (error) {
+          roomSelect.innerHTML = '<option value="">Unable to load rooms</option>';
+          showToast(error.message || 'Unable to load rooms.', 'error');
+        }
+      });
+      roomSelect.addEventListener('change', () => { confirmButton.disabled = !roomSelect.value; });
+      confirmButton.addEventListener('click', () => finish({ blockId: blockSelect.value, roomId: roomSelect.value }));
+    });
+  } catch (error) {
+    throw error;
+  }
+}
+
 function boot() {
   fillSelect(document.getElementById('status'), constants.BOOKING_STATUSES, {
     placeholder: 'All statuses',
@@ -71,22 +135,9 @@ function boot() {
         const payload = { action: 'approve' };
         if (request?.type === 'booking') {
           payload.campId = request.camp?._id;
-          const availableResponse = await listCampRoomsForGuestRequest(payload.campId);
-          const available = Array.isArray(availableResponse.data)
-            ? availableResponse.data
-            : availableResponse.data?.rooms
-            || availableResponse.data?.items
-            || availableResponse.data
-            || [];
-          if (!available.length) throw new Error('No active rooms exist in the selected camp.');
-          const choices = available.map((room, index) =>
-            `${index + 1}. ${room.blockName || room.block?.name || ''} Room ${room.roomNumber} [${room.status || 'Unknown'}] (${room._id})`
-          ).join('\n');
-          const selected = Number(window.prompt(`Choose a room to assign. The system will verify date conflicts:\n${choices}`, '1'));
-          const room = available[selected - 1];
-          if (!room) throw new Error('A valid room assignment is required.');
-          payload.blockId = room.block?._id || room.block;
-          payload.roomId = room._id;
+          const assignment = await collectGuestRoomAssignment(payload.campId);
+          payload.blockId = assignment.blockId;
+          payload.roomId = assignment.roomId;
         }
         await resolveGuestRequest(id, payload);
       }
