@@ -1922,23 +1922,25 @@
 }
 
 .scenery-mountain-back {
+  z-index: 1;
   background: linear-gradient(180deg, #e8721e 0%, #d8782d 42%, rgba(177, 91, 169, 0.94) 64%, rgba(77, 32, 104, 0.97) 100%);
   opacity: 0.82;
   transform: translateX(4%);
 }
 
 .scenery-mountain-front {
+  z-index: 2;
   bottom: -7%;
   height: 42%;
-  background: linear-gradient(180deg, #e8721e 0%, #c45e12 38%, #71338b 58%, #29133f 100%);
-  opacity: 0.94;
+  background: linear-gradient(180deg, rgba(121, 49, 139, 0.82) 0%, rgba(89, 34, 111, 0.94) 52%, #29133f 100%);
+  opacity: 0.88;
   transform: scaleX(1.12);
 }
 
 .scenery-tree {
   position: absolute;
   bottom: 16%;
-  z-index: 3;
+  z-index: 5;
   width: 22px;
   height: 45%;
   background: linear-gradient(90deg, #6f2b88 0 42%, #32103f 42% 58%, #54206b 58%);
