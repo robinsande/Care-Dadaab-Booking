@@ -57,15 +57,15 @@ async function onSubmit(event) {
 
   setButtonLoading(submitBtn, true, 'Creating…');
   try {
-    const response = await createBooking(payload);
-    const booking = response.data?.booking || response.data;
+    await createBooking(payload);
     showToast('Booking created successfully.', 'success');
-    const id = booking?._id || booking?.id;
-    if (id) {
-      window.location.href = `booking-edit.html?id=${id}`;
-    } else {
-      window.location.href = 'bookings.html';
-    }
+    form.reset();
+    selectors.setLocationLocked(false);
+    await selectors.loadBlocks('');
+    selectors.updatePriceSummary();
+    form.querySelectorAll('[data-error-for]').forEach((element) => {
+      element.textContent = '';
+    });
   } catch (error) {
     showToast(
       error instanceof ApiError ? error.message : 'Unable to create booking.',
