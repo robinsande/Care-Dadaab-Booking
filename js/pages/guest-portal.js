@@ -85,6 +85,7 @@ $('#booking-form').addEventListener('submit', async (event) => {
   event.preventDefault();
   try {
     const values = formData(event.target);
+    values.type = 'booking';
     values.driverPickup = event.target.elements.driverPickup.checked;
     await submitBookingRequest(values);
     event.target.reset();
