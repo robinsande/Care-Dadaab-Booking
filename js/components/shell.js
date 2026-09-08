@@ -4,7 +4,7 @@ import { config, applyBrandLogos } from '../config.js';
 import { getUser, clearSession, isSuperAdmin } from '../auth/session.js';
 
 export const ADMIN_NAV = [
-  { href: '/#/dashboard', label: 'Dashboard', icon: 'home', superAdmin: false },
+  { href: '/', label: 'Dashboard', icon: 'home', superAdmin: false },
   { href: '/#/bookings', label: 'Bookings', icon: 'calendar' },
   { href: '/#/booking/create', label: 'Create Booking', icon: 'calendar-plus' },
   { href: '/#/camps', label: 'Camps', icon: 'map', superAdmin: true },
@@ -43,7 +43,7 @@ export function renderAdminNav(user = getUser()) {
     .filter((item) => !item.superAdmin || isSuperAdmin(user))
     .map((item) => {
       const isActive =
-        (item.href === '/#/dashboard' && currentPage === 'dashboard.html')
+        (item.href === '/' && currentPage === 'dashboard.html')
         || (item.href === '/#/bookings' && ['bookings.html', 'booking-edit.html'].includes(currentPage))
         || (item.href === '/admin/reservation-log.html' && currentPage === 'reservation-log.html');
       const attrs = isActive ? ' aria-current="page"' : '';
