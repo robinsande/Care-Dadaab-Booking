@@ -1,6 +1,6 @@
 import {
   guestRegister, guestLogin, guestRequestReset, guestResetPassword,
-  listGuestCamps, listGuestBookings, listGuestRequests,
+  listGuestCamps, listGuestCampRates, listGuestBookings, listGuestRequests,
   submitBookingRequest, submitBookingAdjustment,
   updateGuestProfile,
 } from '../api/guest.js';
@@ -47,6 +47,25 @@ async function loadPortal() {
     option.value = camp._id;
     option.textContent = camp.name;
     $('#booking-form [name="campId"]').appendChild(option);
+  });
+  bookingForm.elements.campId.addEventListener('change', async () => {
+    const rateSelect = bookingForm.elements.rateId;
+    rateSelect.innerHTML = '<option value="">Loading rates…</option>';
+    rateSelect.disabled = true;
+    try {
+      const response = await listGuestCampRates(bookingForm.elements.campId.value);
+      const rates = response.data || [];
+      rateSelect.innerHTML = rates.length
+        ? `<option value="">Choose room rate</option>${rates.map((rate) => `<option value="${rate._id}" data-stay-type="${rate.stayType}">${rate.stayType} - ${rate.currency} ${Number(rate.amount).toLocaleString()} per night</option>`).join('')}`
+        : '<option value="">No rates configured for this camp</option>';
+      rateSelect.disabled = !rates.length;
+    } catch (error) {
+      rateSelect.innerHTML = '<option value="">Unable to load rates</option>';
+      message(error.message, true);
+    }
+  }, { once: true });
+  bookingForm.elements.rateId.addEventListener('change', () => {
+    bookingForm.elements.stayType.value = bookingForm.elements.rateId.selectedOptions[0]?.dataset.stayType || '';
   });
   await refreshLists();
 }

@@ -12,6 +12,7 @@ export const guestRequestReset = (email) => apiRequest('/guest/auth/request-rese
 export const updateGuestProfile = (payload) => request('/guest/auth/me', { method: 'PUT', body: payload });
 export const guestResetPassword = (token, newPassword) => apiRequest('/guest/auth/reset', { method: 'POST', body: { token, newPassword }, auth: false });
 export const listGuestCamps = () => apiRequest('/guest/camps', { auth: false });
+export const listGuestCampRates = (campId) => apiRequest(`/guest/camps/${campId}/rates`, { auth: false });
 export const listGuestBookings = () => request('/guest/bookings');
 export const listGuestRequests = () => request('/guest/requests');
 export const submitBookingRequest = (payload) => request('/guest/requests', { method: 'POST', body: payload });
