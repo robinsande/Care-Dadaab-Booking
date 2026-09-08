@@ -1703,6 +1703,16 @@
     margin-bottom: 1rem;
   }
 
+  .scenery-tree-left {
+    left: -18%;
+    transform: rotate(-4deg) scale(0.82);
+  }
+
+  .scenery-tree-right {
+    right: -18%;
+    transform: rotate(5deg) scale(0.9);
+  }
+
   .login-entry-bag {
     width: min(100%, 286px);
     margin-bottom: 1.25rem;
@@ -1952,13 +1962,13 @@
 }
 
 .scenery-tree-left {
-  left: 8%;
+  left: -2%;
   height: 48%;
   transform: rotate(-4deg);
 }
 
 .scenery-tree-right {
-  right: 7%;
+  right: -2%;
   bottom: 11%;
   height: 54%;
   transform: rotate(5deg) scale(1.12);
