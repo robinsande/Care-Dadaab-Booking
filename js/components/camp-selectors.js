@@ -103,11 +103,24 @@ export function createCampSelectors({
     }
 
     // Staff choose the room; the backend performs the final date/conflict check.
-    const response = await listRooms({ campId, blockId });
-
-    const data = response.data;
+    let response = await listRooms({ campId, blockId });
+    let data = response.data;
     state.rooms = data?.rooms || data?.items || data || [];
     if (!Array.isArray(state.rooms)) state.rooms = [];
+
+    // Some older room records only retain blockName; fall back to camp results
+    // and match the selected block by id or displayed name.
+    if (!state.rooms.length) {
+      response = await listRooms({ campId });
+      data = response.data;
+      const campRooms = data?.rooms || data?.items || data || [];
+      const selectedBlock = blockSelect.selectedOptions[0]?.textContent?.trim();
+      state.rooms = Array.isArray(campRooms)
+        ? campRooms.filter((room) =>
+          String(room.block?._id || room.block || '') === String(blockId)
+          || String(room.blockName || '').trim() === selectedBlock)
+        : [];
+    }
 
     if (!state.rooms.length) {
       roomSelect.innerHTML = '<option value="">No available rooms</option>';
