@@ -11,7 +11,7 @@ Consumes the production private REST API at `/api/v1/`. No backend code lives in
 ## Entry point
 
 - Root (`index.html`) redirects to `admin/login.html`
-- Staff-only application — no public guest pages
+- Staff pages and a public guest portal at `guest/index.html`
 
 ## Admin pages
 
@@ -32,6 +32,7 @@ Consumes the production private REST API at `/api/v1/`. No backend code lives in
 | Users | `admin/users.html` | Super Admin |
 | Settings | `admin/settings.html` | Super Admin |
 | Change Password | `admin/change-password.html` | Staff |
+| Guest portal | `guest/index.html` | Guests |
 
 ## Setup
 
@@ -76,6 +77,16 @@ See `system-contract.md` for full business rules and `js/api/` for client wrappe
 - `POST /auth/login` — `{ email, password }` → `{ token, user }`
 - `GET /auth/me`
 - `PATCH /auth/change-password` — `{ currentPassword, newPassword }`
+
+### Guest portal
+
+- `POST /guest/auth/register` · `POST /guest/auth/login`
+- `POST /guest/auth/request-reset` · `POST /guest/auth/reset`
+- `GET /guest/camps` (public)
+- `POST /guest/requests` — request a booking without selecting a room
+- `GET /guest/bookings` · `GET /guest/requests`
+- Staff review requests at `GET /guest/staff/requests` and resolve them with
+  `POST /guest/staff/requests/:id/resolve`.
 
 ### Bookings
 

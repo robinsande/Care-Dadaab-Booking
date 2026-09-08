@@ -17,6 +17,7 @@ import { confirmDialog } from '../components/modal.js';
 import { renderPagination } from '../components/pagination.js';
 import { constants, fillSelect } from '../utils/constants.js';
 import { isSuperAdmin } from '../auth/session.js';
+import { listStaffGuestRequests, resolveGuestRequest, listAvailableRoomsForGuestRequest } from '../api/guest.js';
 import {
   escapeHtml,
   formatDate,
@@ -42,6 +43,7 @@ const state = {
 const filtersForm = document.getElementById('bookings-filters');
 const tableBody = document.getElementById('bookings-table-body');
 const paginationEl = document.getElementById('bookings-pagination');
+const guestRequestsEl = document.getElementById('guest-requests');
 
 function boot() {
   fillSelect(document.getElementById('status'), constants.BOOKING_STATUSES, {
@@ -52,6 +54,45 @@ function boot() {
   if (params.get('search')) {
     state.search = params.get('search');
     filtersForm.elements.search.value = state.search;
+  }
+
+  async function onGuestRequestAction(event) {
+    const approve = event.target.closest('[data-guest-request]');
+    const reject = event.target.closest('[data-guest-reject]');
+    const id = approve?.dataset.guestRequest || reject?.dataset.guestReject;
+    if (!id) return;
+    try {
+      if (reject) {
+        const note = window.prompt('Reason for rejecting this request:');
+        await resolveGuestRequest(id, { action: 'reject', resolutionNote: note || '' });
+      } else {
+        const request = await listStaffGuestRequests({ status: 'pending' }).then((response) =>
+          (response.data || []).find((item) => String(item._id) === String(id)));
+        const payload = { action: 'approve' };
+        if (request?.type === 'booking') {
+          payload.campId = request.camp?._id;
+          const availableResponse = await listAvailableRoomsForGuestRequest({
+            campId: payload.campId,
+            arrivalDate: request.arrivalDate,
+            departureDate: request.departureDate,
+          });
+          const available = availableResponse.data || [];
+          if (!available.length) throw new Error('No available rooms match the requested dates.');
+          const choices = available.map((room, index) =>
+            `${index + 1}. ${room.blockName || room.block?.name || ''} ${room.roomNumber} (${room._id})`
+          ).join('\n');
+          const selected = Number(window.prompt(`Choose a room number to assign:\n${choices}`, '1'));
+          const room = available[selected - 1];
+          if (!room) throw new Error('A valid room assignment is required.');
+          payload.blockId = room.block?._id || room.block;
+          payload.roomId = room._id;
+        }
+        await resolveGuestRequest(id, payload);
+      }
+      showToast('Guest request updated.', 'success');
+      await loadGuestRequests();
+      await loadBookings();
+    } catch (error) { showToast(error instanceof ApiError ? error.message : 'Unable to update guest request.', 'error'); }
   }
   if (params.get('status')) {
     document.getElementById('status').value = params.get('status');
@@ -70,8 +111,23 @@ function boot() {
 
   tableBody.addEventListener('click', onTableAction);
   tableBody.addEventListener('change', onTableAction);
+  guestRequestsEl?.addEventListener('click', onGuestRequestAction);
   loadCampsForFilter();
   loadBookings();
+  loadGuestRequests();
+}
+
+async function loadGuestRequests() {
+  if (!guestRequestsEl) return;
+  try {
+    const response = await listStaffGuestRequests({ status: 'pending' });
+    const requests = response.data || [];
+    guestRequestsEl.innerHTML = requests.length ? `<div class="table-wrap"><table class="table"><thead><tr><th>Guest</th><th>Type</th><th>Dates / booking</th><th>Reason</th><th>Action</th></tr></thead><tbody>${requests.map((request) => {
+      const booking = request.booking || {};
+      const dates = request.arrivalDate ? `${String(request.arrivalDate).slice(0, 10)} → ${String(request.departureDate).slice(0, 10)}` : (booking.bookingReference || '—');
+      return `<tr><td>${escapeHtml(`${request.guest?.firstName || ''} ${request.guest?.lastName || ''}`)}<br>${escapeHtml(request.guest?.email || '')}</td><td>${escapeHtml(request.type)}</td><td>${escapeHtml(dates)}<br>${escapeHtml(request.camp?.name || booking.campName || '')}</td><td>${escapeHtml(request.reason || '—')}</td><td><button class="btn btn-primary btn-sm" data-guest-request="${escapeHtml(request._id)}">Approve</button> <button class="btn btn-secondary btn-sm" data-guest-reject="${escapeHtml(request._id)}">Reject</button></td></tr>`;
+    }).join('')}</tbody></table></div>` : '<p>No pending guest requests.</p>';
+  } catch { guestRequestsEl.innerHTML = '<p>Unable to load guest requests.</p>'; }
 }
 
 async function loadCampsForFilter() {

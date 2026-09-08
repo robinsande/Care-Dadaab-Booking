@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guest Portal · CARE</title>
+  <link rel="stylesheet" href="../css/variables.css"><link rel="stylesheet" href="../css/base.css"><link rel="stylesheet" href="../css/components.css">
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.js" defer></script>
+  <style>
+    :root{--guest-purple:#54206f;--guest-purple-dark:#281236;--guest-orange:#e8721e;--guest-gold:#f9b233;--guest-ink:#24152f;--guest-muted:#6e6078;--guest-glass:rgba(255,255,255,.78)}
+    *{box-sizing:border-box}
+    body{min-height:100vh;margin:0;color:var(--guest-ink);background:linear-gradient(135deg,#f9b233 0%,#e8721e 28%,#8b4777 62%,#281236 100%);background-attachment:fixed}
+    body::before,body::after{content:"";position:fixed;z-index:-1;border-radius:999px;pointer-events:none;filter:blur(10px)}
+    body::before{width:38rem;height:38rem;top:-18rem;right:-10rem;background:rgba(255,225,154,.55);animation:guest-aura-float 14s ease-in-out infinite alternate}
+    body::after{width:32rem;height:32rem;bottom:-16rem;left:-10rem;background:rgba(130,76,177,.42);animation:guest-aura-float 18s ease-in-out infinite alternate-reverse}
+    @keyframes guest-aura-float{to{transform:translate3d(-20px,24px,0) scale(1.08)}}
+    main{width:min(1120px,calc(100% - 2rem));margin:0 auto;padding:2rem 0 4rem}
+    .guest-topbar{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;color:#fff}
+    .guest-brand{display:flex;align-items:center;gap:.8rem}.guest-brand-mark{display:grid;place-items:center;width:3rem;height:3rem;border-radius:1rem;background:rgba(255,255,255,.2);box-shadow:0 12px 30px rgba(40,18,54,.2);backdrop-filter:blur(14px)}
+    .guest-brand h1{margin:0;font-size:clamp(1.45rem,3vw,2.2rem);color:#fff}.guest-brand p{margin:.25rem 0 0;color:rgba(255,255,255,.82)}
+    .guest-hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(280px,.7fr);gap:1.25rem;align-items:stretch;margin-bottom:1.25rem}
+    section{margin:1.25rem 0;padding:clamp(1.2rem,3vw,2rem);border:1px solid rgba(255,255,255,.52);border-radius:1.4rem;background:var(--guest-glass);box-shadow:0 24px 70px rgba(40,18,54,.2);backdrop-filter:blur(18px)}
+    .guest-hero section{margin:0}.guest-hero-copy{background:linear-gradient(135deg,rgba(84,32,111,.92),rgba(40,18,54,.88));color:#fff;overflow:hidden;position:relative}.guest-hero-copy::after{content:"";position:absolute;inset:auto -10% -55% 35%;height:80%;border-radius:50%;background:rgba(249,178,51,.28);filter:blur(30px)}
+    .guest-hero-copy h2{position:relative;z-index:1;margin:0 0 .6rem;color:#fff;font-size:clamp(1.8rem,4vw,3rem)}.guest-hero-copy p{position:relative;z-index:1;color:rgba(255,255,255,.8);max-width:54ch}
+    .guest-hero-stat{display:flex;align-items:center;gap:.8rem;margin-top:1.4rem;color:#ffe2a4;font-size:.9rem}.guest-hero-stat svg{width:1.15rem}
+    .guest-spotlight{display:grid;place-items:center;min-height:220px;background:radial-gradient(circle at 50% 35%,rgba(249,178,51,.65),rgba(255,255,255,.78) 18%,rgba(255,255,255,.55) 50%,rgba(242,234,250,.64) 100%)}
+    .guest-spotlight-icon{display:grid;place-items:center;width:6rem;height:6rem;border-radius:2rem;color:#fff;background:linear-gradient(135deg,var(--guest-orange),var(--guest-purple));box-shadow:0 20px 45px rgba(84,32,111,.3);transform:rotate(-7deg)}.guest-spotlight-icon svg{width:2.4rem;height:2.4rem}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.9rem}.grid-wide{grid-column:1/-1}
+    form{display:grid;gap:.9rem;max-width:720px}.guest-auth-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.25rem}.guest-auth-grid form{max-width:none}
+    h2{color:var(--guest-purple);margin-top:0}.form-control{border-color:rgba(84,32,111,.2);background:rgba(255,255,255,.72);border-radius:.8rem}.form-control:focus{border-color:var(--guest-orange);box-shadow:0 0 0 3px rgba(232,114,30,.16)}
+    .btn{border-radius:.8rem}.btn-primary{background:linear-gradient(135deg,var(--guest-orange),var(--guest-purple));box-shadow:0 10px 24px rgba(84,32,111,.2)}.btn-ghost{color:var(--guest-purple)}.btn-icon{display:inline-flex;align-items:center;gap:.45rem}.btn-icon svg{width:1rem;height:1rem}
+    .hidden{display:none!important}.notice{padding:.9rem 1rem;border:1px solid rgba(23,92,211,.16);background:rgba(232,241,252,.8);border-radius:.8rem}.table-wrap{overflow:auto;border:1px solid rgba(84,32,111,.12);border-radius:.9rem}table{width:100%;border-collapse:collapse;min-width:680px;background:rgba(255,255,255,.42)}th,td{padding:.75rem;border-bottom:1px solid rgba(84,32,111,.1);text-align:left}th{color:var(--guest-purple);font-size:.8rem;text-transform:uppercase;letter-spacing:.04em}.request-row{padding:.75rem 0;border-bottom:1px solid rgba(84,32,111,.1)}
+    @media(max-width:760px){main{width:min(100% - 1rem,640px);padding-top:1rem}.guest-topbar{align-items:flex-start}.guest-hero,.guest-auth-grid{grid-template-columns:1fr}.guest-spotlight{min-height:150px}.guest-topbar .btn{min-height:36px;padding:.4rem .7rem}}
+  </style>
+</head>
+<body><main>
+  <header class="guest-topbar"><div class="guest-brand"><span class="guest-brand-mark"><i data-lucide="sparkles"></i></span><div><h1>CARE Guest Portal</h1><p>Plan your stay, track requests, and keep every detail in one place.</p></div></div><button id="sign-out" class="btn btn-secondary btn-icon hidden"><i data-lucide="log-out"></i> Sign out</button></header>
+  <div class="guest-hero"><section class="guest-hero-copy"><h2>Stay somewhere that feels cared for.</h2><p>Request accommodation at Dadaab, follow your booking status, and contact the accommodation team without calling back and forth.</p><div class="guest-hero-stat"><i data-lucide="shield-check"></i><span>Secure guest access with email recovery</span></div></section><section class="guest-spotlight"><div class="guest-spotlight-icon"><i data-lucide="bed-double"></i></div></section></div>
+  <section id="auth-section"><div class="guest-auth-grid">
+    <form id="login-form"><h2><i data-lucide="log-in"></i> Sign in</h2><input class="form-control" name="email" type="email" placeholder="Email" autocomplete="email" required><input class="form-control" name="password" type="password" placeholder="Password" autocomplete="current-password" required><button class="btn btn-primary btn-icon"><i data-lucide="arrow-right"></i> Sign in</button><button type="button" id="show-register" class="btn btn-ghost btn-icon"><i data-lucide="user-plus"></i> Create account</button><button type="button" id="forgot-password" class="btn btn-ghost btn-icon"><i data-lucide="key-round"></i> Forgot password?</button></form>
+    <form id="register-form" class="hidden"><h2><i data-lucide="user-round-plus"></i> Create account</h2><div class="grid"><input class="form-control" name="firstName" placeholder="First name" autocomplete="given-name" required><input class="form-control" name="lastName" placeholder="Last name" autocomplete="family-name" required></div><input class="form-control" name="email" type="email" placeholder="Email" autocomplete="email" required><input class="form-control" name="phone" placeholder="Phone" autocomplete="tel"><input class="form-control" name="password" type="password" minlength="8" placeholder="Password" autocomplete="new-password" required><button class="btn btn-primary btn-icon"><i data-lucide="user-check"></i> Register</button></form>
+  </div><form id="reset-form" class="hidden"><h2><i data-lucide="mail"></i> Recover account</h2><input class="form-control" name="email" type="email" placeholder="Email" autocomplete="email" required><button class="btn btn-primary btn-icon"><i data-lucide="send"></i> Send recovery link</button></form></section>
+  <section id="portal-section" class="hidden"><h2><i data-lucide="calendar-plus"></i> Start a booking</h2>
+    <form id="booking-form"><div class="grid"><input class="form-control" name="arrivalDate" type="date" aria-label="Arrival date" required><input class="form-control" name="departureDate" type="date" aria-label="Departure date" required><select class="form-control" name="campId" required><option value="">Choose camp</option></select><select class="form-control" name="stayType"><option>Short Stay</option><option>Long Stay</option></select></div><textarea class="form-control" name="reason" placeholder="Reason for visit"></textarea><button class="btn btn-primary btn-icon"><i data-lucide="send"></i> Request booking</button></form>
+    <p id="message" class="notice"></p><h2><i data-lucide="calendar-check-2"></i> Your bookings</h2><div id="bookings"></div><h2><i data-lucide="inbox"></i> Your requests</h2><div id="requests"></div>
+  </section>
+</main><script type="module" src="../js/pages/guest-portal.js"></script></body>
+</html>

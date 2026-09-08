@@ -67,7 +67,7 @@ export async function apiRequest(path, options = {}) {
   if (auth) {
     const token = getToken();
     if (token) {
-      requestHeaders.Authorization = `Bearer ${token}`;
+            requestHeaders.Authorization = `Bearer ${token}`;
     }
   }
 
