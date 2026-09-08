@@ -14,6 +14,7 @@ export const guestResetPassword = (token, newPassword) => apiRequest('/guest/aut
 export const listGuestCamps = () => apiRequest('/guest/camps', { auth: false });
 export const listGuestCampRates = (campId) => apiRequest(`/guest/camps/${campId}/rates`, { auth: false });
 export const listGuestBookings = () => request('/guest/bookings');
+export const getGuestInvoice = (bookingId) => request(`/guest/bookings/${bookingId}/invoice`);
 export const listGuestRequests = () => request('/guest/requests');
 export const submitBookingRequest = (payload) => request('/guest/requests', { method: 'POST', body: payload });
 export const submitBookingAdjustment = (bookingId, payload) => request(`/guest/bookings/${bookingId}/requests`, { method: 'POST', body: payload });

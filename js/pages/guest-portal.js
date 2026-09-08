@@ -1,7 +1,7 @@
 import {
   guestRegister, guestLogin, guestRequestReset, guestResetPassword,
   listGuestCamps, listGuestCampRates, listGuestBookings, listGuestRequests,
-  submitBookingRequest, submitBookingAdjustment,
+  submitBookingRequest, submitBookingAdjustment, getGuestInvoice,
   updateGuestProfile,
 } from '../api/guest.js';
 import { clearGuestSession, getGuest, getGuestToken, setGuestSession } from '../auth/guest-session.js';
@@ -77,7 +77,7 @@ async function refreshLists() {
   const bookingRows = (bookings.data || []).map((booking) => `
     <tr><td>${esc(booking.bookingReference)}</td><td>${esc(booking.campName || booking.camp?.name)}</td>
     <td>${esc(booking.arrivalDate?.slice(0, 10))} → ${esc(booking.departureDate?.slice(0, 10))}</td>
-    <td>${esc(booking.status)}</td><td><button class="btn btn-secondary btn-sm" data-adjust="${booking._id}">Request adjustment</button>
+    <td>${esc(booking.status)}</td><td><button class="btn btn-secondary btn-sm" data-invoice="${booking._id}">View invoice</button> <button class="btn btn-secondary btn-sm" data-adjust="${booking._id}">Request adjustment</button>
     <button class="btn btn-secondary btn-sm" data-extend="${booking._id}">Request extension</button>
     ${booking.status === 'Checked In' ? `<button class="btn btn-secondary btn-sm" data-checkout="${booking._id}">Request early checkout</button>` : ''}</td></tr>
   `).join('');
@@ -155,6 +155,10 @@ $('#bookings').addEventListener('click', async (event) => {
     } else if (button.dataset.checkout) {
       const reason = window.prompt('Reason for early checkout:');
       if (reason) await submitBookingAdjustment(button.dataset.checkout, { type: 'early_checkout', reason });
+    } else if (button.dataset.invoice) {
+      const result = await getGuestInvoice(button.dataset.invoice);
+      const invoice = result.data;
+      message(`Invoice ${invoice.invoiceNumber}: ${invoice.currency || invoice.appliedRate?.currency || ''} ${Number(invoice.totalAmount || 0).toLocaleString()} total. Payment status: ${invoice.paymentStatus}.`);
     }
     message('Request submitted for staff review.');
     await refreshLists();
