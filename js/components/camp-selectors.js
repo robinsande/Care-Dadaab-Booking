@@ -102,9 +102,8 @@ export function createCampSelectors({
       return;
     }
 
-    const response = arrival && departure
-      ? await listAvailableRooms({ campId, blockId, arrivalDate: arrival, departureDate: departure })
-      : await listRooms({ campId, blockId });
+    // Staff choose the room; the backend performs the final date/conflict check.
+    const response = await listRooms({ campId, blockId });
 
     const data = response.data;
     state.rooms = data?.rooms || data?.items || data || [];
@@ -119,7 +118,7 @@ export function createCampSelectors({
       roomSelect,
       state.rooms.map((room) => ({
         value: room._id || room.id,
-        label: `Room ${room.roomNumber}${room.capacity ? ` (cap ${room.capacity})` : ''}`,
+        label: `Room ${room.roomNumber}${room.capacity ? ` (cap ${room.capacity})` : ''}${room.status ? ` - ${room.status}` : ''}`,
       })),
       { placeholder: 'Select room', value: selectedRoomId },
     );
