@@ -1856,7 +1856,7 @@
   display: grid;
   place-items: center;
   padding: var(--space-6);
-  background: linear-gradient(180deg, #e8721e 0%, #d8782d 38%, #71338b 72%, #29133f 100%);
+  background: linear-gradient(180deg, #e8721e 0%, #e8721e 50%, #54206f 50%, #29133f 100%);
 }
 
 #page-login {
