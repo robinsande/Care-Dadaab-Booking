@@ -15,6 +15,18 @@ const message = (text, error = false) => {
   $('#message').style.background = error ? '#fee2e2' : '#eef6ff';
 };
 const refreshIcons = () => window.lucide?.createIcons();
+const bookingForm = $('#booking-form');
+const arrivalDateInput = bookingForm.elements.arrivalDate;
+const departureDateInput = bookingForm.elements.departureDate;
+const today = new Date().toISOString().slice(0, 10);
+arrivalDateInput.min = today;
+departureDateInput.min = today;
+arrivalDateInput.addEventListener('change', () => {
+  departureDateInput.min = arrivalDateInput.value || today;
+  if (departureDateInput.value && departureDateInput.value <= arrivalDateInput.value) {
+    departureDateInput.value = '';
+  }
+});
 
 async function loadPortal() {
   $('#auth-section').classList.add('hidden');
@@ -22,7 +34,7 @@ async function loadPortal() {
   $('#sign-out').classList.remove('hidden');
   const guest = getGuest();
   ['firstName', 'lastName', 'phone'].forEach((field) => {
-    const input = $(`#booking-form [name="${field}"]`);
+    const input = bookingForm.elements[field];
     if (input && guest?.[field]) input.value = guest[field];
   });
   const camps = await listGuestCamps();

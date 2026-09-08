@@ -60,8 +60,8 @@
       <div class="grid">
         <select class="form-control" name="campId" required><option value="">Choose camp</option></select>
         <select class="form-control" name="stayType" required><option value="">Select stay type</option><option>Short Stay</option><option>Long Stay</option></select>
-        <input class="form-control" name="arrivalDate" type="date" aria-label="Arrival date" required>
-        <input class="form-control" name="departureDate" type="date" aria-label="Departure date" required>
+        <label class="form-field"><span>Arrival date</span><input class="form-control" name="arrivalDate" type="date" required></label>
+        <label class="form-field"><span>Departure date</span><input class="form-control" name="departureDate" type="date" required></label>
       </div>
       <textarea class="form-control" name="remarks" placeholder="Remarks"></textarea>
       <button class="btn btn-primary btn-icon"><i data-lucide="send"></i> Request booking</button>
