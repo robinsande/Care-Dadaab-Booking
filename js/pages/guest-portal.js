@@ -20,6 +20,11 @@ async function loadPortal() {
   $('#auth-section').classList.add('hidden');
   $('#portal-section').classList.remove('hidden');
   $('#sign-out').classList.remove('hidden');
+  const guest = getGuest();
+  ['firstName', 'lastName', 'phone'].forEach((field) => {
+    const input = $(`#booking-form [name="${field}"]`);
+    if (input && guest?.[field]) input.value = guest[field];
+  });
   const camps = await listGuestCamps();
   (camps.data || []).forEach((camp) => {
     const option = document.createElement('option');
@@ -67,7 +72,9 @@ $('#register-form').addEventListener('submit', async (event) => {
 $('#booking-form').addEventListener('submit', async (event) => {
   event.preventDefault();
   try {
-    await submitBookingRequest(formData(event.target));
+    const values = formData(event.target);
+    values.driverPickup = event.target.elements.driverPickup.checked;
+    await submitBookingRequest(values);
     event.target.reset();
     message('Booking request submitted. Staff will assign a room and email you an update.');
     await refreshLists();

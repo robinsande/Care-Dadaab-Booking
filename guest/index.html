@@ -40,7 +40,32 @@
     <form id="register-form" class="hidden"><h2><i data-lucide="user-round-plus"></i> Create account</h2><div class="grid"><input class="form-control" name="firstName" placeholder="First name" autocomplete="given-name" required><input class="form-control" name="lastName" placeholder="Last name" autocomplete="family-name" required></div><input class="form-control" name="email" type="email" placeholder="Email" autocomplete="email" required><input class="form-control" name="phone" placeholder="Phone" autocomplete="tel"><input class="form-control" name="password" type="password" minlength="8" placeholder="Password" autocomplete="new-password" required><button class="btn btn-primary btn-icon"><i data-lucide="user-check"></i> Register</button></form>
   </div><form id="reset-form" class="hidden"><h2><i data-lucide="mail"></i> Recover account</h2><input class="form-control" name="email" type="email" placeholder="Email" autocomplete="email" required><button class="btn btn-primary btn-icon"><i data-lucide="send"></i> Send recovery link</button></form></section>
   <section id="portal-section" class="hidden"><h2><i data-lucide="calendar-plus"></i> Start a booking</h2>
-    <form id="booking-form"><div class="grid"><input class="form-control" name="arrivalDate" type="date" aria-label="Arrival date" required><input class="form-control" name="departureDate" type="date" aria-label="Departure date" required><select class="form-control" name="campId" required><option value="">Choose camp</option></select><select class="form-control" name="stayType"><option>Short Stay</option><option>Long Stay</option></select></div><textarea class="form-control" name="reason" placeholder="Reason for visit"></textarea><button class="btn btn-primary btn-icon"><i data-lucide="send"></i> Request booking</button></form>
+    <p class="form-hint">Complete the same guest and accommodation details used by the booking officer. Staff will assign the block and room after review.</p>
+    <form id="booking-form">
+      <h3>Guest Information</h3>
+      <div class="grid">
+        <input class="form-control" name="firstName" placeholder="First name" required>
+        <input class="form-control" name="lastName" placeholder="Last name" required>
+        <input class="form-control" name="phone" type="tel" placeholder="Phone" required>
+        <input class="form-control" name="organisation" placeholder="Organisation">
+        <select class="form-control" name="gender" required><option value="">Select gender</option><option>Male</option><option>Female</option></select>
+        <select class="form-control" name="contractType" required><option value="">Select contract type</option><option>CARE Staff</option><option>Consultant</option><option>Partner Organisation</option><option>Visitor</option><option>Other</option></select>
+        <select class="form-control" name="departureCountry" required><option value="">Select country of origin</option><option>Local (Kenyan)</option><option>International</option></select>
+        <input class="form-control" name="kenyaOffice" placeholder="Kenya office (if applicable)">
+        <input class="form-control" name="internationalCountry" placeholder="Country of origin (if international)">
+      </div>
+      <textarea class="form-control" name="reasonForVisit" placeholder="Reason for visit" required></textarea>
+      <label class="btn-icon"><input type="checkbox" name="driverPickup" value="true"> Driver pickup required</label>
+      <h3>Accommodation</h3>
+      <div class="grid">
+        <select class="form-control" name="campId" required><option value="">Choose camp</option></select>
+        <select class="form-control" name="stayType" required><option value="">Select stay type</option><option>Short Stay</option><option>Long Stay</option></select>
+        <input class="form-control" name="arrivalDate" type="date" aria-label="Arrival date" required>
+        <input class="form-control" name="departureDate" type="date" aria-label="Departure date" required>
+      </div>
+      <textarea class="form-control" name="remarks" placeholder="Remarks"></textarea>
+      <button class="btn btn-primary btn-icon"><i data-lucide="send"></i> Request booking</button>
+    </form>
     <p id="message" class="notice"></p><h2><i data-lucide="calendar-check-2"></i> Your bookings</h2><div id="bookings"></div><h2><i data-lucide="inbox"></i> Your requests</h2><div id="requests"></div>
   </section>
 </main><script type="module" src="../js/pages/guest-portal.js"></script></body>
