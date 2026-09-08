@@ -25,7 +25,7 @@ const PAGE_TITLES = {
 const SUPER_ADMIN_ROUTES = ['camps', 'blocks', 'rates', 'reports', 'reservation-log', 'users', 'settings'];
 
 const SPA_NAV = [
-  { hash: '#/dashboard', label: 'Dashboard', route: 'dashboard', icon: 'home' },
+  { href: '/', label: 'Dashboard', route: 'dashboard', icon: 'home' },
   { hash: '#/bookings', label: 'Bookings', route: 'bookings', icon: 'calendar' },
   { hash: '#/booking/create', label: 'Create Booking', route: 'booking/create', icon: 'calendar-plus' },
   { hash: '#/camps', label: 'Camps', route: 'camps', icon: 'map', superAdmin: true },
@@ -46,11 +46,16 @@ function parseHash() {
   const raw = window.location.hash.replace(/^#/, '').replace(/^\//, '');
   const [pathPart, queryPart = ''] = raw.split('?');
   const params = new URLSearchParams(queryPart);
-  const route = pathPart || 'login';
+  const route = pathPart || (isAuthenticated() ? 'dashboard' : 'login');
   return { route, params, queryString: queryPart ? `?${queryPart}` : '' };
 }
 
 export function navigate(hash) {
+  if (hash === '#/dashboard') {
+    window.history.pushState({}, '', '/');
+    handleRoute();
+    return;
+  }
   if (window.location.hash === hash) {
     handleRoute();
   } else {
@@ -310,12 +315,9 @@ async function handleRoute() {
 }
 
 window.addEventListener('hashchange', handleRoute);
+window.addEventListener('popstate', handleRoute);
 window.addEventListener('DOMContentLoaded', () => {
-  if (!window.location.hash) {
-    window.location.hash = isAuthenticated() ? '#/dashboard' : '#/login';
-  } else {
-    handleRoute();
-  }
+  handleRoute();
 });
 
 export { navigate as default };
