@@ -1856,7 +1856,7 @@
   display: grid;
   place-items: center;
   padding: var(--space-6);
-  background: linear-gradient(180deg, #e8721e 0%, #d8782d 28%, #a45567 52%, #71338b 76%, #29133f 100%);
+  background: linear-gradient(135deg, #f9b233 0%, #e8721e 28%, #8b4777 62%, #281236 100%);
 }
 
 #page-login {
@@ -1871,7 +1871,7 @@
   width: 24rem;
   height: 24rem;
   border-radius: 50%;
-  opacity: 0;
+  opacity: 1;
   filter: blur(8px);
   pointer-events: none;
 }
@@ -1879,14 +1879,14 @@
 .login-page::before {
   top: -12rem;
   left: -8rem;
-  background: #ffd18a;
+  background: rgba(255, 225, 154, 0.55);
   animation: login-orb-drift 12s ease-in-out infinite alternate;
 }
 
 .login-page::after {
   right: -10rem;
   bottom: -14rem;
-  background: #b987d1;
+  background: rgba(130, 76, 177, 0.42);
   animation: login-orb-drift 16s ease-in-out infinite alternate-reverse;
 }
 
