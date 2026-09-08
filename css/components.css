@@ -24,6 +24,7 @@
 .btn:focus-visible {
   outline: 3px solid rgba(249, 178, 51, 0.55);
   outline-offset: 2px;
+  box-shadow: 0 0 0 5px rgba(249, 178, 51, 0.16), 0 0 22px rgba(249, 178, 51, 0.42);
 }
 
 .btn:active:not(:disabled) {
@@ -46,7 +47,7 @@
 .btn-primary:hover:not(:disabled) {
   background: linear-gradient(135deg, var(--color-brand-accent) 0%, var(--color-purple) 100%);
   transform: translateY(-2px);
-  box-shadow: var(--button-shadow-hover);
+  box-shadow: 0 0 0 3px rgba(249, 178, 51, 0.2), 0 0 24px rgba(249, 178, 51, 0.55), var(--button-shadow-hover);
 }
 
 .btn-secondary {
@@ -60,7 +61,7 @@
   border-color: rgba(84, 32, 111, 0.28);
   color: var(--color-purple-dark);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 0 0 3px rgba(130, 76, 177, 0.14), 0 0 20px rgba(130, 76, 177, 0.32), var(--shadow-sm);
 }
 
 .btn-danger {
@@ -71,7 +72,7 @@
 .btn-danger:hover:not(:disabled) {
   background: #912018;
   transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 0 0 3px rgba(180, 35, 24, 0.15), 0 0 18px rgba(180, 35, 24, 0.38), var(--shadow-sm);
 }
 
 .btn-ghost {
@@ -84,6 +85,7 @@
   background: rgba(84, 32, 111, 0.08);
   color: var(--color-ink);
   transform: translateY(-1px);
+  box-shadow: 0 0 18px rgba(249, 178, 51, 0.2);
 }
 
 .btn-icon {
