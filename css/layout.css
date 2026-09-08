@@ -1693,6 +1693,11 @@
     place-items: start center;
   }
 
+  #page-login {
+    width: calc(100% + 2rem);
+    margin: -1rem;
+  }
+
   .login-panel {
     width: min(100%, 390px);
     margin: 1rem 0;
@@ -1855,7 +1860,8 @@
 }
 
 #page-login {
-  width: 100%;
+  width: calc(100% + (2 * var(--space-6)));
+  margin: calc(-1 * var(--space-6));
 }
 
 .login-page::before,
