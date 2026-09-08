@@ -18,3 +18,4 @@ export const submitBookingAdjustment = (bookingId, payload) => request(`/guest/b
 export const listStaffGuestRequests = (params = {}) => apiRequest('/guest/staff/requests', { query: params });
 export const resolveGuestRequest = (id, payload) => apiRequest(`/guest/staff/requests/${id}/resolve`, { method: 'POST', body: payload });
 export const listAvailableRoomsForGuestRequest = (params = {}) => apiRequest('/rooms/available', { query: params });
+export const listCampRoomsForGuestRequest = (campId) => apiRequest('/rooms', { query: { campId } });

@@ -17,7 +17,7 @@ import { confirmDialog } from '../components/modal.js';
 import { renderPagination } from '../components/pagination.js';
 import { constants, fillSelect } from '../utils/constants.js';
 import { isSuperAdmin } from '../auth/session.js';
-import { listStaffGuestRequests, resolveGuestRequest, listAvailableRoomsForGuestRequest } from '../api/guest.js';
+import { listStaffGuestRequests, resolveGuestRequest, listCampRoomsForGuestRequest } from '../api/guest.js';
 import {
   escapeHtml,
   formatDate,
@@ -71,22 +71,18 @@ function boot() {
         const payload = { action: 'approve' };
         if (request?.type === 'booking') {
           payload.campId = request.camp?._id;
-          const availableResponse = await listAvailableRoomsForGuestRequest({
-            campId: payload.campId,
-            arrivalDate: request.arrivalDate,
-            departureDate: request.departureDate,
-          });
+          const availableResponse = await listCampRoomsForGuestRequest(payload.campId);
           const available = Array.isArray(availableResponse.data)
             ? availableResponse.data
             : availableResponse.data?.rooms
             || availableResponse.data?.items
             || availableResponse.data
             || [];
-          if (!available.length) throw new Error('No available rooms match the requested dates.');
+          if (!available.length) throw new Error('No active rooms exist in the selected camp.');
           const choices = available.map((room, index) =>
-            `${index + 1}. ${room.blockName || room.block?.name || ''} ${room.roomNumber} (${room._id})`
+            `${index + 1}. ${room.blockName || room.block?.name || ''} Room ${room.roomNumber} [${room.status || 'Unknown'}] (${room._id})`
           ).join('\n');
-          const selected = Number(window.prompt(`Choose a room number to assign:\n${choices}`, '1'));
+          const selected = Number(window.prompt(`Choose a room to assign. The system will verify date conflicts:\n${choices}`, '1'));
           const room = available[selected - 1];
           if (!room) throw new Error('A valid room assignment is required.');
           payload.blockId = room.block?._id || room.block;
