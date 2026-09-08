@@ -289,6 +289,13 @@ async function handleRoute() {
       navigate('#/dashboard');
       return;
     }
+    const legacyRedirect = params.get('redirect');
+    if (legacyRedirect) {
+      window.sessionStorage.setItem('cams.loginRedirect', legacyRedirect);
+    }
+    if (window.location.hash) {
+      window.history.replaceState({}, '', '/');
+    }
     showPage('login');
     await loadPageModule('login');
     currentRoute = 'login';
@@ -296,8 +303,11 @@ async function handleRoute() {
   }
 
   if (!authed) {
-    const redirect = encodeURIComponent(window.location.hash || '#/dashboard');
-    window.location.hash = '#/login?redirect=' + redirect;
+    window.sessionStorage.setItem('cams.loginRedirect', window.location.hash || '#/dashboard');
+    window.history.replaceState({}, '', '/');
+    showPage('login');
+    await loadPageModule('login');
+    currentRoute = 'login';
     return;
   }
 

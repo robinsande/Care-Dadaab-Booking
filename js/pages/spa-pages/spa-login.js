@@ -98,7 +98,11 @@ export async function init() {
       authStatus.textContent = 'CARE identity verified';
       successOverlay.classList.add('care-auth-verified');
     }, 1450);
-    window.setTimeout(() => navigate('#/dashboard'), 2600);
+    window.setTimeout(() => {
+      const redirect = window.sessionStorage.getItem('cams.loginRedirect');
+      window.sessionStorage.removeItem('cams.loginRedirect');
+      navigate(redirect && redirect.startsWith('#/') ? redirect : '#/dashboard');
+    }, 2600);
   };
 
   openLoginButton?.addEventListener('click', () => {
