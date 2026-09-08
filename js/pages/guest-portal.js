@@ -2,6 +2,7 @@ import {
   guestRegister, guestLogin, guestRequestReset, guestResetPassword,
   listGuestCamps, listGuestBookings, listGuestRequests,
   submitBookingRequest, submitBookingAdjustment,
+  updateGuestProfile,
 } from '../api/guest.js';
 import { clearGuestSession, getGuest, getGuestToken, setGuestSession } from '../auth/guest-session.js';
 
@@ -16,6 +17,7 @@ const message = (text, error = false) => {
 };
 const refreshIcons = () => window.lucide?.createIcons();
 const bookingForm = $('#booking-form');
+const profileForm = $('#profile-form');
 const arrivalDateInput = bookingForm.elements.arrivalDate;
 const departureDateInput = bookingForm.elements.departureDate;
 const today = new Date().toISOString().slice(0, 10);
@@ -33,9 +35,11 @@ async function loadPortal() {
   $('#portal-section').classList.remove('hidden');
   $('#sign-out').classList.remove('hidden');
   const guest = getGuest();
-  ['firstName', 'lastName', 'phone'].forEach((field) => {
-    const input = bookingForm.elements[field];
-    if (input && guest?.[field]) input.value = guest[field];
+  ['firstName', 'lastName', 'phone', 'organisation', 'gender', 'contractType', 'departureCountry', 'kenyaOffice', 'internationalCountry'].forEach((field) => {
+    if (guest?.[field]) {
+      if (profileForm.elements[field]) profileForm.elements[field].value = guest[field];
+      if (bookingForm.elements[field]) bookingForm.elements[field].value = guest[field];
+    }
   });
   const camps = await listGuestCamps();
   (camps.data || []).forEach((camp) => {
@@ -79,6 +83,14 @@ $('#register-form').addEventListener('submit', async (event) => {
     const result = await guestRegister(formData(event.target));
     setGuestSession(result.data.token, result.data.guest);
     await loadPortal();
+  } catch (error) { message(error.message, true); }
+});
+profileForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  try {
+    const result = await updateGuestProfile(formData(event.target));
+    setGuestSession(getGuestToken(), result.data);
+    message('Profile saved.');
   } catch (error) { message(error.message, true); }
 });
 $('#booking-form').addEventListener('submit', async (event) => {
