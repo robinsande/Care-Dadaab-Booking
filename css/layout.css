@@ -122,19 +122,31 @@
 }
 
 .nav a {
+  position: relative;
   color: var(--color-ink-muted);
   text-decoration: none;
   font-size: var(--text-sm);
   font-weight: 600;
   padding: 0.45rem 0.7rem;
   border-radius: var(--radius-md);
+  transition: color var(--transition), background var(--transition), box-shadow var(--transition), transform var(--transition);
 }
 
 .nav a:hover,
 .nav a[aria-current="page"] {
-  color: var(--color-ink);
-  background: var(--color-surface-muted);
+  color: var(--color-purple-dark);
+  background: rgba(249, 178, 51, 0.16);
+  box-shadow: 0 0 0 2px rgba(249, 178, 51, 0.14), 0 0 18px rgba(249, 178, 51, 0.3);
+  transform: translateY(-1px);
   text-decoration: none;
+}
+
+.nav a:focus-visible,
+.admin-nav a:focus-visible,
+.nav-toggle:focus-visible,
+.sidebar-collapse-toggle:focus-visible {
+  outline: 3px solid rgba(249, 178, 51, 0.65);
+  outline-offset: 2px;
 }
 
 .nav-toggle {
@@ -145,6 +157,13 @@
   padding: 0.45rem 0.7rem;
   font-size: var(--text-sm);
   font-weight: 600;
+  transition: color var(--transition), background var(--transition), box-shadow var(--transition);
+}
+
+.nav-toggle:hover {
+  color: var(--color-purple-dark);
+  background: rgba(249, 178, 51, 0.16);
+  box-shadow: 0 0 18px rgba(249, 178, 51, 0.3);
 }
 
 @media (min-width: 860px) {
@@ -343,18 +362,22 @@
 }
 
 .admin-nav a {
+  position: relative;
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   font-size: var(--text-sm);
   font-weight: 600;
   padding: 0.65rem 0.8rem;
   border-radius: var(--radius-md);
+  transition: color var(--transition), background var(--transition), box-shadow var(--transition), transform var(--transition);
 }
 
 .admin-nav a:hover,
 .admin-nav a[aria-current="page"] {
-  background: var(--color-brand);
+  background: linear-gradient(135deg, var(--color-brand-accent), var(--color-brand));
   color: #fff;
+  box-shadow: 0 0 0 2px rgba(249, 178, 51, 0.2), 0 0 22px rgba(249, 178, 51, 0.48);
+  transform: translateX(2px);
   text-decoration: none;
 }
 
@@ -377,11 +400,14 @@
   font-size: var(--text-xs);
   font-weight: 700;
   text-align: left;
+  transition: color var(--transition), background var(--transition), box-shadow var(--transition), transform var(--transition);
 }
 
 .sidebar-collapse-toggle:hover {
-  background: var(--color-brand);
+  background: linear-gradient(135deg, var(--color-brand-accent), var(--color-brand));
   color: #fff;
+  box-shadow: 0 0 18px rgba(249, 178, 51, 0.42);
+  transform: translateY(-1px);
 }
 
 .sidebar-collapse-toggle > span:first-child {
