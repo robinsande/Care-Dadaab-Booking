@@ -33,6 +33,7 @@ arrivalDateInput.addEventListener('change', () => {
 async function loadPortal() {
   $('#auth-section').classList.add('hidden');
   $('#portal-section').classList.remove('hidden');
+  $('#account-menu').classList.remove('hidden');
   $('#sign-out').classList.remove('hidden');
   const guest = getGuest();
   ['firstName', 'lastName', 'phone', 'organisation', 'gender', 'contractType', 'departureCountry', 'kenyaOffice', 'internationalCountry'].forEach((field) => {
@@ -42,7 +43,8 @@ async function loadPortal() {
     }
   });
   const camps = await listGuestCamps();
-  (camps.data || []).forEach((camp) => {
+  const campList = Array.isArray(camps.data) ? camps.data : (camps.data?.items || camps.data?.camps || []);
+  campList.forEach((camp) => {
     const option = document.createElement('option');
     option.value = camp._id;
     option.textContent = camp.name;
@@ -54,7 +56,7 @@ async function loadPortal() {
     rateSelect.disabled = true;
     try {
       const response = await listGuestCampRates(bookingForm.elements.campId.value);
-      const rates = response.data || [];
+      const rates = Array.isArray(response.data) ? response.data : (response.data?.rates || response.data?.items || []);
       rateSelect.innerHTML = rates.length
         ? `<option value="">Choose room rate</option>${rates.map((rate) => `<option value="${rate._id}" data-stay-type="${rate.stayType}">${rate.stayType} - ${rate.currency} ${Number(rate.amount).toLocaleString()} per night</option>`).join('')}`
         : '<option value="">No rates configured for this camp</option>';
@@ -109,6 +111,7 @@ profileForm.addEventListener('submit', async (event) => {
   try {
     const result = await updateGuestProfile(formData(event.target));
     setGuestSession(getGuestToken(), result.data);
+    $('#profile-panel').classList.add('hidden');
     message('Profile saved.');
   } catch (error) { message(error.message, true); }
 });
@@ -136,6 +139,9 @@ $('#reset-form').addEventListener('submit', async (event) => {
 });
 $('#show-register').addEventListener('click', () => $('#register-form').classList.toggle('hidden'));
 $('#sign-out').addEventListener('click', () => { clearGuestSession(); window.location.reload(); });
+$('#profile-toggle').addEventListener('click', () => {
+  $('#profile-panel').classList.toggle('hidden');
+});
 $('#bookings').addEventListener('click', async (event) => {
   const button = event.target.closest('button');
   if (!button) return;
