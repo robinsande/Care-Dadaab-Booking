@@ -18,7 +18,7 @@ export const ADMIN_NAV = [
   { href: 'settings.html', label: 'Settings', icon: 'settings', superAdmin: true },
 ];
 
-const NAV_ICONS = {
+export const NAV_ICONS = {
   home: '<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
   calendar: '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
   'calendar-plus': '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M12 14v4M10 16h4"/>',
@@ -48,7 +48,7 @@ export function renderAdminNav(user = getUser()) {
       const attrs = isActive ? ' aria-current="page"' : '';
       const superAttr = item.superAdmin ? ' data-super-admin-only' : '';
       const icon = NAV_ICONS[item.icon] || '';
-      return `<a href="${item.href}"${attrs}${superAttr}><span class="admin-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" role="presentation">${icon}</svg></span><span>${item.label}</span></a>`;
+      return `<a class="admin-nav-link nav-color-${item.icon}" href="${item.href}"${attrs}${superAttr}><span class="admin-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" role="presentation">${icon}</svg></span><span>${item.label}</span></a>`;
     })
     .join('');
 }

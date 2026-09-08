@@ -2,6 +2,7 @@ import { isAuthenticated, getUser, clearSession, isSuperAdmin } from '../auth/se
 import { config, applyBrandLogos } from '../config.js';
 import { initModals } from '../components/modal.js';
 import { showToast } from '../components/toast.js';
+import { NAV_ICONS } from '../components/shell.js';
 
 const PAGE_TITLES = {
   login: 'Staff Login',
@@ -24,18 +25,18 @@ const PAGE_TITLES = {
 const SUPER_ADMIN_ROUTES = ['camps', 'blocks', 'rates', 'reports', 'reservation-log', 'users', 'settings'];
 
 const SPA_NAV = [
-  { hash: '#/dashboard', label: 'Dashboard', route: 'dashboard' },
-  { hash: '#/bookings', label: 'Bookings', route: 'bookings' },
-  { hash: '#/booking/create', label: 'Create Booking', route: 'booking/create' },
-  { hash: '#/camps', label: 'Camps', route: 'camps', superAdmin: true },
-  { hash: '#/blocks', label: 'Blocks', route: 'blocks', superAdmin: true },
-  { hash: '#/rooms', label: 'Rooms', route: 'rooms' },
-  { hash: '#/rates', label: 'Rates', route: 'rates', superAdmin: true },
-  { hash: '#/invoices', label: 'Invoices', route: 'invoices' },
-  { hash: '#/reports', label: 'Reports', route: 'reports', superAdmin: true },
-  { href: 'admin/reservation-log.html', label: 'Reservation Log', route: 'reservation-log', superAdmin: true },
-  { hash: '#/users', label: 'Users', route: 'users', superAdmin: true },
-  { hash: '#/settings', label: 'Settings', route: 'settings', superAdmin: true },
+  { hash: '#/dashboard', label: 'Dashboard', route: 'dashboard', icon: 'home' },
+  { hash: '#/bookings', label: 'Bookings', route: 'bookings', icon: 'calendar' },
+  { hash: '#/booking/create', label: 'Create Booking', route: 'booking/create', icon: 'calendar-plus' },
+  { hash: '#/camps', label: 'Camps', route: 'camps', icon: 'map', superAdmin: true },
+  { hash: '#/blocks', label: 'Blocks', route: 'blocks', icon: 'layout-grid', superAdmin: true },
+  { hash: '#/rooms', label: 'Rooms', route: 'rooms', icon: 'bed-double' },
+  { hash: '#/rates', label: 'Rates', route: 'rates', icon: 'badge-dollar-sign', superAdmin: true },
+  { hash: '#/invoices', label: 'Invoices', route: 'invoices', icon: 'receipt' },
+  { hash: '#/reports', label: 'Reports', route: 'reports', icon: 'chart-no-axes-combined', superAdmin: true },
+  { href: 'admin/reservation-log.html', label: 'Reservation Log', route: 'reservation-log', icon: 'history', superAdmin: true },
+  { hash: '#/users', label: 'Users', route: 'users', icon: 'users', superAdmin: true },
+  { hash: '#/settings', label: 'Settings', route: 'settings', icon: 'settings', superAdmin: true },
 ];
 
 const loadedRoutes = new Set();
@@ -77,7 +78,8 @@ function buildNav(user) {
       const superAttr = item.superAdmin ? ' data-super-admin-only' : '';
       const href = item.href || item.hash;
       const navAttr = item.hash ? ' data-nav-link' : '';
-      return `<a href="${href}"${activeAttr}${superAttr}${navAttr}>${item.label}</a>`;
+      const icon = NAV_ICONS[item.icon] || '';
+      return `<a class="admin-nav-link nav-color-${item.icon}" href="${href}"${activeAttr}${superAttr}${navAttr}><span class="admin-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" role="presentation">${icon}</svg></span><span>${item.label}</span></a>`;
     })
     .join('');
 }
