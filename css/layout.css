@@ -363,6 +363,9 @@
 
 .admin-nav a {
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   font-size: var(--text-sm);
@@ -372,6 +375,26 @@
   transition: color var(--transition), background var(--transition), box-shadow var(--transition), transform var(--transition);
 }
 
+.admin-nav-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  flex: 0 0 1.15rem;
+  color: var(--color-brand-accent);
+  transition: color var(--transition), filter var(--transition), transform var(--transition);
+}
+
+.admin-nav-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
 .admin-nav a:hover,
 .admin-nav a[aria-current="page"] {
   background: linear-gradient(135deg, var(--color-brand-accent), var(--color-brand));
@@ -379,6 +402,13 @@
   box-shadow: 0 0 0 2px rgba(249, 178, 51, 0.2), 0 0 22px rgba(249, 178, 51, 0.48);
   transform: translateX(2px);
   text-decoration: none;
+}
+
+.admin-nav a:hover .admin-nav-icon,
+.admin-nav a[aria-current="page"] .admin-nav-icon {
+  color: #fff7d6;
+  filter: drop-shadow(0 0 6px rgba(255, 240, 164, 0.9));
+  transform: scale(1.08);
 }
 
 .admin-nav a[hidden] {
@@ -1005,12 +1035,17 @@
   }
 
   .admin-shell.sidebar-collapsed .brand-text,
-  .admin-shell.sidebar-collapsed .admin-nav a {
+  .admin-shell.sidebar-collapsed .admin-nav a > span:last-child {
     display: none;
   }
 
   .admin-shell.sidebar-collapsed .admin-nav {
     width: 100%;
+  }
+
+  .admin-shell.sidebar-collapsed .admin-nav a {
+    justify-content: center;
+    padding-inline: 0.65rem;
   }
 
   .admin-shell.sidebar-collapsed .sidebar-collapse-toggle {
