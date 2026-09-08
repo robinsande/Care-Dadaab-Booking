@@ -125,7 +125,7 @@ export function createCampSelectors({
       const selectedBlock = blockSelect.selectedOptions[0]?.textContent?.trim();
       state.rooms = Array.isArray(campRooms)
         ? campRooms.filter((room) =>
-          String(room.block?._id || room.block || '') === String(blockId)
+          String(room.block?._id || room.block?.id || room.block || '') === String(blockId)
           || String(room.blockName || '').trim() === selectedBlock)
         : [];
       state.rooms = state.rooms.filter((room) =>
