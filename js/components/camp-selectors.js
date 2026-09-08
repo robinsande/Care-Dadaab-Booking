@@ -110,6 +110,14 @@ export function createCampSelectors({
 
     // Some older room records only retain blockName; fall back to camp results
     // and match the selected block by id or displayed name.
+    state.rooms = state.rooms.filter((room) =>
+      !room.status || room.status === 'Available'
+    ).filter((room) =>
+      !room.housekeepingStatus
+      || room.housekeepingStatus === 'Clean'
+      || room.housekeepingStatus === 'Inspected'
+    );
+
     if (!state.rooms.length) {
       response = await listRooms({ campId });
       data = response.data;
@@ -120,6 +128,12 @@ export function createCampSelectors({
           String(room.block?._id || room.block || '') === String(blockId)
           || String(room.blockName || '').trim() === selectedBlock)
         : [];
+      state.rooms = state.rooms.filter((room) =>
+      (!room.status || room.status === 'Available')
+      && (!room.housekeepingStatus
+        || room.housekeepingStatus === 'Clean'
+        || room.housekeepingStatus === 'Inspected')
+      );
     }
 
     if (!state.rooms.length) {
