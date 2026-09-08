@@ -76,7 +76,10 @@ function boot() {
             arrivalDate: request.arrivalDate,
             departureDate: request.departureDate,
           });
-          const available = availableResponse.data || [];
+          const available = availableResponse.data?.rooms
+            || availableResponse.data?.items
+            || availableResponse.data
+            || [];
           if (!available.length) throw new Error('No available rooms match the requested dates.');
           const choices = available.map((room, index) =>
             `${index + 1}. ${room.blockName || room.block?.name || ''} ${room.roomNumber} (${room._id})`
@@ -92,7 +95,9 @@ function boot() {
       showToast('Guest request updated.', 'success');
       await loadGuestRequests();
       await loadBookings();
-    } catch (error) { showToast(error instanceof ApiError ? error.message : 'Unable to update guest request.', 'error'); }
+    } catch (error) {
+      showToast(error instanceof ApiError ? error.message : (error.message || 'Unable to update guest request.'), 'error');
+    }
   }
   if (params.get('status')) {
     document.getElementById('status').value = params.get('status');
