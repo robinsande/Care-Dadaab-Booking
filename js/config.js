@@ -9,7 +9,7 @@ export const config = {
   API_BASE_URL: API_BASE,
   APP_NAME: 'CAMS',
   APP_TITLE: 'CARE Accommodation Management System',
-  BRAND_LOGO_SRC: '/assets/care-logo.jpg',
+  BRAND_LOGO_SRC: '/assets/care-logo.png',
   TOKEN_KEY: 'cams_token',
   USER_KEY: 'cams_user',
 };
