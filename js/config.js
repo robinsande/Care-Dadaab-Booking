@@ -4,7 +4,7 @@
  */
 export const BACKEND_URL = 'https://care-dadaab-booking-backend.onrender.com';
 export const API_BASE = `${BACKEND_URL}/api/v1`;
-const BRAND_LOGO_URL = new URL('../assets/care-logo.png', import.meta.url).href;
+const BRAND_LOGO_URL = new URL('../assets/care-logo.jpg', import.meta.url).href;
 
 export const config = {
   API_BASE_URL: API_BASE,
