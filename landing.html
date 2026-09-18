@@ -175,22 +175,14 @@
       --beige: #f6efe6;
     }
 
-    body {
-      background:
-        radial-gradient(circle at 85% 4%, rgba(242, 139, 53, 0.2), transparent 25rem),
-        var(--beige);
-      color: var(--paper);
-    }
+    body { background: var(--beige); color: var(--paper); }
 
     body::before {
       position: fixed;
       inset: 0;
       z-index: -1;
-      background:
-        radial-gradient(circle at 12% 12%, rgba(84, 32, 111, 0.1), transparent 20rem),
-        linear-gradient(rgba(84, 32, 111, 0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(84, 32, 111, 0.025) 1px, transparent 1px);
-      background-size: auto, 28px 28px, 28px 28px;
+      background: linear-gradient(rgba(84, 32, 111, 0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(84, 32, 111, 0.025) 1px, transparent 1px);
+      background-size: 28px 28px;
       content: "";
       pointer-events: none;
     }
@@ -244,30 +236,7 @@
       color: #fff;
     }
 
-    .hero::before {
-      position: absolute;
-      inset: -35% -8% auto auto;
-      z-index: -1;
-      width: 48rem;
-      height: 48rem;
-      border-radius: 42% 58% 62% 38%;
-      background: conic-gradient(from 120deg, rgba(232, 114, 30, 0.55), rgba(217, 155, 53, 0.18), rgba(255, 255, 255, 0.08), rgba(232, 114, 30, 0.55));
-      filter: blur(12px);
-      animation: mesh-drift 16s ease-in-out infinite alternate;
-      content: "";
-    }
-
-    .hero::after {
-      position: absolute;
-      right: 10%;
-      bottom: 8%;
-      z-index: -1;
-      width: 16rem;
-      height: 16rem;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: 50%;
-      content: "";
-    }
+    .hero::before, .hero::after { display: none; }
 
     .hero-copy > p,
     .access-note,
@@ -300,13 +269,7 @@
     footer { color: var(--muted); }
     .footer-brand p { color: var(--muted); }
 
-    @keyframes mesh-drift {
-      from { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
-      to { transform: translate3d(-3rem, 2rem, 0) rotate(14deg) scale(1.08); }
-    }
-
     @media (prefers-reduced-motion: reduce) {
-      .hero::before { animation: none; }
       .feature { transition: none; }
     }
   </style>

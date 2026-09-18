@@ -834,6 +834,71 @@ textarea.form-control {
   color: var(--color-ink);
 }
 
+/* Premium admin component finish. */
+.page-header {
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid rgba(84, 32, 111, 0.12);
+}
+
+.page-header h1,
+.page-header h2 {
+  color: var(--color-purple-dark);
+  letter-spacing: -0.02em;
+}
+
+.form-section-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+  color: var(--color-purple-dark);
+  font-size: var(--text-lg);
+}
+
+.form-section-title::before {
+  width: 0.35rem;
+  height: 1.35rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-brand);
+  content: "";
+}
+
+.form-section-title:first-child { margin-top: 0; }
+
+.panel .form-actions {
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: 1px solid rgba(84, 32, 111, 0.1);
+}
+
+.pagination {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid rgba(84, 32, 111, 0.1);
+  border-radius: var(--radius-md);
+  background: rgba(255, 253, 249, 0.72);
+}
+
+.pagination-controls { display: flex; gap: var(--space-2); }
+
+.empty-state {
+  min-height: 7rem;
+  background: linear-gradient(90deg, transparent, rgba(84, 32, 111, 0.025), transparent);
+}
+
+.loading-overlay { background: rgba(43, 23, 64, 0.2); }
+.spinner { border-color: rgba(84, 32, 111, 0.16); border-top-color: var(--color-brand); }
+
+@media (max-width: 767px) {
+  .admin-topbar { padding: var(--space-3) var(--space-4); }
+  .admin-topbar h1 { max-width: 11rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .admin-user { gap: var(--space-1); }
+  .admin-user .dashboard-sync { display: none; }
+  .panel { padding: var(--space-4); }
+  .toolbar { margin-inline: 0; }
+  .toolbar .btn { width: 100%; }
+  .form-section-title { margin-top: var(--space-6); }
+}
+
 /* Pagination */
 .pagination {
   display: flex;
