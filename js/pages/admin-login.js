@@ -42,7 +42,9 @@ let mfaState = null;
 let mfaVerificationActive = false;
 
 function showCodeEntry() {
-  mfaQrCode.hidden = true;
+  const hasQrCode = typeof qrDataUrl === 'string' && qrDataUrl.startsWith('data:image/');
+  mfaQrCode.src = hasQrCode ? qrDataUrl : '';
+  mfaQrCode.hidden = !hasQrCode;
   mfaManualKey.hidden = true;
   mfaQrDone.hidden = true;
   mfaCodeLabel.hidden = false;
@@ -75,7 +77,7 @@ function showMfaVerificationState(setupRequired, qrDataUrl, manualKey) {
   mfaCodeLabel.hidden = false;
   mfaCode.hidden = false;
   mfaSubmit.hidden = false;
-  mfaInstructions.textContent = 'Open Microsoft Authenticator and enter the current six-digit code.';
+  mfaInstructions.textContent = 'Open Microsoft Authenticator and enter the current six-digit code. The QR code remains available below.';
 }
 
 mfaQrCode.addEventListener('error', () => {
