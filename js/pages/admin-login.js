@@ -29,6 +29,7 @@ const mfaInstructions = document.getElementById('mfa-instructions');
 const mfaQrDone = document.getElementById('mfa-qr-done');
 const mfaCodeLabel = document.getElementById('mfa-code-label');
 let mfaState = null;
+let mfaVerificationActive = false;
 
 function showCodeEntry() {
   mfaQrCode.hidden = true;
@@ -136,11 +137,13 @@ form.addEventListener('submit', async (event) => {
 
 mfaQrDone.addEventListener('click', showCodeEntry);
 
-mfaSubmit.addEventListener('click', async () => {
+async function submitMfa() {
+  if (mfaVerificationActive) return;
   if (!mfaState || !/^\d{6}$/.test(mfaCode.value.trim())) {
     showToast('Enter the six-digit Microsoft Authenticator code.', 'error');
     return;
   }
+  mfaVerificationActive = true;
   setButtonLoading(mfaSubmit, true, 'Verifying…');
   try {
     const response = await verifyMfa(mfaState.mfaToken, mfaCode.value.trim());
@@ -151,7 +154,14 @@ mfaSubmit.addEventListener('click', async () => {
     showToast(error instanceof ApiError ? error.message : 'Unable to verify code.', 'error');
   } finally {
     setButtonLoading(mfaSubmit, false);
+    mfaVerificationActive = false;
   }
+}
+
+mfaCode.addEventListener('input', () => {
+  if (/^\d{6}$/.test(mfaCode.value.trim())) submitMfa();
 });
+
+mfaSubmit.addEventListener('click', submitMfa);
 
 applyBrandLogos();

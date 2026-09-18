@@ -13,6 +13,7 @@ const $ = (id) => orig(idMap[id] || id);
 
 let initialized = false;
 let mfaState = null;
+let mfaVerificationActive = false;
 
 export function reset() {
   const form = $('login-form');
@@ -166,11 +167,13 @@ export async function init() {
 
   mfaQrDone.addEventListener('click', showCodeEntry);
 
-  mfaSubmit.addEventListener('click', async () => {
+  const submitMfa = async () => {
+    if (mfaVerificationActive) return;
     if (!mfaState || !/^\d{6}$/.test(mfaCode.value.trim())) {
       showToast('Enter the six-digit Microsoft Authenticator code.', 'error');
       return;
     }
+    mfaVerificationActive = true;
     setButtonLoading(mfaSubmit, true, 'Verifying…');
     try {
       const response = await verifyMfa(mfaState.mfaToken, mfaCode.value.trim());
@@ -181,8 +184,15 @@ export async function init() {
       showToast(error instanceof ApiError ? error.message : 'Unable to verify code.', 'error');
     } finally {
       setButtonLoading(mfaSubmit, false);
+      mfaVerificationActive = false;
     }
+  };
+
+  mfaCode.addEventListener('input', () => {
+    if (/^\d{6}$/.test(mfaCode.value.trim())) submitMfa();
   });
+
+  mfaSubmit.addEventListener('click', submitMfa);
 }
 
 if (!window.__SPA_DEFER_INIT__) init();
