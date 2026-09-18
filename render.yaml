@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: care-dadaab-booking
+    runtime: static
+    staticPublishPath: .
+    routes:
+      - type: rewrite
+        source: /
+        destination: /landing.html
+      - type: rewrite
+        source: /landing
+        destination: /landing.html
+      - type: rewrite
+        source: /landing.html
+        destination: /landing.html
