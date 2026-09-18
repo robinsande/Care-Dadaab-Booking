@@ -98,8 +98,9 @@ export async function init() {
   const showMfaVerificationState = (setupRequired, qrDataUrl, manualKey) => {
     mfaCode.value = '';
     if (setupRequired) {
-      mfaQrCode.src = qrDataUrl;
-      mfaQrCode.hidden = false;
+      const hasQrCode = typeof qrDataUrl === 'string' && qrDataUrl.startsWith('data:image/');
+      mfaQrCode.src = hasQrCode ? qrDataUrl : '';
+      mfaQrCode.hidden = !hasQrCode;
       mfaManualKey.textContent = `Can't scan? Use this key: ${manualKey}`;
       mfaManualKey.hidden = false;
       mfaQrDone.hidden = false;
@@ -118,6 +119,12 @@ export async function init() {
     mfaSubmit.hidden = false;
     mfaInstructions.textContent = 'Open Microsoft Authenticator and enter the current six-digit code.';
   };
+
+  mfaQrCode.addEventListener('error', () => {
+    mfaQrCode.hidden = true;
+    mfaQrCode.removeAttribute('src');
+    mfaInstructions.textContent = 'QR code unavailable. Use the manual key in Microsoft Authenticator, then enter the six-digit code below.';
+  });
 
   const finishLogin = (user, token) => {
     setSession(token, user);
