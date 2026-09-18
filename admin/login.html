@@ -54,6 +54,10 @@
     .mfa-login-panel p{color:var(--muted)}
     .mfa-login-panel .form-control{border-bottom-color:rgba(84,32,111,.26);background:transparent!important;color:var(--paper)!important;-webkit-text-fill-color:var(--paper)}
     .button-secondary{border-color:rgba(84,32,111,.24);color:var(--paper)}
+    .login-success-overlay{background:rgba(245,239,231,.28)!important;backdrop-filter:blur(4px)!important}
+    .login-success-card{border:1px solid rgba(84,32,111,.12)!important;background:rgba(255,255,255,.96)!important;box-shadow:0 18px 48px rgba(20,5,28,.18)!important}
+    .care-auth-logo{box-shadow:0 0 0 5px rgba(255,255,255,.86)!important;animation:none!important}
+    .care-auth-status{animation:none!important}
   </style>
 </head>
 <body>
@@ -76,7 +80,7 @@
     document.querySelectorAll('[data-password-toggle]').forEach((button) => button.addEventListener('click', () => { const input = document.getElementById(button.dataset.passwordToggle); const visible = input.type === 'text'; input.type = visible ? 'password' : 'text'; button.classList.toggle('is-visible', !visible); button.setAttribute('aria-label', visible ? 'Show password' : 'Hide password'); }));
     document.querySelector('#create-account-form').addEventListener('submit', (event) => { event.preventDefault(); if (!event.currentTarget.reportValidity()) return; statusStrip.textContent = 'Request recorded. Your camp operations lead will review access.'; statusStrip.classList.add('is-visible'); });
   </script>
-  <script type="module" src="../js/pages/admin-login.js?v=20260918-1"></script>
+  <script type="module" src="../js/pages/admin-login.js?v=20260918-2"></script>
 </body>
 </html>
 
