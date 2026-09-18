@@ -24,6 +24,7 @@ const $ = (id) => orig(idMap[id] || id);
 let initialized = false;
 let mfaState = null;
 let mfaVerificationActive = false;
+const MFA_STORAGE_KEY = 'cams.mfaChallenge';
 
 export function reset() {
   const form = $('login-form');
@@ -84,9 +85,6 @@ export async function init() {
   const mfaCodeLabel = document.getElementById('spa-mfa-code-label');
 
   const showCodeEntry = () => {
-    const hasQrCode = typeof qrDataUrl === 'string' && qrDataUrl.startsWith('data:image/');
-    mfaQrCode.src = hasQrCode ? qrDataUrl : '';
-    mfaQrCode.hidden = !hasQrCode;
     mfaManualKey.hidden = true;
     mfaQrDone.hidden = true;
     mfaCodeLabel.hidden = false;
@@ -113,7 +111,9 @@ export async function init() {
       return;
     }
 
-    mfaQrCode.hidden = true;
+    const hasQrCode = typeof qrDataUrl === 'string' && qrDataUrl.startsWith('data:image/');
+    mfaQrCode.src = hasQrCode ? qrDataUrl : '';
+    mfaQrCode.hidden = !hasQrCode;
     mfaManualKey.hidden = true;
     mfaQrDone.hidden = true;
     mfaCodeLabel.hidden = false;
@@ -175,6 +175,12 @@ export async function init() {
       const data = response.data || response;
       if (data.mfaRequired) {
         mfaState = data;
+        window.sessionStorage.setItem(MFA_STORAGE_KEY, JSON.stringify({
+          mfaToken: data.mfaToken,
+          mfaSetupRequired: Boolean(data.mfaSetupRequired),
+          qrCodeDataUrl: data.qrCodeDataUrl || '',
+          manualKey: data.manualKey || '',
+        }));
         form.hidden = true;
         mfaPanel.hidden = false;
         showMfaVerificationState(data.mfaSetupRequired, data.qrCodeDataUrl, data.manualKey);
@@ -204,6 +210,7 @@ export async function init() {
       const response = await verifyMfa(mfaState.mfaToken, mfaCode.value.trim());
       const data = response.data || response;
       if (!data.token || !data.user) throw new ApiError('Verification response was incomplete.');
+      window.sessionStorage.removeItem(MFA_STORAGE_KEY);
       finishLogin(data.user, data.token);
     } catch (error) {
       showToast(error instanceof ApiError ? error.message : 'Unable to verify code.', 'error');
@@ -218,6 +225,18 @@ export async function init() {
   });
 
   mfaSubmit.addEventListener('click', submitMfa);
+
+  try {
+    const savedMfaState = JSON.parse(window.sessionStorage.getItem(MFA_STORAGE_KEY) || 'null');
+    if (savedMfaState?.mfaToken) {
+      mfaState = savedMfaState;
+      form.hidden = true;
+      mfaPanel.hidden = false;
+      showMfaVerificationState(savedMfaState.mfaSetupRequired, savedMfaState.qrCodeDataUrl, savedMfaState.manualKey);
+    }
+  } catch (_) {
+    window.sessionStorage.removeItem(MFA_STORAGE_KEY);
+  }
 }
 
 if (!window.__SPA_DEFER_INIT__) init();
