@@ -157,6 +157,158 @@
       html { scroll-behavior: auto; }
       .hero-copy, .ledger { animation: none; }
     }
+
+    /* Premium CAMS visual layer: UIverse-style surfaces with a restrained shader field. */
+    :root {
+      --ink: #2b1740;
+      --surface: #ffffff;
+      --surface-raised: #fffaf4;
+      --line: rgba(43, 23, 64, 0.14);
+      --line-strong: rgba(43, 23, 64, 0.26);
+      --clay: #e8721e;
+      --clay-bright: #f28b35;
+      --gold: #d99b35;
+      --paper: #2b1740;
+      --muted: #65596b;
+      --muted-dim: #8b7f91;
+      --purple: #54206f;
+      --beige: #f6efe6;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 85% 4%, rgba(242, 139, 53, 0.2), transparent 25rem),
+        var(--beige);
+      color: var(--paper);
+    }
+
+    body::before {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(circle at 12% 12%, rgba(84, 32, 111, 0.1), transparent 20rem),
+        linear-gradient(rgba(84, 32, 111, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(84, 32, 111, 0.025) 1px, transparent 1px);
+      background-size: auto, 28px 28px, 28px 28px;
+      content: "";
+      pointer-events: none;
+    }
+
+    .site-header {
+      border-bottom-color: rgba(84, 32, 111, 0.12);
+      background: rgba(246, 239, 230, 0.88);
+    }
+
+    .brand-mark {
+      border-color: rgba(84, 32, 111, 0.22);
+      background: #fff;
+    }
+
+    .brand-text strong,
+    .brand-text small,
+    .nav-links a { color: var(--purple); }
+
+    .nav-links a:hover { color: var(--clay); }
+
+    .button {
+      border-color: var(--clay);
+      background: var(--clay);
+      box-shadow: 0 8px 18px rgba(232, 114, 30, 0.18);
+    }
+
+    .button:hover {
+      border-color: var(--clay-bright);
+      background: var(--clay-bright);
+      box-shadow: 0 12px 24px rgba(232, 114, 30, 0.25);
+    }
+
+    .button-ghost {
+      border-color: rgba(84, 32, 111, 0.25);
+      background: rgba(255, 255, 255, 0.45);
+      color: var(--purple);
+      box-shadow: none;
+    }
+
+    .button-ghost:hover { border-color: var(--purple); background: #fff; }
+
+    .hero {
+      position: relative;
+      isolation: isolate;
+      max-width: none;
+      width: 100%;
+      padding: clamp(5rem, 10vw, 9rem) max(1rem, calc((100% - var(--max-width)) / 2)) clamp(5rem, 9vw, 8rem);
+      overflow: hidden;
+      border-bottom: 0;
+      background: var(--purple);
+      color: #fff;
+    }
+
+    .hero::before {
+      position: absolute;
+      inset: -35% -8% auto auto;
+      z-index: -1;
+      width: 48rem;
+      height: 48rem;
+      border-radius: 42% 58% 62% 38%;
+      background: conic-gradient(from 120deg, rgba(232, 114, 30, 0.55), rgba(217, 155, 53, 0.18), rgba(255, 255, 255, 0.08), rgba(232, 114, 30, 0.55));
+      filter: blur(12px);
+      animation: mesh-drift 16s ease-in-out infinite alternate;
+      content: "";
+    }
+
+    .hero::after {
+      position: absolute;
+      right: 10%;
+      bottom: 8%;
+      z-index: -1;
+      width: 16rem;
+      height: 16rem;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 50%;
+      content: "";
+    }
+
+    .hero-copy > p,
+    .access-note,
+    .eyebrow { color: rgba(255, 255, 255, 0.76); }
+    .hero h1 { color: #fff; }
+    .hero .button-ghost { border-color: rgba(255, 255, 255, 0.34); background: transparent; color: #fff; }
+    .hero .button-ghost:hover { border-color: var(--gold); background: rgba(255, 255, 255, 0.08); }
+    .hero .ledger { border-color: rgba(255, 255, 255, 0.25); background: rgba(20, 8, 34, 0.3); backdrop-filter: blur(14px); }
+    .hero .ledger-head, .hero .ledger-row { border-color: rgba(255, 255, 255, 0.16); }
+    .hero .ledger-row strong { color: #fff; }
+
+    .section { border-bottom-color: var(--line); }
+    .section-label { color: var(--purple); }
+    .section-label::before { background: var(--clay); }
+    h2, h3 { color: var(--purple); }
+    p, .camp-row p, .workflow-step p { color: var(--muted); }
+    .camp-list, .feature-grid, .workflow { border-color: var(--line); }
+    .camp-row, .feature, .workflow-step { border-color: var(--line); }
+    .camp-code, .feature-number, .step-number { color: var(--clay); }
+
+    .desk-section { background: rgba(255, 255, 255, 0.65); }
+    .feature { background: rgba(255, 255, 255, 0.55); transition: background var(--ease), transform var(--ease); }
+    .feature:hover { background: #fff; transform: translateY(-3px); }
+
+    .cta {
+      border-color: rgba(84, 32, 111, 0.24);
+      background: linear-gradient(115deg, #fff, rgba(242, 139, 53, 0.22));
+    }
+
+    footer { color: var(--muted); }
+    .footer-brand p { color: var(--muted); }
+
+    @keyframes mesh-drift {
+      from { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+      to { transform: translate3d(-3rem, 2rem, 0) rotate(14deg) scale(1.08); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero::before { animation: none; }
+      .feature { transition: none; }
+    }
   </style>
 </head>
 <body>
