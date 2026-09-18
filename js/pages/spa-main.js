@@ -133,6 +133,7 @@ function initAdminChromeOnce() {
   const collapseToggle = document.querySelector('[data-admin-collapse-toggle]');
   const logoutBtn = document.querySelector('[data-logout]');
   const adminUser = document.querySelector('.admin-user');
+  const globalSearch = document.querySelector('[data-global-search]');
 
   buildNav(user);
 
@@ -221,6 +222,12 @@ function initAdminChromeOnce() {
   if (brandText) brandText.textContent = config.APP_NAME;
 
   applyBrandLogos();
+
+  globalSearch?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const value = new FormData(globalSearch).get('search')?.toString().trim();
+    navigate(value ? `#/bookings?search=${encodeURIComponent(value)}` : '#/bookings');
+  });
 
   initModals();
 

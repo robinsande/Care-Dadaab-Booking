@@ -77,7 +77,7 @@ function showDashboardError() {
     ['recent-bookings-body', 6],
   ].forEach(([id, columns]) => {
     const tbody = document.getElementById(id);
-    if (tbody && tbody.querySelector('.empty-state')) {
+    if (tbody && (tbody.querySelector('.empty-state') || tbody.querySelector('.skeleton'))) {
       tbody.innerHTML = `<tr><td colspan="${columns}" class="empty-state">Dashboard data is temporarily unavailable. Refresh to try again.</td></tr>`;
     }
   });
@@ -92,10 +92,10 @@ function renderRoomStatuses(rooms) {
   }
   tbody.innerHTML = rooms.map(room => `
     <tr>
-      <td>${escapeHtml(room.campName)}</td>
-      <td>${escapeHtml(room.blockName)}</td>
-      <td>${escapeHtml(room.roomNumber)}</td>
-      <td>${statusBadge(room.status)}</td>
+      <td data-label="Camp">${escapeHtml(room.campName)}</td>
+      <td data-label="Block">${escapeHtml(room.blockName)}</td>
+      <td data-label="Room">${escapeHtml(room.roomNumber)}</td>
+      <td data-label="Status">${statusBadge(room.status)}</td>
     </tr>
   `).join('');
 }
@@ -109,8 +109,8 @@ function renderCampStats(rows) {
   }
   tbody.innerHTML = rows.map(row => `
     <tr>
-      <td>${escapeHtml(row.campName || row.camp || row.name || '—')}</td>
-      <td>${escapeHtml(String(row.count ?? row.totalActive ?? 0))}</td>
+      <td data-label="Camp">${escapeHtml(row.campName || row.camp || row.name || '—')}</td>
+      <td data-label="Active bookings">${escapeHtml(String(row.count ?? row.totalActive ?? 0))}</td>
     </tr>
   `).join('');
 }
@@ -127,12 +127,12 @@ function renderRecentBookings(bookings) {
     const camp = booking.campName || campLabel(booking.camp);
     return `
       <tr>
-        <td><a data-nav-link href="#/booking/edit?id=${escapeHtml(id)}"><strong>${escapeHtml(booking.bookingReference || '—')}</strong></a></td>
-        <td>${escapeHtml(fullName(booking.guest || booking))}</td>
-        <td>${escapeHtml(camp)}</td>
-        <td>${escapeHtml(formatDate(booking.arrivalDate))}</td>
-        <td>${escapeHtml(formatDate(booking.departureDate))}</td>
-        <td>${statusBadge(booking.status)}</td>
+          <td data-label="Reference"><a data-nav-link href="#/booking/edit?id=${escapeHtml(id)}"><strong>${escapeHtml(booking.bookingReference || '—')}</strong></a></td>
+          <td data-label="Guest">${escapeHtml(fullName(booking.guest || booking))}</td>
+          <td data-label="Camp">${escapeHtml(camp)}</td>
+          <td data-label="Arrival">${escapeHtml(formatDate(booking.arrivalDate))}</td>
+          <td data-label="Departure">${escapeHtml(formatDate(booking.departureDate))}</td>
+          <td data-label="Status">${statusBadge(booking.status)}</td>
       </tr>
     `;
   }).join('');

@@ -18,53 +18,18 @@
   <!-- ============ LOGIN PAGE ============ -->
   <div id="page-login" class="page-container" data-route="login" hidden>
     <div class="login-page">
-      <div class="login-scenery" aria-hidden="true">
-        <span class="scenery-sun"></span>
-        <span class="scenery-mountain scenery-mountain-back"></span>
-        <span class="scenery-mountain scenery-mountain-front"></span>
-        <span class="scenery-tree scenery-tree-left"></span>
-        <span class="scenery-tree scenery-tree-right"></span>
-        <span class="scenery-mist"></span>
-      </div>
-      <div class="login-galaxy" aria-hidden="true">
-        <span class="galaxy-star"></span><span class="galaxy-star"></span><span class="galaxy-star"></span>
-        <span class="galaxy-star"></span><span class="galaxy-star"></span><span class="galaxy-star"></span>
-        <span class="galaxy-star"></span><span class="galaxy-star"></span><span class="galaxy-star"></span>
-        <span class="galaxy-star"></span><span class="galaxy-star"></span><span class="galaxy-star"></span>
-      </div>
-      <div class="login-leaves" aria-hidden="true">
-        <span class="login-leaf"></span><span class="login-leaf"></span><span class="login-leaf"></span>
-        <span class="login-leaf"></span><span class="login-leaf"></span><span class="login-leaf"></span>
-        <span class="login-leaf"></span><span class="login-leaf"></span><span class="login-leaf"></span>
-        <span class="login-leaf"></span><span class="login-leaf"></span><span class="login-leaf"></span>
+      <div class="login-story">
+        <span class="login-overline">CARE Kenya / Operations</span>
+        <h1>Accommodation,<br><em>handled beautifully.</em></h1>
+        <p>One calm workspace for every arrival, room and reservation across the Dadaab network.</p>
+        <div class="login-story-rule"><span></span><small>Trusted by the teams who keep CARE moving</small></div>
       </div>
       <div class="login-panel panel">
         <div class="login-brand">
           <img class="brand-logo" src="assets/care-logo.png" alt="" aria-hidden="true">
-          <h1 style="font-size:var(--text-xl);margin-bottom:var(--space-2);">Staff Login</h1>
-          <p class="mb-0">CARE Accommodation Management System</p>
+          <div><span class="login-overline">CAMS</span><h2>Welcome back</h2><p class="mb-0">Sign in to your operations workspace.</p></div>
         </div>
-        <button type="button" class="reservation-log-bag login-entry-bag" id="spa-open-login-form" aria-controls="login-form" aria-expanded="false">
-          <span class="login-entry-kicker">Secure staff access</span>
-          <span class="reservation-log-illustration" aria-hidden="true">
-            <svg viewBox="0 0 180 150" role="presentation">
-              <path class="reservation-log-ground" d="M24 132h132" />
-              <circle class="reservation-log-head" cx="72" cy="35" r="13" />
-              <path class="reservation-log-body" d="M72 49v43" />
-              <path class="login-walk-arm login-walk-arm-back" d="M72 62 48 82" />
-              <path class="login-walk-arm login-walk-arm-front" d="M72 62 96 79" />
-              <path class="login-walk-leg login-walk-leg-back" d="M72 92 53 132" />
-              <path class="login-walk-leg login-walk-leg-front" d="M72 92 96 132" />
-              <path class="reservation-log-bag-strap" d="M91 60c14-8 28-5 38 8" />
-              <path class="reservation-log-bag" d="M119 67h35l-4 39h-27z" />
-              <path class="reservation-log-bag-handle" d="M127 67c0-12 19-12 19 0" />
-              <path class="reservation-log-paper" d="M126 79h20m-17 8h14m-11 8h10" />
-            </svg>
-          </span>
-          <span class="reservation-log-bag-label">Enter CAMS</span>
-          <span class="reservation-log-bag-hint">Click the bag to open staff sign-in</span>
-        </button>
-        <form id="login-form" novalidate hidden>
+        <form id="login-form" novalidate>
           <div class="form-grid">
             <div class="form-group">
               <label class="form-label" for="login-email">Email <span class="required" aria-hidden="true">*</span></label>
@@ -79,7 +44,7 @@
             <p style="text-align:center;margin-top:var(--space-4);"><a href="/guest/">Guest booking portal</a></p>
           </div>
           <div class="form-actions" style="margin-top:var(--space-5);">
-            <button class="btn btn-primary btn-block" type="submit" id="login-submit">Sign In</button>
+            <button class="btn btn-primary btn-block" type="submit" id="login-submit">Sign in to CAMS <span aria-hidden="true">→</span></button>
           </div>
         </form>
         <section class="mfa-login-panel" id="spa-mfa-panel" hidden aria-labelledby="spa-mfa-title">
@@ -131,6 +96,10 @@
         <header class="admin-topbar">
           <button type="button" class="btn btn-secondary btn-sm admin-menu-toggle" data-admin-menu-toggle>Menu</button>
           <h1 id="page-title" style="font-size:var(--text-lg);margin:0;">Dashboard</h1>
+          <form class="admin-topbar-search" data-global-search role="search">
+            <label class="sr-only" for="global-search">Search bookings</label>
+            <input class="form-control" id="global-search" name="search" type="search" placeholder="Search bookings..." autocomplete="off">
+          </form>
           <div class="admin-user">
             <button type="button" class="btn btn-secondary btn-sm dashboard-sync" data-dashboard-sync><span aria-hidden="true">↻</span> Sync now</button>
             <div class="admin-user-meta">
@@ -200,7 +169,7 @@
             <div class="table-wrap">
               <table class="table" aria-label="Room status by camp and block">
                 <thead><tr><th>Camp</th><th>Block</th><th>Room</th><th>Status</th></tr></thead>
-                <tbody id="room-status-body"><tr><td colspan="4" class="empty-state">Connecting to dashboard…</td></tr></tbody>
+                <tbody id="room-status-body"><tr aria-hidden="true"><td colspan="4"><span class="skeleton skeleton-row"></span><span class="skeleton skeleton-row"></span><span class="skeleton skeleton-row"></span></td></tr></tbody>
               </table>
             </div>
           </div>
@@ -209,7 +178,7 @@
             <div class="table-wrap">
               <table class="table" aria-label="Bookings by camp">
                 <thead><tr><th>Camp</th><th>Active Bookings</th></tr></thead>
-                <tbody id="camp-stats-body">                <tr><td colspan="2" class="empty-state">Connecting to dashboard…</td></tr></tbody>
+                <tbody id="camp-stats-body"><tr aria-hidden="true"><td colspan="2"><span class="skeleton skeleton-row"></span><span class="skeleton skeleton-row"></span><span class="skeleton skeleton-row"></span></td></tr></tbody>
               </table>
             </div>
           </div>
@@ -218,7 +187,7 @@
             <div class="table-wrap">
               <table class="table" aria-label="Recent bookings">
                 <thead><tr><th>Reference</th><th>Guest</th><th>Camp</th><th>Arrival</th><th>Departure</th><th>Status</th></tr></thead>
-                <tbody id="recent-bookings-body">                <tr><td colspan="6" class="empty-state">Connecting to dashboard…</td></tr></tbody>
+                <tbody id="recent-bookings-body"><tr aria-hidden="true"><td colspan="6"><span class="skeleton skeleton-row"></span><span class="skeleton skeleton-row"></span><span class="skeleton skeleton-row"></span></td></tr></tbody>
               </table>
             </div>
             </div>
@@ -277,6 +246,11 @@
             <h2 style="font-size:var(--text-xl);">New Accommodation Booking</h2>
             <p>Enter guest details, select camp, block, and room. Booking is created immediately.</p>
           </div>
+          <ol class="booking-progress" aria-label="Booking progress">
+            <li class="is-current"><span>1</span><strong>Guest information</strong></li>
+            <li><span>2</span><strong>Accommodation</strong></li>
+            <li><span>3</span><strong>Review</strong></li>
+          </ol>
           <form id="booking-create-form" class="panel" style="max-width:800px;" novalidate>
             <h3 class="form-section-title">Guest Information</h3>
             <div class="form-grid two-col">
@@ -297,7 +271,7 @@
             <div class="form-grid two-col">
               <div class="form-group"><label class="form-label" for="bc-campId">Camp <span class="required">*</span></label><select class="form-control" id="bc-campId" name="campId" required></select><span class="form-error" data-error-for="campId"></span></div>
               <div class="form-group"><label class="form-label" for="bc-blockId">Block <span class="required">*</span></label><select class="form-control" id="bc-blockId" name="blockId" required disabled><option value="">Select camp first</option></select><span class="form-error" data-error-for="blockId"></span></div>
-              <div class="form-group"><label class="form-label" for="bc-roomId">Room <span class="required">*</span></label><select class="form-control" id="bc-roomId" name="roomId" required disabled><option value="">Select block and dates</option></select><span class="form-error" data-error-for="roomId"></span></div>
+              <div class="form-group"><label class="form-label" for="bc-roomId">Room <span class="required">*</span></label><select class="form-control" id="bc-roomId" name="roomId" required disabled><option value="">Select block and dates</option></select><p class="form-hint" data-room-availability>Select a room to see capacity and occupancy.</p><span class="form-error" data-error-for="roomId"></span></div>
               <div class="form-group"><label class="form-label" for="bc-stayType">Stay Type <span class="required">*</span></label><select class="form-control" id="bc-stayType" name="stayType" required></select><span class="form-error" data-error-for="stayType"></span></div>
               <div class="form-group"><label class="form-label" for="bc-arrivalDate">Arrival Date <span class="required">*</span></label><input class="form-control" type="date" id="bc-arrivalDate" name="arrivalDate" required><span class="form-error" data-error-for="arrivalDate"></span></div>
               <div class="form-group"><label class="form-label" for="bc-departureDate">Departure Date <span class="required">*</span></label><input class="form-control" type="date" id="bc-departureDate" name="departureDate" required><span class="form-error" data-error-for="departureDate"></span></div>

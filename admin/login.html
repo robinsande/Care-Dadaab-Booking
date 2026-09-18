@@ -14,54 +14,18 @@
   <link rel="stylesheet" href="../css/layout.css?v=20260908-17">
 </head>
 <body class="login-page">
-  <div class="login-scenery" aria-hidden="true">
-    <span class="scenery-sun"></span>
-    <span class="scenery-mountain scenery-mountain-back"></span>
-    <span class="scenery-mountain scenery-mountain-front"></span>
-    <span class="scenery-tree scenery-tree-left"></span>
-    <span class="scenery-tree scenery-tree-right"></span>
-    <span class="scenery-mist"></span>
-  </div>
-  <div class="login-galaxy" aria-hidden="true">
-    <span class="galaxy-star"></span><span class="galaxy-star"></span><span class="galaxy-star"></span>
-    <span class="galaxy-star"></span><span class="galaxy-star"></span><span class="galaxy-star"></span>
-    <span class="galaxy-star"></span><span class="galaxy-star"></span><span class="galaxy-star"></span>
-    <span class="galaxy-star"></span><span class="galaxy-star"></span><span class="galaxy-star"></span>
-  </div>
-  <div class="login-leaves" aria-hidden="true">
-    <span class="login-leaf"></span><span class="login-leaf"></span><span class="login-leaf"></span>
-    <span class="login-leaf"></span><span class="login-leaf"></span><span class="login-leaf"></span>
-    <span class="login-leaf"></span><span class="login-leaf"></span><span class="login-leaf"></span>
-    <span class="login-leaf"></span><span class="login-leaf"></span><span class="login-leaf"></span>
+  <div class="login-story">
+    <span class="login-overline">CARE Kenya / Operations</span>
+    <h1>Accommodation,<br><em>handled beautifully.</em></h1>
+    <p>One calm workspace for every arrival, room and reservation across the Dadaab network.</p>
+    <div class="login-story-rule"><span></span><small>Trusted by the teams who keep CARE moving</small></div>
   </div>
   <div class="login-panel panel">
     <div class="login-brand">
       <img class="brand-logo" src="../assets/care-logo.png" alt="" aria-hidden="true">
-      <h1 style="font-size:var(--text-xl);margin-bottom:var(--space-2);">Staff Login</h1>
-      <p class="mb-0">CARE Accommodation Management System</p>
+      <div><span class="login-overline">CAMS</span><h2>Welcome back</h2><p class="mb-0">Sign in to your operations workspace.</p></div>
     </div>
-
-    <button type="button" class="reservation-log-bag login-entry-bag" id="open-login-form" aria-controls="login-form" aria-expanded="false">
-      <span class="login-entry-kicker">Secure staff access</span>
-      <span class="reservation-log-illustration" aria-hidden="true">
-        <svg viewBox="0 0 180 150" role="presentation">
-          <path class="reservation-log-ground" d="M24 132h132" />
-          <circle class="reservation-log-head" cx="72" cy="35" r="13" />
-          <path class="reservation-log-body" d="M72 49v43" />
-          <path class="login-walk-arm login-walk-arm-back" d="M72 62 48 82" />
-          <path class="login-walk-arm login-walk-arm-front" d="M72 62 96 79" />
-          <path class="login-walk-leg login-walk-leg-back" d="M72 92 53 132" />
-          <path class="login-walk-leg login-walk-leg-front" d="M72 92 96 132" />
-          <path class="reservation-log-bag-strap" d="M91 60c14-8 28-5 38 8" />
-          <path class="reservation-log-bag" d="M119 67h35l-4 39h-27z" />
-          <path class="reservation-log-bag-handle" d="M127 67c0-12 19-12 19 0" />
-          <path class="reservation-log-paper" d="M126 79h20m-17 8h14m-11 8h10" />
-        </svg>
-      </span>
-      <span class="reservation-log-bag-label">Enter CAMS</span>
-      <span class="reservation-log-bag-hint">Click the bag to open staff sign-in</span>
-    </button>
-    <form id="login-form" novalidate hidden>
+    <form id="login-form" novalidate>
       <div class="form-grid">
         <div class="form-group">
           <label class="form-label" for="email">Email <span class="required" aria-hidden="true">*</span></label>
@@ -75,7 +39,7 @@
         </div>
       </div>
       <div class="form-actions" style="margin-top:var(--space-5);">
-        <button class="btn btn-primary btn-block" type="submit" id="login-submit">Sign In</button>
+        <button class="btn btn-primary btn-block" type="submit" id="login-submit">Sign in to CAMS <span aria-hidden="true">→</span></button>
       </div>
     </form>
     <section class="mfa-login-panel" id="mfa-panel" hidden aria-labelledby="mfa-title">

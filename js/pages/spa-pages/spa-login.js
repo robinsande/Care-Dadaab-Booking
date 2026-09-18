@@ -17,6 +17,7 @@ let mfaState = null;
 export function reset() {
   const form = $('login-form');
   const openLoginButton = document.getElementById('spa-open-login-form');
+  const mfaSubmit = document.getElementById('spa-mfa-submit');
   const successOverlay = document.getElementById('spa-login-success');
   const authStatus = document.getElementById('spa-login-auth-status');
   const mfaPanel = document.getElementById('spa-mfa-panel');
@@ -29,7 +30,7 @@ export function reset() {
 
   if (form) {
     form.reset();
-    form.hidden = true;
+    form.hidden = false;
     form.classList.remove('login-form-reveal');
   }
   if (mfaPanel) mfaPanel.hidden = true;

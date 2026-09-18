@@ -1,52 +1,50 @@
 :root {
-  /* Brand — CARE orange */
+  /* CAMS design tokens */
   --color-brand: #e8721e;
   --color-brand-dark: #c45e12;
   --color-brand-soft: #fff4eb;
   --color-brand-accent: #f9b233;
+  --color-primary: var(--color-brand);
+  --color-primary-strong: var(--color-brand-dark);
+  --color-secondary: #26332d;
+  --color-secondary-soft: #e9efeb;
   --color-purple: #54206f;
   --color-purple-dark: #351347;
   --color-purple-soft: #f2eafa;
 
-  /* Neutrals */
-  --color-ink: #1f2933;
-  --color-ink-muted: #5f6c7b;
-  --color-border: #d9e2ec;
-  --color-surface: #ffffff;
-  --color-surface-muted: #f7f9fc;
-  --color-bg: #f6f0fa;
-  --color-bg-accent: #fff3e8;
+  /* Neutral scale */
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #fbfcfa;
+  --color-neutral-100: #f4f1eb;
+  --color-neutral-200: #e7e8e3;
+  --color-neutral-300: #d4d8d2;
+  --color-neutral-400: #aeb6ae;
+  --color-neutral-500: #7b857d;
+  --color-neutral-600: #5e6861;
+  --color-neutral-700: #3f4942;
+  --color-neutral-800: #26332d;
+  --color-neutral-900: #17201b;
+  --color-ink: var(--color-neutral-800);
+  --color-ink-muted: var(--color-neutral-600);
+  --color-border: var(--color-neutral-300);
+  --color-surface: var(--color-neutral-0);
+  --color-surface-muted: var(--color-neutral-50);
+  --color-bg: var(--color-neutral-100);
+  --color-bg-accent: #fff8ef;
 
-  /* Semantic */
-  --color-success: #1b7a4e;
-  --color-success-soft: #e6f5ee;
-  --color-warning: #9a6b00;
-  --color-warning-soft: #fff4d9;
+  /* Semantic colors */
+  --color-success: #16724a;
+  --color-success-soft: #e7f5ee;
+  --color-warning: #9a6500;
+  --color-warning-soft: #fff4d6;
   --color-danger: #b42318;
-  --color-danger-soft: #fce8e6;
-  --color-info: #175cd3;
-  --color-info-soft: #e8f1fc;
+  --color-danger-soft: #fdebea;
+  --color-info: #2463a8;
+  --color-info-soft: #eaf2fb;
 
-  /* Button tokens */
-  --button-height: 42px;
-  --button-height-sm: 34px;
-  --button-radius: 0.8rem;
-  --button-shadow: 0 10px 24px rgba(84, 32, 111, 0.2);
-  --button-shadow-hover: 0 14px 30px rgba(84, 32, 111, 0.28);
-
-  /* Status badges */
-  --status-pending: #9a6b00;
-  --status-approved: #175cd3;
-  --status-rejected: #b42318;
-  --status-cancellation: #e8721e;
-  --status-cancelled: #667085;
-  --status-checked-in: #1b7a4e;
-  --status-checked-out: #475467;
-
-  /* Typography */
+  /* Type scale */
   --font-sans: "Source Sans 3", "Segoe UI", sans-serif;
   --font-display: "Libre Franklin", "Source Sans 3", sans-serif;
-
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
@@ -54,8 +52,16 @@
   --text-xl: 1.35rem;
   --text-2xl: 1.75rem;
   --text-3xl: 2.25rem;
+  --text-4xl: 3rem;
+  --leading-tight: 1.2;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
 
-  /* Spacing */
+  /* 4px spacing scale */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -67,12 +73,35 @@
   --space-12: 3rem;
   --space-16: 4rem;
 
+  /* Radius and elevation */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 999px;
+  --elevation-flat: none;
+  --elevation-raised: 0 1px 2px rgba(23, 32, 27, 0.06);
+  --elevation-floating: 0 10px 28px rgba(23, 32, 27, 0.1);
+  --elevation-modal: 0 24px 64px rgba(23, 32, 27, 0.18);
+  --shadow-sm: var(--elevation-raised);
+  --shadow-md: var(--elevation-floating);
+  --shadow-lg: var(--elevation-modal);
+  --button-height: 44px;
+  --button-height-sm: 36px;
+  --button-radius: var(--radius-md);
+  --button-shadow: var(--elevation-floating);
+  --button-shadow-hover: var(--elevation-modal);
+
+  /* Status badges */
+  --status-pending: #9a6b00;
+  --status-approved: #175cd3;
+  --status-rejected: #b42318;
+  --status-cancellation: #e8721e;
+  --status-cancelled: #667085;
+  --status-checked-in: #1b7a4e;
+  --status-checked-out: #475467;
+
   /* Layout */
   --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 10px;
-  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
-  --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.08);
   --container: 1120px;
   --header-height: 64px;
   --sidebar-width: 240px;

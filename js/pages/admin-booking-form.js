@@ -232,6 +232,19 @@ export function wireCampSelectors(form, { priceSummaryEl, rateDisplay, onReady }
     onRateChange: () => updatePriceSummary(),
   });
 
+  const availabilityDisplay = form.querySelector('[data-room-availability]');
+  form.elements.roomId?.addEventListener('change', () => {
+    if (!availabilityDisplay) return;
+    const room = selectors.getSelectedRoom?.();
+    if (!room) {
+      availabilityDisplay.textContent = 'Select a room to see capacity and occupancy.';
+      return;
+    }
+    const capacity = room.capacity ?? '—';
+    const occupancy = room.currentOccupancy ?? room.occupancy ?? room.occupiedBeds ?? 0;
+    availabilityDisplay.textContent = `Capacity ${capacity} · Current occupancy ${occupancy}`;
+  });
+
   form.elements.arrivalDate?.addEventListener('change', updatePriceSummary);
   form.elements.departureDate?.addEventListener('change', updatePriceSummary);
 

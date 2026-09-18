@@ -45,6 +45,7 @@ const state = {
 const filtersForm = document.getElementById('bookings-filters');
 const tableBody = document.getElementById('bookings-table-body');
 const paginationEl = document.getElementById('bookings-pagination');
+  let searchTimer;
 const guestRequestsEl = document.getElementById('guest-requests');
 
 async function collectGuestRoomAssignment(campId) {
@@ -166,6 +167,15 @@ function boot() {
     loadBookings();
   });
 
+  filtersForm.elements.search?.addEventListener('input', () => {
+    window.clearTimeout(searchTimer);
+    searchTimer = window.setTimeout(() => {
+      state.search = filtersForm.elements.search.value.trim();
+      state.page = 1;
+      loadBookings();
+    }, 300);
+  });
+
   tableBody.addEventListener('click', onTableAction);
   tableBody.addEventListener('change', onTableAction);
   guestRequestsEl?.addEventListener('click', onGuestRequestAction);
@@ -205,6 +215,9 @@ async function loadCampsForFilter() {
 }
 
 async function loadBookings() {
+  if (!state.bookings.length) {
+    tableBody.innerHTML = '<tr aria-hidden="true"><td colspan="12"><span class="skeleton skeleton-row"></span><span class="skeleton skeleton-row"></span><span class="skeleton skeleton-row"></span></td></tr>';
+  }
   try {
     const [sortBy, sortOrder] = state.sort.split(':');
     const response = await withLoading(

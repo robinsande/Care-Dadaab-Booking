@@ -226,6 +226,7 @@ export function createCampSelectors({
     setLocationLocked,
     getAppliedRate: () => state.appliedRate,
     getCurrency: () => state.currency,
+    getSelectedRoom: () => state.rooms.find((room) => String(room._id || room.id) === String(roomSelect.value)),
     async init({
       campId = '',
       blockId = '',

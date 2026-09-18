@@ -47,6 +47,7 @@ export async function init() {
   const filtersForm = document.getElementById('bookings-filters');
   const tableBody = document.getElementById('bookings-table-body');
   const paginationEl = document.getElementById('bookings-pagination');
+  let searchTimer;
 
   fillSelect(document.getElementById('bf-status'), constants.BOOKING_STATUSES, {
     placeholder: 'All statuses',
@@ -70,6 +71,15 @@ export async function init() {
     state.sort = filtersForm.elements.sort.value;
     state.page = 1;
     loadBookings(tableBody, paginationEl);
+  });
+
+  filtersForm.elements.search?.addEventListener('input', () => {
+    window.clearTimeout(searchTimer);
+    searchTimer = window.setTimeout(() => {
+      state.search = filtersForm.elements.search.value.trim();
+      state.page = 1;
+      loadBookings(tableBody, paginationEl);
+    }, 300);
   });
 
   tableBody.addEventListener('click', onTableAction);
@@ -103,6 +113,9 @@ async function loadCampsForFilter() {
 }
 
 async function loadBookings(tableBody, paginationEl) {
+  if (!state.bookings.length) {
+    tableBody.innerHTML = '<tr aria-hidden="true"><td colspan="12"><span class="skeleton skeleton-row"></span><span class="skeleton skeleton-row"></span><span class="skeleton skeleton-row"></span></td></tr>';
+  }
   try {
     const [sortBy, sortOrder] = state.sort.split(':');
     const response = await withLoading(
@@ -214,18 +227,18 @@ function renderTable(tableBody) {
       }
       return `
         <tr data-id="${escapeHtml(id)}">
-          <td><a data-nav-link href="#/booking/edit?id=${escapeHtml(id)}"><strong>${escapeHtml(booking.bookingReference || '—')}</strong></a></td>
-          <td>${escapeHtml(fullName(booking))}<br><span class="text-muted">${escapeHtml(booking.email || '')}</span></td>
-          <td>${escapeHtml(campLabel(booking.camp))}</td>
-          <td>${escapeHtml(formatDateTime(booking.createdAt))}</td>
-          <td>${escapeHtml(formatDate(booking.arrivalDate))}</td>
-          <td>${escapeHtml(formatDate(booking.departureDate))}</td>
-          <td>${escapeHtml(formatDateTime(booking.checkedInAt))}</td>
-          <td>${escapeHtml(formatDateTime(booking.checkedOutAt))}</td>
-          <td>${escapeHtml(booking.stayType || '—')}</td>
-          <td>${statusBadge(booking.status)}</td>
-          <td>${escapeHtml(roomLabel(booking.room, booking))}</td>
-          <td><div class="button-group" style="gap:var(--space-2);flex-wrap:wrap;">${actions.join('')}</div></td>
+          <td data-label="Reference"><a data-nav-link href="#/booking/edit?id=${escapeHtml(id)}"><strong>${escapeHtml(booking.bookingReference || '—')}</strong></a></td>
+          <td data-label="Guest">${escapeHtml(fullName(booking))}<br><span class="text-muted">${escapeHtml(booking.email || '')}</span></td>
+          <td data-label="Camp">${escapeHtml(campLabel(booking.camp))}</td>
+          <td data-label="Created">${escapeHtml(formatDateTime(booking.createdAt))}</td>
+          <td data-label="Arrival">${escapeHtml(formatDate(booking.arrivalDate))}</td>
+          <td data-label="Departure">${escapeHtml(formatDate(booking.departureDate))}</td>
+          <td data-label="Check-in">${escapeHtml(formatDateTime(booking.checkedInAt))}</td>
+          <td data-label="Check-out">${escapeHtml(formatDateTime(booking.checkedOutAt))}</td>
+          <td data-label="Stay type">${escapeHtml(booking.stayType || '—')}</td>
+          <td data-label="Status">${statusBadge(booking.status)}</td>
+          <td data-label="Room">${escapeHtml(roomLabel(booking.room, booking))}</td>
+          <td data-label="Actions"><div class="button-group" style="gap:var(--space-2);flex-wrap:wrap;">${actions.join('')}</div></td>
         </tr>
       `;
     })
