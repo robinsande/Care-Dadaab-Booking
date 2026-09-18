@@ -2864,6 +2864,21 @@ body.login-page {
   box-shadow: 0 0 0 4px rgba(232, 114, 30, 0.12);
 }
 
+.login-panel .mfa-login-panel input.form-control {
+  color: #111 !important;
+  -webkit-text-fill-color: #111;
+  background: #fff !important;
+  caret-color: #111;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+.login-panel .mfa-login-panel input.form-control::placeholder {
+  color: #6f6a61;
+  -webkit-text-fill-color: #6f6a61;
+}
+
 .login-panel .btn-primary {
   min-height: 3.15rem;
   border-radius: 0.65rem;
