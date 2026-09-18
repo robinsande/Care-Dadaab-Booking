@@ -296,25 +296,15 @@ async function handleRoute() {
       navigate('#/dashboard');
       return;
     }
-    const legacyRedirect = params.get('redirect');
-    if (legacyRedirect) {
-      window.sessionStorage.setItem('cams.loginRedirect', legacyRedirect);
-    }
-    if (window.location.hash) {
-      window.history.replaceState({}, '', '/');
-    }
-    showPage('login');
-    await loadPageModule('login');
-    currentRoute = 'login';
+    const redirect = params.get('redirect');
+    window.location.href = redirect
+      ? `admin/login.html?redirect=${encodeURIComponent(redirect)}`
+      : 'admin/login.html';
     return;
   }
 
   if (!authed) {
-    window.sessionStorage.setItem('cams.loginRedirect', window.location.hash || '#/dashboard');
-    window.history.replaceState({}, '', '/');
-    showPage('login');
-    await loadPageModule('login');
-    currentRoute = 'login';
+    window.location.href = 'admin/login.html';
     return;
   }
 
