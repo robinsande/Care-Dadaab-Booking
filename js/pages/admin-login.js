@@ -101,10 +101,11 @@ form.addEventListener('submit', async (event) => {
         mfaManualKey.textContent = `Can't scan? Use this key: ${data.manualKey}`;
         mfaManualKey.hidden = false;
         mfaQrDone.hidden = false;
-        mfaCodeLabel.hidden = true;
-        mfaCode.hidden = true;
-        mfaSubmit.hidden = true;
-        mfaInstructions.textContent = 'Scan this QR code in Microsoft Authenticator, then confirm below.';
+        mfaCodeLabel.hidden = false;
+        mfaCode.hidden = false;
+        mfaSubmit.hidden = false;
+        mfaInstructions.textContent = 'Scan the QR code in Microsoft Authenticator, then enter the six-digit code below.';
+        mfaCode.focus();
       } else {
         mfaQrCode.hidden = true;
         mfaManualKey.hidden = true;

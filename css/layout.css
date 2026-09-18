@@ -2730,6 +2730,15 @@ body.login-page {
   background: #f4f1eb;
 }
 
+.login-page {
+  grid-template-columns: minmax(320px, 440px);
+  justify-content: center;
+}
+
+.login-story {
+  display: none;
+}
+
 .login-page::before,
 .login-page::after,
 .login-scenery,
