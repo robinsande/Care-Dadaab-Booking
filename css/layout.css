@@ -338,7 +338,7 @@
 }
 
 .admin-sidebar {
-  background: linear-gradient(180deg, var(--color-purple-dark) 0%, var(--color-purple) 72%, var(--color-brand-dark) 100%);
+  background: var(--color-brand);
   color: #fff;
   border-right: 0;
   padding: var(--space-5);
@@ -456,16 +456,16 @@
 
 .admin-nav a:hover,
 .admin-nav a[aria-current="page"] {
-  background: rgba(35, 79, 157, 0.72);
+  background: rgba(84, 32, 111, 0.24);
   color: #fff;
-  box-shadow: 0 0 0 1px rgba(48, 126, 255, 0.18), 0 0 22px rgba(38, 120, 238, 0.22);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.16), 0 8px 18px rgba(126, 49, 26, 0.16);
   transform: translateX(2px);
   text-decoration: none;
 }
 
 .admin-nav a[aria-current="page"]::before {
-  background: #1686ff;
-  box-shadow: 0 0 12px rgba(22, 134, 255, 0.9);
+  background: #fff;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
 }
 
 .admin-nav a:hover .admin-nav-icon,
