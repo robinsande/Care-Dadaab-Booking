@@ -2900,13 +2900,13 @@ body.login-page {
 }
 
 .admin-sidebar {
-  background: #26332d;
+  background: var(--color-brand);
   border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .admin-nav a:hover,
 .admin-nav a[aria-current="page"] {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(84, 32, 111, 0.24);
   box-shadow: none;
   transform: none;
 }
