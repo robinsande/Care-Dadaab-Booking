@@ -114,12 +114,6 @@
     .feature { min-height: 12rem; padding: var(--space-6); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
     .feature-number { display: block; margin-bottom: var(--space-8); color: var(--clay); font-family: var(--mono); font-size: var(--text-sm); }
     .feature p { margin: 0; font-size: var(--text-sm); }
-    .workflow { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid var(--line); }
-    .workflow-step { min-height: 9rem; padding: var(--space-5) var(--space-4); border-right: 1px solid var(--line); }
-    .workflow-step:last-child { border-right: 0; }
-    .step-number { display: block; margin-bottom: var(--space-8); color: var(--gold); font-family: var(--mono); font-size: var(--text-sm); }
-    .workflow-step h3 { margin-bottom: var(--space-2); font-size: 1.15rem; }
-    .workflow-step p { margin: 0; font-size: var(--text-sm); }
     .cta { position: relative; overflow: hidden; padding: clamp(2rem, 6vw, 4rem); border: 1px solid var(--line-strong); background: linear-gradient(115deg, var(--surface-raised), rgba(193, 80, 46, 0.22)); }
     .cta::after { position: absolute; right: -10%; bottom: -65%; width: 45%; height: 160%; border: 1px solid rgba(217, 166, 82, 0.18); border-radius: 50%; content: ""; transform: rotate(-20deg); }
     .cta-content { position: relative; z-index: 1; max-width: 38rem; }
@@ -147,10 +141,6 @@
       .camp-row p { grid-column: 1 / -1; }
       .camp-code { grid-column: 2; grid-row: 1; }
       .feature-grid { grid-template-columns: 1fr; }
-      .workflow { grid-template-columns: 1fr; }
-      .workflow-step { min-height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
-      .workflow-step:last-child { border-bottom: 0; }
-      .step-number { margin-bottom: var(--space-3); }
       .footer-inner { align-items: flex-start; flex-direction: column; }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -283,9 +273,9 @@
     .section-label { color: var(--purple); }
     .section-label::before { background: var(--clay); }
     h2, h3 { color: var(--purple); }
-    p, .camp-row p, .workflow-step p { color: var(--muted); }
-    .camp-list, .feature-grid, .workflow { border-color: var(--line); }
-    .camp-row, .feature, .workflow-step { border-color: var(--line); }
+    p, .camp-row p { color: var(--muted); }
+    .camp-list, .feature-grid { border-color: var(--line); }
+    .camp-row, .feature { border-color: var(--line); }
     .camp-code, .feature-number, .step-number { color: var(--clay); }
 
     .desk-section { background: rgba(255, 255, 255, 0.65); }
@@ -327,9 +317,8 @@
       <nav class="nav-links" id="site-nav" aria-label="Primary navigation">
         <a href="#camps">Camps</a>
         <a href="#desk">The desk</a>
-        <a href="#workflow">Workflow</a>
         <a href="#access">Access</a>
-        <a class="button" href="admin/login.html">Enter CAMS</a>
+        <a class="button" href="/admin/login">Enter CAMS</a>
       </nav>
     </div>
   </header>
@@ -341,8 +330,7 @@
         <h1 id="hero-title">Somewhere to sleep, after a day in the field.</h1>
         <p>CAMS gives CARE teams one reliable desk for booking rooms, preparing arrivals, tracking occupancy, and closing the loop across Dadaab.</p>
         <div class="hero-actions">
-          <a class="button" href="admin/login.html">Enter CAMS</a>
-          <a class="button button-ghost" href="#workflow">See how a booking moves</a>
+          <a class="button" href="/admin/login">Enter CAMS</a>
         </div>
         <p class="access-note">Staff and approved partners only. Access is issued by camp operations.</p>
       </div>
@@ -378,23 +366,9 @@
       </div>
     </section>
 
-    <section class="section" id="workflow" aria-labelledby="workflow-title">
-      <div class="wrap">
-        <div class="section-label">03 / The handover</div>
-        <div class="section-intro"><h2 id="workflow-title">How a stay moves through CAMS.</h2><p>Every stay follows a visible chain from request to closeout, so the next person at the desk knows what has already happened.</p></div>
-        <div class="workflow">
-          <article class="workflow-step"><span class="step-number">01</span><h3>Request</h3><p>Capture the guest, dates, and purpose of visit.</p></article>
-          <article class="workflow-step"><span class="step-number">02</span><h3>Assign</h3><p>Choose the camp, block, and available room.</p></article>
-          <article class="workflow-step"><span class="step-number">03</span><h3>Check-in</h3><p>Mark arrival and keep the room record current.</p></article>
-          <article class="workflow-step"><span class="step-number">04</span><h3>Check-out</h3><p>Record departure and release the room.</p></article>
-          <article class="workflow-step"><span class="step-number">05</span><h3>Invoice</h3><p>Generate the final charge and payment trail.</p></article>
-        </div>
-      </div>
-    </section>
-
     <section class="section" id="access" aria-labelledby="access-title">
       <div class="wrap">
-        <div class="cta"><div class="cta-content"><div class="section-label">04 / Access point</div><h2 id="access-title">Staff access only.</h2><p>CAMS is for CARE staff and approved partners working with camp operations. Use your issued credentials to enter the live desk.</p><a class="button" href="admin/login.html">Enter CAMS</a><p class="access-note">Need access? Contact your camp operations lead.</p></div></div>
+        <div class="cta"><div class="cta-content"><div class="section-label">04 / Access point</div><h2 id="access-title">Staff access only.</h2><p>CAMS is for CARE staff and approved partners working with camp operations. Use your issued credentials to enter the live desk.</p><a class="button" href="/admin/login">Enter CAMS</a><p class="access-note">Need access? Contact your camp operations lead.</p></div></div>
       </div>
     </section>
   </main>
@@ -402,7 +376,7 @@
   <footer>
     <div class="wrap footer-inner">
       <div class="footer-brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path class="tent-gold" d="M3 19 12 5l9 14" /><path class="tent-clay" d="M7 19 12 11l5 8" /></svg></span><p>CAMS - CARE Dadaab Accommodation Management, Garissa County, Kenya</p></div>
-      <nav class="footer-links" aria-label="Footer navigation"><a href="#camps">Camps</a><a href="#desk">The desk</a><a href="#workflow">Workflow</a><a href="admin/login.html">Access</a></nav>
+      <nav class="footer-links" aria-label="Footer navigation"><a href="#camps">Camps</a><a href="#desk">The desk</a><a href="/admin/login">Access</a></nav>
     </div>
   </footer>
 

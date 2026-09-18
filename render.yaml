@@ -13,3 +13,6 @@ services:
       - type: rewrite
         source: /landing.html
         destination: /landing.html
+      - type: rewrite
+        source: /admin/login
+        destination: /admin/login.html
