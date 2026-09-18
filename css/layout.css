@@ -756,6 +756,17 @@
   font-size: var(--text-sm);
 }
 
+.mfa-login-panel .form-label,
+.mfa-login-panel .form-control,
+.mfa-login-panel .mfa-manual-key {
+  color: #000;
+}
+
+.mfa-login-panel .form-control {
+  background: #fff;
+  caret-color: #000;
+}
+
 .mfa-qr-code {
   display: block;
   width: 170px;
