@@ -2307,18 +2307,18 @@
   display: grid;
   place-items: center;
   padding: var(--space-6);
-  background: rgba(39, 13, 51, 0.72);
-  backdrop-filter: blur(12px);
+  background: rgba(13, 18, 24, 0.2);
+  backdrop-filter: blur(4px);
   animation: login-success-fade 240ms ease-out both;
 }
 
 .login-success-card {
   width: min(360px, 100%);
   padding: var(--space-8) var(--space-6);
-  border: 1px solid rgba(255, 255, 255, 0.26);
+  border: 1px solid rgba(84, 32, 111, 0.12);
   border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.97);
-  box-shadow: 0 24px 80px rgba(20, 5, 28, 0.35);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 18px 48px rgba(20, 5, 28, 0.18);
   text-align: center;
   animation: login-success-card-in 420ms 80ms ease-out both;
 }
@@ -2341,7 +2341,7 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(249, 178, 51, 0.2), rgba(185, 135, 209, 0.12) 48%, transparent 68%);
+  background: rgba(255, 255, 255, 0.22);
   isolation: isolate;
 }
 
@@ -2354,40 +2354,20 @@
   border-radius: 12px;
   object-fit: contain;
   background: #fff;
-  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.86), 0 0 24px rgba(232, 114, 30, 0.5);
-  animation: care-auth-logo-pulse 1.8s ease-in-out infinite;
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.86);
+  animation: none;
 }
 
 .care-auth-ring {
-  position: absolute;
-  inset: 5px;
-  z-index: 1;
-  border: 2px solid transparent;
-  border-top-color: var(--color-brand);
-  border-right-color: rgba(185, 135, 209, 0.9);
-  border-radius: 50%;
-  animation: care-auth-ring-spin 2.8s linear infinite;
+  display: none;
 }
 
 .care-auth-ring-inner {
-  inset: 27px;
-  border-width: 1px;
-  border-top-color: var(--color-purple);
-  border-right-color: rgba(249, 178, 51, 0.85);
-  animation: care-auth-ring-spin-reverse 2s linear infinite;
+  display: none;
 }
 
 .care-auth-scan-beam {
-  position: absolute;
-  left: 22px;
-  right: 22px;
-  top: 12%;
-  z-index: 3;
-  height: 2px;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 0 8px 2px var(--color-brand), 0 0 22px 5px rgba(185, 135, 209, 0.75);
-  animation: care-auth-beam-scan 1.5s ease-in-out infinite;
+  display: none;
 }
 
 .care-auth-check {
@@ -2419,7 +2399,7 @@
   font-size: var(--text-sm);
   font-weight: 700;
   letter-spacing: 0.04em;
-  animation: care-auth-status-pulse 1.2s ease-in-out infinite;
+  animation: none;
 }
 
 .fingerprint-scanner svg {
