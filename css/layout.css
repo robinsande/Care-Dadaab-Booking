@@ -2935,17 +2935,12 @@ body.login-page {
 .dashboard-hero {
   min-height: 220px;
   border-radius: 1rem;
-  background: linear-gradient(115deg, #26332d 0%, #3d5145 62%, #a7572e 100%);
+  background: var(--color-purple);
   box-shadow: 0 18px 40px rgba(38, 51, 45, 0.15);
 }
 
-.dashboard-hero::after {
-  right: -8%;
-  bottom: -65%;
-  width: 45%;
-  height: 210%;
-  background: linear-gradient(135deg, rgba(255, 215, 157, 0.3), transparent 58%);
-}
+.dashboard-hero::before,
+.dashboard-hero::after { display: none; }
 
 .dashboard-hero-visual {
   display: none;
