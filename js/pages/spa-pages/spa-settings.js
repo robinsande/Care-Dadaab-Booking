@@ -29,7 +29,7 @@ export async function init() {
         custom: (value) =>
           isBlank(value) || isValidEmail(value) ? null : 'Enter a valid email address.',
       },
-      mpesaPaybill: { required: true, label: 'M-Pesa Paybill Number' },
+      mpesaTill: { required: true, label: 'M-Pesa Till Number' },
       bankAccountName: { required: true, label: 'Bank Account Name' },
       bankAccountNumber: { required: true, label: 'Bank Account Number' },
       bankName: { required: true, label: 'Bank Name' },
@@ -45,7 +45,8 @@ export async function init() {
         supportEmail: values.supportEmail || '',
         supportPhone: values.supportPhone || '',
         payment: {
-          mpesaPaybillNumber: values.mpesaPaybill,
+          mpesaTillNumber: values.mpesaTill,
+          mpesaPaybillNumber: values.mpesaTill,
           bankAccountName: values.bankAccountName,
           bankAccountNumber: values.bankAccountNumber,
           bankName: values.bankName,
@@ -76,7 +77,7 @@ async function loadSettings() {
     form.elements.facilityName.value = settings.facilityName || '';
     form.elements.supportEmail.value = settings.supportEmail || '';
     form.elements.supportPhone.value = settings.supportPhone || '';
-    form.elements.mpesaPaybill.value = payment.mpesaPaybillNumber || '';
+    form.elements.mpesaTill.value = payment.mpesaTillNumber || payment.mpesaPaybillNumber || '';
     form.elements.bankAccountName.value = payment.bankAccountName || '';
     form.elements.bankAccountNumber.value = payment.bankAccountNumber || '';
     form.elements.bankName.value = payment.bankName || '';

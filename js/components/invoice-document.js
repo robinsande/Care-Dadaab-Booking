@@ -126,7 +126,7 @@ export function renderInvoiceDocument(invoice, { logoSrc = config.BRAND_LOGO_SRC
         <h3>Payment Instructions</h3>
         <p class="invoice-document-payment-intro">Please settle this invoice using one of the following methods:</p>
         <dl class="invoice-detail-list">
-          ${detailRow('M-Pesa Paybill', paymentValue(payment, 'mpesaPaybillNumber', 'mpesaPaybill'))}
+          ${detailRow('M-Pesa Till', paymentValue(payment, 'mpesaTillNumber', 'mpesaPaybillNumber', 'mpesaPaybill'))}
           ${detailRow('Bank', paymentValue(payment, 'bankName'))}
           ${detailRow('Account Name', paymentValue(payment, 'bankAccountName', 'accountName'))}
           ${detailRow('Account Number', paymentValue(payment, 'bankAccountNumber', 'accountNumber'))}
