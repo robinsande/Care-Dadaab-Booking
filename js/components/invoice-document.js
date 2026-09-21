@@ -127,9 +127,6 @@ export function renderInvoiceDocument(invoice, { logoSrc = config.BRAND_LOGO_SRC
         <p class="invoice-document-payment-intro">Please settle this invoice using one of the following methods:</p>
         <dl class="invoice-detail-list">
           ${detailRow('M-Pesa Till', paymentValue(payment, 'mpesaTillNumber', 'mpesaPaybillNumber', 'mpesaPaybill'))}
-          ${detailRow('Bank', paymentValue(payment, 'bankName'))}
-          ${detailRow('Account Name', paymentValue(payment, 'bankAccountName', 'accountName'))}
-          ${detailRow('Account Number', paymentValue(payment, 'bankAccountNumber', 'accountNumber'))}
         </dl>
         <p class="invoice-document-note">Use invoice number <strong>${escapeHtml(invoice.invoiceNumber || '—')}</strong> or booking reference <strong>${escapeHtml(invoice.bookingReference || '—')}</strong> as payment reference.</p>
       </section>

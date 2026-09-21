@@ -26,9 +26,6 @@ async function loadSettings() {
     form.elements.supportPhone.value = settings.supportPhone || '';
     form.elements.sendBookingConfirmation.checked = settings.notifications?.sendBookingConfirmation !== false;
     form.elements.mpesaTill.value = payment.mpesaTillNumber || payment.mpesaPaybillNumber || '';
-    form.elements.bankAccountName.value = payment.bankAccountName || '';
-    form.elements.bankAccountNumber.value = payment.bankAccountNumber || '';
-    form.elements.bankName.value = payment.bankName || '';
   } catch (error) {
     showToast(error instanceof ApiError ? error.message : 'Unable to load settings.', 'error');
   }
@@ -45,9 +42,6 @@ form.addEventListener('submit', async (event) => {
         isBlank(value) || isValidEmail(value) ? null : 'Enter a valid email address.',
     },
     mpesaTill: { required: true, label: 'M-Pesa Till Number' },
-    bankAccountName: { required: true, label: 'Bank Account Name' },
-    bankAccountNumber: { required: true, label: 'Bank Account Number' },
-    bankName: { required: true, label: 'Bank Name' },
   });
 
   applyFieldErrors(form, errors);
@@ -65,9 +59,6 @@ form.addEventListener('submit', async (event) => {
       payment: {
         mpesaTillNumber: values.mpesaTill,
         mpesaPaybillNumber: values.mpesaTill,
-        bankAccountName: values.bankAccountName,
-        bankAccountNumber: values.bankAccountNumber,
-        bankName: values.bankName,
       },
     });
     showToast('Settings saved successfully.', 'success');
