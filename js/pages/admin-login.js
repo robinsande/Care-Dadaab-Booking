@@ -40,6 +40,7 @@ const mfaQrDone = document.getElementById('mfa-qr-done');
 const mfaCodeLabel = document.getElementById('mfa-code-label');
 let mfaState = null;
 let mfaVerificationActive = false;
+let loginRequestActive = false;
 const MFA_STORAGE_KEY = 'cams.mfaChallenge';
 
 function showCodeEntry() {
@@ -121,6 +122,7 @@ openLoginButton?.addEventListener('click', () => {
 
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
+  if (loginRequestActive) return;
   const values = getFormValues(form);
 
   const { valid, errors } = validateFields(values, {
@@ -132,6 +134,7 @@ form.addEventListener('submit', async (event) => {
   if (!valid) return;
 
   setButtonLoading(submitBtn, true, 'Signing in…');
+  loginRequestActive = true;
 
   try {
     const response = await login(values.email, values.password);
@@ -163,6 +166,7 @@ form.addEventListener('submit', async (event) => {
     );
   } finally {
     setButtonLoading(submitBtn, false);
+    loginRequestActive = false;
   }
 });
 

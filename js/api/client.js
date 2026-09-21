@@ -73,7 +73,15 @@ export async function apiRequest(path, options = {}) {
 
   let response;
   const controller = new AbortController();
-  const timeoutId = window.setTimeout(() => controller.abort(), 20000);
+  const timeoutId = window.setTimeout(() => controller.abort(), 15000);
+  let requestSignal = controller.signal;
+  if (signal) {
+    if (typeof AbortSignal.any === 'function') {
+      requestSignal = AbortSignal.any([signal, controller.signal]);
+    } else {
+      signal.addEventListener('abort', () => controller.abort(), { once: true });
+    }
+  }
   try {
     response = await fetch(buildUrl(path, query), {
       method,
@@ -83,7 +91,7 @@ export async function apiRequest(path, options = {}) {
         : body instanceof FormData
           ? body
           : JSON.stringify(body),
-    signal: signal || controller.signal,
+    signal: requestSignal,
     ...rest,
     });
   } catch (error) {

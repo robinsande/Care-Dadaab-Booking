@@ -24,6 +24,7 @@ const $ = (id) => orig(idMap[id] || id);
 let initialized = false;
 let mfaState = null;
 let mfaVerificationActive = false;
+let loginRequestActive = false;
 const MFA_STORAGE_KEY = 'cams.mfaChallenge';
 
 export function reset() {
@@ -161,6 +162,7 @@ export async function init() {
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
+    if (loginRequestActive) return;
     const values = getFormValues(form);
     const { valid, errors } = validateFields(values, {
       email: { required: true, email: true, label: 'Email' },
@@ -170,6 +172,7 @@ export async function init() {
     if (!valid) return;
 
     setButtonLoading(submitBtn, true, 'Signing in…');
+    loginRequestActive = true;
     try {
       const response = await login(values.email, values.password);
       const data = response.data || response;
@@ -193,6 +196,7 @@ export async function init() {
       showToast(error instanceof ApiError ? error.message : 'Unable to sign in.', 'error');
     } finally {
       setButtonLoading(submitBtn, false);
+      loginRequestActive = false;
     }
   });
 
