@@ -1,4 +1,16 @@
-import { api } from './client.js';
+import { api } from './client.js?v=20260922-1';
+import { config } from '../config.js';
+
+export function wakeBackend() {
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), 8000);
+  return fetch(`${config.API_BASE_URL}/health`, {
+    method: 'GET',
+    headers: { Accept: 'application/json' },
+    cache: 'no-store',
+    signal: controller.signal,
+  }).catch(() => null).finally(() => window.clearTimeout(timeoutId));
+}
 
 export function login(email, password) {
   return api.post('/auth/login', { email, password }, { auth: false, retryTransient: true });

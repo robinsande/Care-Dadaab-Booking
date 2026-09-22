@@ -81,7 +81,7 @@
     document.querySelectorAll('[data-password-toggle]').forEach((button) => button.addEventListener('click', () => { const input = document.getElementById(button.dataset.passwordToggle); const visible = input.type === 'text'; input.type = visible ? 'password' : 'text'; button.classList.toggle('is-visible', !visible); button.setAttribute('aria-label', visible ? 'Show password' : 'Hide password'); }));
     document.querySelector('#create-account-form').addEventListener('submit', (event) => { event.preventDefault(); if (!event.currentTarget.reportValidity()) return; statusStrip.textContent = 'Request recorded. Your camp operations lead will review access.'; statusStrip.classList.add('is-visible'); });
   </script>
-  <script type="module" src="../js/pages/admin-login.js?v=20260918-2"></script>
+  <script type="module" src="../js/pages/admin-login.js?v=20260922-1"></script>
 </body>
 </html>
 

@@ -93,7 +93,7 @@ export async function apiRequest(path, options = {}) {
     signal: requestSignal,
     ...rest,
   };
-  const maxAttempts = retryTransient ? 3 : 1;
+  const maxAttempts = retryTransient ? 4 : 1;
 
   try {
     let response;
@@ -102,12 +102,12 @@ export async function apiRequest(path, options = {}) {
         response = await fetch(buildUrl(path, query), request);
       } catch (error) {
         if (attempt === maxAttempts || error.name === 'AbortError') throw error;
-        await new Promise((resolve) => window.setTimeout(resolve, 700 * attempt));
+        await new Promise((resolve) => window.setTimeout(resolve, 300 * attempt));
         continue;
       }
 
       if (![502, 503, 504].includes(response.status) || attempt === maxAttempts) break;
-      await new Promise((resolve) => window.setTimeout(resolve, 700 * attempt));
+      await new Promise((resolve) => window.setTimeout(resolve, 300 * attempt));
     }
 
     const payload = await parseBody(response);
