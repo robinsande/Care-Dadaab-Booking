@@ -69,6 +69,11 @@
   100% { transform: translate3d(24px, 115vh, 0) rotate(360deg); }
 }
 
+@keyframes admin-nav-enter {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .site-header-inner {
   display: flex;
   align-items: center;
@@ -379,8 +384,19 @@
   padding: 0.45rem 0.7rem;
   border: 1px solid transparent;
   border-radius: 0.7rem;
+  animation: admin-nav-enter 420ms ease both;
   transition: color var(--transition), background var(--transition), border-color var(--transition), box-shadow var(--transition), transform var(--transition);
 }
+
+.admin-nav a:nth-child(2) { animation-delay: 35ms; }
+.admin-nav a:nth-child(3) { animation-delay: 70ms; }
+.admin-nav a:nth-child(4) { animation-delay: 105ms; }
+.admin-nav a:nth-child(5) { animation-delay: 140ms; }
+.admin-nav a:nth-child(6) { animation-delay: 175ms; }
+.admin-nav a:nth-child(7) { animation-delay: 210ms; }
+.admin-nav a:nth-child(8) { animation-delay: 245ms; }
+.admin-nav a:nth-child(9) { animation-delay: 280ms; }
+.admin-nav a:nth-child(10) { animation-delay: 315ms; }
 
 .admin-nav-icon {
   display: inline-grid;
@@ -466,7 +482,7 @@
   border-color: rgba(255, 255, 255, 0.22);
   color: #fff;
   box-shadow: 0 8px 20px rgba(73, 28, 5, 0.18);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   text-decoration: none;
 }
 
@@ -479,7 +495,11 @@
 .admin-nav a[aria-current="page"] .admin-nav-icon {
   color: #fff;
   filter: drop-shadow(0 0 7px rgba(255, 255, 255, 0.55));
-  transform: scale(1.08);
+  transform: translateY(-2px) scale(1.08) rotate(-4deg);
+}
+
+.admin-nav a:hover > span:last-child {
+  text-shadow: 0 1px 10px rgba(255, 255, 255, 0.28);
 }
 
 .admin-nav a[hidden] {
@@ -974,6 +994,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .admin-nav a {
+    animation: none;
+  }
+
   .login-entry-bag .reservation-log-head,
   .login-entry-bag .login-cartoon-body,
   .login-entry-bag .login-cartoon-shadow,
