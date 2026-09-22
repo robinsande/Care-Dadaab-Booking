@@ -26,7 +26,6 @@ const SUPER_ADMIN_ROUTES = ['camps', 'blocks', 'rates', 'reports', 'reservation-
 
 const SPA_NAV = [
   { href: '/', label: 'Dashboard', route: 'dashboard', icon: 'home' },
-  { hash: '#/bookings', label: 'Bookings', route: 'bookings', icon: 'calendar' },
   { hash: '#/booking/create', label: 'Create Booking', route: 'booking/create', icon: 'calendar-plus' },
   { hash: '#/camps', label: 'Camps', route: 'camps', icon: 'map', superAdmin: true },
   { hash: '#/blocks', label: 'Blocks', route: 'blocks', icon: 'layout-grid', superAdmin: true },
@@ -78,7 +77,7 @@ function buildNav(user) {
     .map((item) => {
       const isActive =
         item.route === route ||
-        (item.route === 'bookings' && route === 'booking/edit');
+        (item.route === 'booking/create' && route === 'booking/edit');
       const activeAttr = isActive ? ' aria-current="page"' : '';
       const superAttr = item.superAdmin ? ' data-super-admin-only' : '';
       const href = item.href || item.hash;
