@@ -89,8 +89,8 @@
     .nav-toggle span::after { transform: translateY(0.35rem); }
     .floating-access { position: fixed; right: clamp(1rem, 3vw, 2rem); bottom: clamp(1rem, 3vw, 2rem); z-index: 20; display: flex; gap: .55rem; padding: .45rem; border: 1px solid var(--line-strong); background: rgba(255, 255, 255, .9); box-shadow: 0 14px 34px rgba(43, 23, 64, .18); backdrop-filter: blur(12px); }
     .floating-access a { min-height: 42px; padding: .6rem .85rem; border: 1px solid transparent; font-size: var(--text-xs); font-weight: 600; transition: background var(--ease), border-color var(--ease), color var(--ease), transform var(--ease), box-shadow var(--ease); }
-    .floating-access .floating-signin { border-color: var(--purple); color: var(--purple); }
-    .floating-access .floating-create { background: var(--purple); color: #fff; }
+    .floating-access .floating-signin { background: var(--purple); border-color: var(--purple); color: #fff; box-shadow: 0 8px 18px rgba(84, 32, 111, .22); }
+    .floating-access .floating-create { border-color: var(--purple); color: var(--purple); }
     .floating-access a:hover { background: var(--clay); border-color: var(--clay); color: #fff; box-shadow: 0 8px 18px rgba(193, 80, 46, .25); transform: translateY(-2px); text-decoration: none; }
     .hero { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr); gap: clamp(2rem, 7vw, 7rem); align-items: center; padding: clamp(4rem, 10vw, 8rem) 0 clamp(4rem, 9vw, 7rem); border-bottom: 1px solid var(--line); }
     .hero-copy { animation: rise-in 600ms ease both; }
