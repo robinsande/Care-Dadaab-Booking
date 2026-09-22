@@ -69,8 +69,13 @@
   100% { transform: translate3d(24px, 115vh, 0) rotate(360deg); }
 }
 
-@keyframes admin-nav-enter {
-  from { opacity: 0; transform: translateY(-8px); }
+@keyframes admin-nav-enter-left {
+  from { opacity: 0; transform: translateX(-18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes admin-nav-enter-right {
+  from { opacity: 0; transform: translateX(18px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -384,10 +389,11 @@
   padding: 0.45rem 0.7rem;
   border: 1px solid transparent;
   border-radius: 0.7rem;
-  animation: admin-nav-enter 420ms ease both;
+  animation: admin-nav-enter-left 420ms ease both;
   transition: color var(--transition), background var(--transition), border-color var(--transition), box-shadow var(--transition), transform var(--transition);
 }
 
+.admin-nav a:nth-child(even) { animation-name: admin-nav-enter-right; }
 .admin-nav a:nth-child(2) { animation-delay: 35ms; }
 .admin-nav a:nth-child(3) { animation-delay: 70ms; }
 .admin-nav a:nth-child(4) { animation-delay: 105ms; }
