@@ -75,7 +75,9 @@
   <script>
     const statusStrip = document.querySelector('#auth-status');
     const views = document.querySelectorAll('[data-view]');
-    document.querySelectorAll('[data-tab]').forEach((tab) => tab.addEventListener('click', () => { const view = tab.dataset.tab; document.querySelectorAll('[data-tab]').forEach((item) => { item.classList.toggle('is-active', item === tab); item.setAttribute('aria-selected', String(item === tab)); }); views.forEach((panel) => { panel.hidden = panel.dataset.view !== view; }); statusStrip.classList.remove('is-visible'); }));
+    const selectView = (view) => { const selectedTab = document.querySelector(`[data-tab="${view}"]`); if (!selectedTab) return; document.querySelectorAll('[data-tab]').forEach((item) => { item.classList.toggle('is-active', item === selectedTab); item.setAttribute('aria-selected', String(item === selectedTab)); }); views.forEach((panel) => { panel.hidden = panel.dataset.view !== view; }); statusStrip.classList.remove('is-visible'); };
+    document.querySelectorAll('[data-tab]').forEach((tab) => tab.addEventListener('click', () => selectView(tab.dataset.tab)));
+    if (new URLSearchParams(window.location.search).get('view') === 'create') selectView('create');
     document.querySelectorAll('[data-password-toggle]').forEach((button) => button.addEventListener('click', () => { const input = document.getElementById(button.dataset.passwordToggle); const visible = input.type === 'text'; input.type = visible ? 'password' : 'text'; button.classList.toggle('is-visible', !visible); button.setAttribute('aria-label', visible ? 'Show password' : 'Hide password'); }));
     document.querySelector('#create-account-form').addEventListener('submit', (event) => { event.preventDefault(); if (!event.currentTarget.reportValidity()) return; statusStrip.textContent = 'Request recorded. Your camp operations lead will review access.'; statusStrip.classList.add('is-visible'); });
   </script>
