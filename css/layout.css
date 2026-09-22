@@ -89,6 +89,18 @@
   50% { transform: translateX(3px); }
 }
 
+@keyframes admin-nav-icon-travel {
+  0% {
+    transform: translate3d(-5px, 0, 0) rotate(-6deg);
+  }
+  50% {
+    transform: translate3d(0, -3px, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate3d(5px, 0, 0) rotate(6deg);
+  }
+}
+
 .site-header-inner {
   display: flex;
   align-items: center;
@@ -435,6 +447,9 @@
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 1.8;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: admin-nav-icon-travel 3.6s ease-in-out infinite alternate;
 }
 
 .nav-color-calendar .admin-nav-icon {
@@ -1023,6 +1038,10 @@
   }
 
   .admin-nav a > span:last-child {
+    animation: none;
+  }
+
+  .admin-nav-icon svg {
     animation: none;
   }
 
