@@ -71,7 +71,6 @@ export async function apiRequest(path, options = {}) {
     }
   }
 
-  let response;
   const controller = new AbortController();
   const timeoutId = window.setTimeout(() => controller.abort(), 15000);
   let requestSignal = controller.signal;
@@ -83,7 +82,7 @@ export async function apiRequest(path, options = {}) {
     }
   }
   try {
-    response = await fetch(buildUrl(path, query), {
+    const response = await fetch(buildUrl(path, query), {
       method,
       headers: requestHeaders,
       body: body === undefined
@@ -94,38 +93,39 @@ export async function apiRequest(path, options = {}) {
     signal: requestSignal,
     ...rest,
     });
+
+    const payload = await parseBody(response);
+
+    if (response.status === 401 && auth) {
+      clearSession();
+      if (!window.location.pathname.includes('/admin/login')) {
+        window.location.href = '/admin/login.html';
+      }
+      throw new ApiError(payload?.message || 'Your session has expired. Please sign in again.', {
+        status: 401,
+        errors: payload?.errors || [],
+        data: payload?.data ?? null,
+      });
+    }
+
+    if (!response.ok || payload?.success === false) {
+      throw new ApiError(payload?.message || `Request failed (${response.status}).`, {
+        status: response.status,
+        errors: payload?.errors || [],
+        data: payload?.data ?? null,
+      });
+    }
+
+    return payload;
   } catch (error) {
     if (error.name === 'AbortError') {
-    throw new ApiError('The server took too long to respond. Please try again.');
+      throw new ApiError('The server took too long to respond. Please try again.');
     }
+    if (error instanceof ApiError) throw error;
     throw new ApiError('Unable to reach the server. Please check your connection and try again.');
   } finally {
     window.clearTimeout(timeoutId);
   }
-
-  const payload = await parseBody(response);
-
-  if (response.status === 401 && auth) {
-    clearSession();
-    if (!window.location.pathname.includes('/admin/login')) {
-      window.location.href = '/admin/login.html';
-    }
-    throw new ApiError(payload?.message || 'Your session has expired. Please sign in again.', {
-      status: 401,
-      errors: payload?.errors || [],
-      data: payload?.data ?? null,
-    });
-  }
-
-  if (!response.ok || payload?.success === false) {
-    throw new ApiError(payload?.message || `Request failed (${response.status}).`, {
-      status: response.status,
-      errors: payload?.errors || [],
-      data: payload?.data ?? null,
-    });
-  }
-
-  return payload;
 }
 
 export const api = {

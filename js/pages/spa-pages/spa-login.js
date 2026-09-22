@@ -116,9 +116,9 @@ export async function init() {
     applyFieldErrors(form, errors);
     if (!valid) return;
 
-    setButtonLoading(submitBtn, true, 'Signing in…');
     loginRequestActive = true;
     try {
+      setButtonLoading(submitBtn, true, 'Signing in...');
       const response = await login(values.email, values.password);
       const data = response.data || response;
       if (!data.token || !data.user) throw new ApiError('Login succeeded but session data was incomplete.');

@@ -78,10 +78,10 @@ form.addEventListener('submit', async (event) => {
   applyFieldErrors(form, errors);
   if (!valid) return;
 
-  setButtonLoading(submitBtn, true, 'Signing in…');
   loginRequestActive = true;
 
   try {
+    setButtonLoading(submitBtn, true, 'Signing in...');
     const response = await login(values.email, values.password);
     const data = response.data || response;
     const token = data.token;
