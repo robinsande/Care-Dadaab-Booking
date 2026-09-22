@@ -131,7 +131,6 @@ function initAdminChromeOnce() {
   const topbar = document.querySelector('.admin-topbar');
   const adminUser = document.querySelector('.admin-user');
   const logoutBtn = document.querySelector('[data-logout]');
-  const adminUser = document.querySelector('.admin-user');
   const globalSearch = document.querySelector('[data-global-search]');
 
   const syncAdminUserPlacement = () => {
