@@ -1,7 +1,7 @@
 import { api } from './client.js';
 
 export function login(email, password) {
-  return api.post('/auth/login', { email, password }, { auth: false });
+  return api.post('/auth/login', { email, password }, { auth: false, retryTransient: true });
 }
 
 export function verifyMfa(mfaToken, code) {

@@ -52,6 +52,7 @@ export async function apiRequest(path, options = {}) {
     auth = true,
     signal,
     headers = {},
+    retryTransient = false,
     ...rest
   } = options;
 
@@ -81,18 +82,33 @@ export async function apiRequest(path, options = {}) {
       signal.addEventListener('abort', () => controller.abort(), { once: true });
     }
   }
-  try {
-    const response = await fetch(buildUrl(path, query), {
-      method,
-      headers: requestHeaders,
-      body: body === undefined
-        ? undefined
-        : body instanceof FormData
-          ? body
-          : JSON.stringify(body),
+  const request = {
+    method,
+    headers: requestHeaders,
+    body: body === undefined
+      ? undefined
+      : body instanceof FormData
+        ? body
+        : JSON.stringify(body),
     signal: requestSignal,
     ...rest,
-    });
+  };
+  const maxAttempts = retryTransient ? 3 : 1;
+
+  try {
+    let response;
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      try {
+        response = await fetch(buildUrl(path, query), request);
+      } catch (error) {
+        if (attempt === maxAttempts || error.name === 'AbortError') throw error;
+        await new Promise((resolve) => window.setTimeout(resolve, 700 * attempt));
+        continue;
+      }
+
+      if (![502, 503, 504].includes(response.status) || attempt === maxAttempts) break;
+      await new Promise((resolve) => window.setTimeout(resolve, 700 * attempt));
+    }
 
     const payload = await parseBody(response);
 

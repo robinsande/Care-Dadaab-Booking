@@ -345,6 +345,8 @@
   display: none;
   flex-direction: column;
   gap: var(--space-6);
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .admin-sidebar .brand {
@@ -359,6 +361,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
+  min-height: 0;
 }
 
 .admin-nav a {
