@@ -59,10 +59,22 @@ export function initAdminShell() {
   const roleEl = document.querySelector('[data-admin-role]');
   const toggle = document.querySelector('[data-admin-menu-toggle]');
   const sidebar = document.querySelector('[data-admin-sidebar]');
+  const topbar = document.querySelector('.admin-topbar');
+  const adminUser = document.querySelector('.admin-user');
   const mobileQuery = window.matchMedia('(max-width: 959px)');
   const isMobile = () => mobileQuery.matches;
 
+  const syncAdminUserPlacement = () => {
+    if (!adminUser) return;
+    if (isMobile()) {
+      topbar?.appendChild(adminUser);
+    } else {
+      sidebar?.appendChild(adminUser);
+    }
+  };
+
   renderAdminNav(user);
+  syncAdminUserPlacement();
 
   const mobileNavOpen = window.localStorage.getItem('cams.sidebarOpen') === 'true';
   if (isMobile() && mobileNavOpen) {
@@ -118,9 +130,15 @@ export function initAdminShell() {
     toggle?.setAttribute('aria-expanded', String(shouldOpen));
   };
   if (mobileQuery.addEventListener) {
-    mobileQuery.addEventListener('change', syncNavigationForViewport);
+    mobileQuery.addEventListener('change', (event) => {
+      syncNavigationForViewport(event);
+      syncAdminUserPlacement();
+    });
   } else {
-    mobileQuery.addListener(syncNavigationForViewport);
+    mobileQuery.addListener((event) => {
+      syncNavigationForViewport(event);
+      syncAdminUserPlacement();
+    });
   }
 
   document.querySelector('[data-logout]')?.addEventListener('click', (event) => {
@@ -129,7 +147,6 @@ export function initAdminShell() {
     window.location.href = '/admin/login.html';
   });
 
-  const adminUser = document.querySelector('.admin-user');
   const logoutBtn = document.querySelector('[data-logout]');
   if (adminUser && logoutBtn && !document.querySelector('[data-change-password]')) {
     const link = document.createElement('a');

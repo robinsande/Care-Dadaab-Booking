@@ -1099,6 +1099,40 @@
     flex: 0 0 auto;
   }
 
+  .admin-sidebar > .admin-user {
+    flex: 0 0 auto;
+    margin-left: auto;
+    color: #fff;
+  }
+
+  .admin-sidebar > .admin-user .admin-user-meta {
+    display: flex;
+    text-align: right;
+  }
+
+  .admin-sidebar > .admin-user .admin-user-meta strong,
+  .admin-sidebar > .admin-user .admin-user-meta span {
+    color: #fff;
+  }
+
+  .admin-sidebar > .admin-user .btn,
+  .admin-sidebar > .admin-user a {
+    border-color: rgba(255, 255, 255, 0.32);
+    color: #fff;
+  }
+
+  .admin-sidebar > .admin-user .btn:hover,
+  .admin-sidebar > .admin-user .btn:focus-visible,
+  .admin-sidebar > .admin-user a:hover,
+  .admin-sidebar > .admin-user a:focus-visible {
+    background: var(--color-purple);
+    border-color: var(--color-purple);
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(53, 19, 71, 0.28);
+    text-decoration: none;
+    transform: translateY(-1px);
+  }
+
   .admin-nav {
     flex: 1 1 auto;
     flex-direction: row;

@@ -128,11 +128,23 @@ function initAdminChromeOnce() {
   const roleEl = document.querySelector('[data-admin-role]');
   const toggle = document.querySelector('[data-admin-menu-toggle]');
   const sidebar = document.querySelector('[data-admin-sidebar]');
+  const topbar = document.querySelector('.admin-topbar');
+  const adminUser = document.querySelector('.admin-user');
   const logoutBtn = document.querySelector('[data-logout]');
   const adminUser = document.querySelector('.admin-user');
   const globalSearch = document.querySelector('[data-global-search]');
 
+  const syncAdminUserPlacement = () => {
+    if (!adminUser) return;
+    if (window.matchMedia('(max-width: 959px)').matches) {
+      topbar?.appendChild(adminUser);
+    } else {
+      sidebar?.appendChild(adminUser);
+    }
+  };
+
   buildNav(user);
+  syncAdminUserPlacement();
 
   const mobileNavOpen = window.localStorage.getItem('cams.sidebarOpen') === 'true';
   if (window.innerWidth < 960 && mobileNavOpen) {
