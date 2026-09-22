@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CAMS</title>
+  <title>CDAB | Care Dadaab Accommodation Booking</title>
   <link rel="icon" type="image/png" href="assets/care-logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +27,7 @@
       <div class="login-panel panel">
         <div class="login-brand">
           <img class="brand-logo" src="assets/care-logo.png" alt="" aria-hidden="true">
-          <div><h2>Staff Login</h2><p class="mb-0">CARE Accommodation Management System</p></div>
+          <div><h2>Staff Login</h2><p class="mb-0">Care Dadaab Accommodation Booking (CDAB)</p></div>
         </div>
         <form id="login-form" novalidate>
           <div class="form-grid">
@@ -47,17 +47,6 @@
             <button class="btn btn-primary btn-block" type="submit" id="login-submit">Sign In</button>
           </div>
         </form>
-        <section class="mfa-login-panel" id="spa-mfa-panel" hidden aria-labelledby="spa-mfa-title">
-          <p class="login-success-kicker">Microsoft Authenticator</p>
-          <h2 id="spa-mfa-title">Verify your account</h2>
-          <p id="spa-mfa-instructions">Scan this QR code in Microsoft Authenticator, then enter the six-digit code.</p>
-          <img id="spa-mfa-qr-code" class="mfa-qr-code" alt="Microsoft Authenticator setup QR code" hidden>
-          <p class="mfa-manual-key" id="spa-mfa-manual-key" hidden></p>
-          <button class="btn btn-secondary btn-block" type="button" id="spa-mfa-qr-done" hidden>I've scanned the QR code</button>
-          <label class="form-label" for="spa-mfa-code" id="spa-mfa-code-label" hidden>Authenticator code</label>
-          <input class="form-control" type="text" id="spa-mfa-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" hidden>
-          <button class="btn btn-primary btn-block" type="button" id="spa-mfa-submit" hidden>Verify and continue</button>
-        </section>
       </div>
     </div>
     <div class="login-success-overlay" id="spa-login-success" role="status" aria-live="polite" hidden>
