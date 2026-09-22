@@ -40,21 +40,11 @@ function finishLogin(user, token) {
     return;
   }
   showToast('Signed in successfully.', 'success');
-  successTitle.textContent = `Welcome, ${user.firstName || 'back'}`;
-  successOverlay.hidden = false;
-  authStatus.textContent = 'Scanning CARE identity';
-  window.setTimeout(() => { authStatus.textContent = 'Verifying secure access'; }, 700);
-  window.setTimeout(() => {
-    authStatus.textContent = 'CARE identity verified';
-    successOverlay.classList.add('care-auth-verified');
-  }, 1450);
   const params = new URLSearchParams(window.location.search);
   const redirect = params.get('redirect');
-  window.setTimeout(() => {
     window.location.href = redirect && redirect.startsWith('/admin/')
       ? redirect
       : '/';
-  }, 2600);
 }
 
 openLoginButton?.addEventListener('click', () => {
