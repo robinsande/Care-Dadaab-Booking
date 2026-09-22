@@ -1117,9 +1117,9 @@
     flex: 1 1 auto;
     flex-direction: row;
     align-items: center;
+    flex-wrap: wrap;
     min-width: 0;
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: visible;
     padding: 0.2rem 0;
   }
 
