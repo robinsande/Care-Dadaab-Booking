@@ -338,7 +338,7 @@
 }
 
 .admin-sidebar {
-  background: var(--color-brand);
+  background: var(--color-brand-dark);
   color: #fff;
   border-right: 0;
   padding: var(--space-5);
@@ -483,15 +483,17 @@
 }
 
 .sidebar-collapse-toggle {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 0.55rem;
+  width: 100%;
+  min-height: 44px;
   margin-top: auto;
   padding: 0.65rem 0.8rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.82);
+  background: rgba(20, 23, 28, 0.22);
+  color: #fff;
   cursor: pointer;
   font: inherit;
   font-size: var(--text-xs);
@@ -501,15 +503,24 @@
 }
 
 .sidebar-collapse-toggle:hover {
-  background: linear-gradient(135deg, var(--color-brand-accent), var(--color-brand));
+  background: var(--color-brand);
   color: #fff;
   box-shadow: 0 0 18px rgba(249, 178, 51, 0.42);
   transform: translateY(-1px);
 }
 
 .sidebar-collapse-toggle > span:first-child {
-  font-size: 1.25rem;
-  line-height: 0.7;
+  display: inline-grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex: 0 0 1.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .admin-main {
@@ -1128,6 +1139,7 @@
 
   .admin-shell.sidebar-collapsed .sidebar-collapse-toggle {
     justify-content: center;
+    min-width: 44px;
     width: 100%;
     padding-inline: 0.4rem;
   }
@@ -2883,7 +2895,7 @@ body.login-page {
 }
 
 .admin-sidebar {
-  background: var(--color-brand);
+  background: var(--color-brand-dark);
   border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 
