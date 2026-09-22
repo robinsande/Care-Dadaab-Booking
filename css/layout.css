@@ -1078,7 +1078,8 @@
   }
 
   .admin-sidebar {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(170px, 220px) minmax(0, 1fr) auto;
     position: sticky;
     top: 0;
     z-index: 60;
@@ -1087,7 +1088,6 @@
     margin: 0;
     min-height: 72px;
     height: auto;
-    flex-direction: row;
     align-items: center;
     gap: var(--space-4);
     padding: 0.75rem var(--space-6);
@@ -1097,11 +1097,13 @@
 
   .admin-sidebar .brand {
     flex: 0 0 auto;
+    grid-column: 1;
   }
 
   .admin-sidebar > .admin-user {
-    flex: 0 0 auto;
-    margin-left: auto;
+    grid-column: 3;
+    display: flex;
+    align-items: center;
     color: #fff;
   }
 
@@ -1117,6 +1119,7 @@
 
   .admin-sidebar > .admin-user .btn,
   .admin-sidebar > .admin-user a {
+    background: rgba(20, 23, 28, 0.18);
     border-color: rgba(255, 255, 255, 0.32);
     color: #fff;
   }
@@ -1134,17 +1137,19 @@
   }
 
   .admin-nav {
-    flex: 1 1 auto;
-    flex-direction: row;
+    grid-column: 2;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(125px, 1fr));
     align-items: center;
-    flex-wrap: wrap;
+    gap: 0.35rem;
     min-width: 0;
-    overflow: visible;
+    max-height: 7rem;
+    overflow: auto;
     padding: 0.2rem 0;
   }
 
   .admin-nav a {
-    flex: 0 0 auto;
+    min-width: 0;
     white-space: nowrap;
   }
 

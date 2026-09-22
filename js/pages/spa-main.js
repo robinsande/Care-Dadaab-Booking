@@ -130,12 +130,13 @@ function initAdminChromeOnce() {
   const sidebar = document.querySelector('[data-admin-sidebar]');
   const topbar = document.querySelector('.admin-topbar');
   const adminUser = document.querySelector('.admin-user');
+  const viewportQuery = window.matchMedia('(max-width: 959px)');
   const logoutBtn = document.querySelector('[data-logout]');
   const globalSearch = document.querySelector('[data-global-search]');
 
   const syncAdminUserPlacement = () => {
     if (!adminUser) return;
-    if (window.matchMedia('(max-width: 959px)').matches) {
+    if (viewportQuery.matches) {
       topbar?.appendChild(adminUser);
     } else {
       sidebar?.appendChild(adminUser);
@@ -144,6 +145,11 @@ function initAdminChromeOnce() {
 
   buildNav(user);
   syncAdminUserPlacement();
+  if (viewportQuery.addEventListener) {
+    viewportQuery.addEventListener('change', syncAdminUserPlacement);
+  } else {
+    viewportQuery.addListener(syncAdminUserPlacement);
+  }
 
   const mobileNavOpen = window.localStorage.getItem('cams.sidebarOpen') === 'true';
   if (window.innerWidth < 960 && mobileNavOpen) {
