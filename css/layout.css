@@ -346,7 +346,7 @@
   flex-direction: column;
   gap: var(--space-6);
   min-height: 0;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .admin-sidebar .brand {
@@ -359,9 +359,12 @@
 
 .admin-nav {
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
   gap: var(--space-1);
   min-height: 0;
+  overflow-y: auto;
+  padding-right: 0.2rem;
 }
 
 .admin-nav a {
@@ -488,7 +491,8 @@
   gap: 0.55rem;
   width: 100%;
   min-height: 44px;
-  margin-top: auto;
+  flex: 0 0 auto;
+  margin-top: 0;
   padding: 0.65rem 0.8rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-md);
@@ -1087,7 +1091,7 @@
 
 @media (min-width: 960px) {
   .admin-shell {
-    grid-template-columns: var(--sidebar-width) 1fr;
+    display: block;
   }
 
   .admin-sidebar {
@@ -1095,7 +1099,40 @@
     position: sticky;
     top: 0;
     z-index: 60;
-    height: 100vh;
+    width: 100%;
+    min-height: 72px;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-4);
+    padding: 0.75rem var(--space-6);
+    overflow: hidden;
+  }
+
+  .admin-sidebar .brand {
+    flex: 0 0 auto;
+  }
+
+  .admin-nav {
+    flex: 1 1 auto;
+    flex-direction: row;
+    align-items: center;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.2rem 0;
+  }
+
+  .admin-nav a {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .sidebar-collapse-toggle {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 44px;
+    margin: 0;
   }
 
   .admin-menu-toggle {
@@ -1111,12 +1148,11 @@
   }
 
   .admin-shell.sidebar-collapsed {
-    grid-template-columns: 84px 1fr;
+    display: block;
   }
 
   .admin-shell.sidebar-collapsed .admin-sidebar {
-    align-items: center;
-    padding: var(--space-4) 0.65rem;
+    padding-inline: var(--space-4);
   }
 
   .admin-shell.sidebar-collapsed .brand {
@@ -1129,7 +1165,7 @@
   }
 
   .admin-shell.sidebar-collapsed .admin-nav {
-    width: 100%;
+    width: auto;
   }
 
   .admin-shell.sidebar-collapsed .admin-nav a {
@@ -1159,7 +1195,7 @@
   inset: var(--header-height) auto 0 0;
   width: min(280px, 86vw);
   z-index: 1200;
-  overflow-y: auto;
+  overflow: hidden;
   box-shadow: var(--shadow-md);
 }
 
