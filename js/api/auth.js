@@ -1,4 +1,4 @@
-import { api } from './client.js?v=20260922-1';
+import { api } from './client.js?v=20260922-2';
 import { config } from '../config.js';
 
 export function wakeBackend() {

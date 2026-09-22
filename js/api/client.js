@@ -1,6 +1,8 @@
 import { config } from '../config.js';
 import { getToken, clearSession } from '../auth/session.js';
 
+const KEEP_ALIVE_INTERVAL_MS = 4 * 60 * 1000;
+
 /**
  * Low-level HTTP client for the CARE Dadaab REST API.
  * Separates networking from page/UI logic.
@@ -30,6 +32,25 @@ function buildUrl(path, query) {
 
   return url.toString();
 }
+
+function startBackendKeepAlive() {
+  if (typeof window === 'undefined') return;
+
+  const ping = () => {
+    if (document.visibilityState === 'hidden') return;
+    fetch(buildUrl('/health'), {
+      headers: { Accept: 'application/json' },
+      cache: 'no-store',
+      keepalive: true,
+    }).catch(() => null);
+  };
+
+  ping();
+  window.setInterval(ping, KEEP_ALIVE_INTERVAL_MS);
+  document.addEventListener('visibilitychange', ping);
+}
+
+startBackendKeepAlive();
 
 async function parseBody(response) {
   const contentType = response.headers.get('content-type') || '';
