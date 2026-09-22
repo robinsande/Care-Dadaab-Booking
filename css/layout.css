@@ -79,6 +79,16 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes admin-nav-text-drift-left {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-3px); }
+}
+
+@keyframes admin-nav-text-drift-right {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(3px); }
+}
+
 .site-header-inner {
   display: flex;
   align-items: center;
@@ -506,6 +516,14 @@
 
 .admin-nav a:hover > span:last-child {
   text-shadow: 0 1px 10px rgba(255, 255, 255, 0.28);
+}
+
+.admin-nav a > span:last-child {
+  animation: admin-nav-text-drift-left 4.8s ease-in-out 420ms infinite;
+}
+
+.admin-nav a:nth-child(even) > span:last-child {
+  animation-name: admin-nav-text-drift-right;
 }
 
 .admin-nav a[hidden] {
@@ -1001,6 +1019,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .admin-nav a {
+    animation: none;
+  }
+
+  .admin-nav a > span:last-child {
     animation: none;
   }
 
