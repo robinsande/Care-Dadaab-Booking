@@ -16,13 +16,14 @@ const PAGE_TITLES = {
   rooms: 'Rooms',
   rates: 'Rates',
   reports: 'Reports',
+  mous: 'MOU Tracker',
   'reservation-log': 'Reservation Log',
   users: 'Users',
   settings: 'Settings',
   'change-password': 'Change Password',
 };
 
-const SUPER_ADMIN_ROUTES = ['camps', 'blocks', 'rates', 'reports', 'reservation-log', 'users', 'settings'];
+const SUPER_ADMIN_ROUTES = ['camps', 'blocks', 'rates', 'reports', 'mous', 'reservation-log', 'users', 'settings'];
 
 const SPA_NAV = [
   { href: '/', label: 'Dashboard', route: 'dashboard', icon: 'home' },
@@ -33,6 +34,7 @@ const SPA_NAV = [
   { hash: '#/rates', label: 'Rates', route: 'rates', icon: 'badge-dollar-sign', superAdmin: true },
   { hash: '#/invoices', label: 'Invoices', route: 'invoices', icon: 'receipt' },
   { hash: '#/reports', label: 'Reports', route: 'reports', icon: 'chart-no-axes-combined', superAdmin: true },
+  { hash: '#/mous', label: 'MOU Tracker', route: 'mous', icon: 'file-chart-column', superAdmin: true },
   { href: 'admin/reservation-log.html', label: 'Reservation Log', route: 'reservation-log', icon: 'history', superAdmin: true },
   { hash: '#/users', label: 'Users', route: 'users', icon: 'users', superAdmin: true },
   { hash: '#/settings', label: 'Settings', route: 'settings', icon: 'settings', superAdmin: true },
@@ -249,6 +251,7 @@ async function loadPageModule(route) {
     rooms: './spa-pages/spa-rooms.js',
     rates: './spa-pages/spa-rates.js',
     reports: './spa-pages/spa-reports.js',
+    mous: './spa-pages/spa-reports.js',
     users: './spa-pages/spa-users.js',
     settings: './spa-pages/spa-settings.js',
     'change-password': './spa-pages/spa-change-password.js',

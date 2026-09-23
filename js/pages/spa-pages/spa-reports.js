@@ -31,6 +31,7 @@ export async function init() {
     reportTypeSelect.value = requestedType;
   }
   fillSelect(form.elements.stayType, constants.STAY_TYPES, { placeholder: 'All stay types' });
+  if (form.elements.status) form.elements.status.innerHTML = '<option value="">All MOU statuses</option><option value="active">Active</option><option value="expiring_soon">Expiring soon</option><option value="expired">Expired</option>';
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -68,6 +69,9 @@ function buildParams(form) {
   if (values.to) params.to = values.to;
   if (values.campId) params.campId = values.campId;
   if (values.stayType) params.stayType = values.stayType;
+  if (values.period) params.period = values.period;
+  if (values.year) params.year = values.year;
+  if (values.status) params.status = values.status;
   return params;
 }
 

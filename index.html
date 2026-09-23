@@ -422,6 +422,9 @@
               <div class="form-group"><label class="form-label" for="rp-from">From Date</label><input class="form-control" type="date" id="rp-from" name="from"></div>
               <div class="form-group"><label class="form-label" for="rp-to">To Date</label><input class="form-control" type="date" id="rp-to" name="to"></div>
               <div class="form-group"><label class="form-label" for="rp-stayType">Stay Type</label><select class="form-control" id="rp-stayType" name="stayType"></select></div>
+              <div class="form-group"><label class="form-label" for="rp-period">MOU Month / Period</label><input class="form-control" type="month" id="rp-period" name="period"></div>
+              <div class="form-group"><label class="form-label" for="rp-year">MOU Year</label><input class="form-control" type="number" id="rp-year" name="year" min="2000" max="2100"></div>
+              <div class="form-group"><label class="form-label" for="rp-status">MOU Status</label><select class="form-control" id="rp-status" name="status"><option value="">All statuses</option><option value="active">Active</option><option value="expiring_soon">Expiring soon</option><option value="expired">Expired</option></select></div>
             </div>
             <div class="form-actions">
               <button type="submit" class="btn btn-primary" id="generate-report">Generate Report</button>

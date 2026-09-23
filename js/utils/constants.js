@@ -18,6 +18,7 @@ const DEPARTURE_COUNTRIES = [
 const CONTRACT_TYPES = [
   'CARE Staff',
   'Consultant',
+  'Implementing Partner',
   'Partner Organisation',
   'Visitor',
   'Other',
