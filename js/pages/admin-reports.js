@@ -92,6 +92,7 @@ function buildParams() {
   if (values.status) params.status = values.status;
   if (values.counterpartyCategory) params.counterpartyCategory = values.counterpartyCategory;
   if (values.mouId) params.mouId = values.mouId;
+  if (values.bookingReference) params.bookingReference = values.bookingReference.trim();
   return params;
 }
 
@@ -116,10 +117,10 @@ async function generateReport() {
     const rows = report.rows || [];
     if (summaryEl) {
       const summary = report.summary || {};
-      summaryEl.textContent = Object.entries(summary)
+      summaryEl.textContent = `Revenue Calculation: ${Object.entries(summary)
         .filter(([key]) => key !== 'personTotals')
         .map(([key, value]) => `${key}: ${typeof value === 'number' ? value.toLocaleString('en-KE', { maximumFractionDigits: 2 }) : String(value ?? '')}`)
-        .join(' | ');
+        .join(' | ') || 'No revenue data'}`;
     }
 
     if (reportType === 'reservation-log') {
@@ -182,7 +183,7 @@ function renderMouRevenue(rows, report, resultsEl) {
   resultsEl.classList.add('mou-revenue-print');
   resultsEl.innerHTML = [...groups.entries()].map(([, groupRows]) => {
     const total = groupRows.reduce((sum, row) => sum + Number(row.amountAccumulated || 0), 0);
-    return `<section class="mou-report-page"><div class="reservation-log-heading">ROOM RESERVATION FORM 1</div><h3>Room Reservation Form - ${escapeHtml(groupRows[0]?.mou || 'Unassigned MOU')}</h3><p class="reservation-log-date">Recipient: Dadaab Accommodation Team | Sender: CARE International | Period: ${escapeHtml(report.summary?.period || 'All selected dates')} | MOU subtotal: ${total.toLocaleString('en-KE', { maximumFractionDigits: 2 })}</p><table class="table"><thead><tr>${columns.map((column) => `<th>${column[1]}</th>`).join('')}</tr></thead><tbody>${groupRows.map((row, index) => `<tr>${columns.map((column) => `<td>${escapeHtml(column[0] === 'tableNo' ? index + 1 : row[column[0]] ?? '')}</td>`).join('')}</tr>`).join('')}</tbody></table><p class="form-hint">Remark: Hotel confirmation by: ____________________ Confirmation date: ____________________</p></section>`;
+    return `<section class="mou-report-page"><div class="reservation-log-heading">ROOM RESERVATION FORM 1</div><h3>Room Reservation Form - ${escapeHtml(groupRows[0]?.mou || 'Unassigned MOU')}</h3><p class="reservation-log-date">Recipient: Dadaab Accommodation Team | Sender: CARE International | Period: ${escapeHtml(report.summary?.period || 'All selected dates')} | Revenue Calculation: MOU subtotal ${total.toLocaleString('en-KE', { maximumFractionDigits: 2 })}</p><table class="table"><thead><tr>${columns.map((column) => `<th>${column[1]}</th>`).join('')}</tr></thead><tbody>${groupRows.map((row, index) => `<tr>${columns.map((column) => `<td>${escapeHtml(column[0] === 'tableNo' ? index + 1 : row[column[0]] ?? '')}</td>`).join('')}</tr>`).join('')}</tbody></table><p class="form-hint">Remark: Hotel confirmation by: ____________________ Confirmation date: ____________________</p></section>`;
   }).join('') || '<p class="empty-state">No MOU occupancy revenue found.</p>';
 }
 
