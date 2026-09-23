@@ -11,6 +11,20 @@ const bookingForm = $('#booking-form');
 const arrivalDateInput = bookingForm.elements.arrivalDate;
 const departureDateInput = bookingForm.elements.departureDate;
 const today = new Date().toISOString().slice(0, 10);
+const careStaffLocation = bookingForm.elements.careStaffLocation;
+const internationalCountry = bookingForm.elements.internationalCountry;
+const updateCareStaffFields = () => {
+  const isCareStaff = bookingForm.elements.contractType.value === 'CARE Staff';
+  const isInternationalStaff = careStaffLocation.value === 'CARE International Staff';
+  const countryGroup = internationalCountry.closest('.form-field, .form-group') || internationalCountry;
+  countryGroup.hidden = !isInternationalStaff;
+  countryGroup.classList.toggle('is-hidden', !isInternationalStaff);
+  internationalCountry.required = isInternationalStaff;
+  if (!isInternationalStaff) internationalCountry.value = '';
+  if (isCareStaff && careStaffLocation.value) {
+    bookingForm.elements.departureCountry.value = isInternationalStaff ? 'International' : 'Local (Kenyan)';
+  }
+};
 const stayTypeSelect = bookingForm.elements.stayType;
 const rateField = bookingForm.querySelector('[data-short-stay]');
 const mouFields = bookingForm.querySelectorAll('[data-long-stay]');
@@ -29,6 +43,9 @@ departureDateInput.addEventListener('change', () => {
     if (nights > 21) message('Short Stay is limited to 21 nights. Select Long Stay (MOU-based) for a longer visit.', true);
   }
 });
+bookingForm.elements.contractType.addEventListener('change', updateCareStaffFields);
+careStaffLocation.addEventListener('change', updateCareStaffFields);
+updateCareStaffFields();
 
 const setStayType = async () => {
   const longStay = stayTypeSelect.value === 'Long Stay';

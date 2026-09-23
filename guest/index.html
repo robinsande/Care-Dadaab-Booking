@@ -71,9 +71,10 @@
         <input class="form-control" name="organisation" placeholder="Organisation">
         <select class="form-control" name="gender" required><option value="">Select gender</option><option>Male</option><option>Female</option></select>
         <select class="form-control" name="contractType" required><option value="">Select contract type</option><option>CARE Staff</option><option>Consultant</option><option>Implementing Partner</option><option>Partner Organisation</option><option>Visitor</option><option>Other</option></select>
+        <select class="form-control" name="careStaffLocation"><option value="">CARE Staff location (if applicable)</option><option>CARE Kenya Staff</option><option>CARE International Staff</option></select>
         <select class="form-control" name="departureCountry" required><option value="">Select country of origin</option><option>Local (Kenyan)</option><option>International</option></select>
         <input class="form-control" name="kenyaOffice" placeholder="Kenya office (if applicable)">
-        <input class="form-control" name="internationalCountry" placeholder="Country of origin (if international)">
+        <input class="form-control conditional-field is-hidden" name="internationalCountry" placeholder="International country of origin (if applicable)" hidden>
       </div>
       <textarea class="form-control" name="reasonForVisit" placeholder="Reason for visit" required></textarea>
       <label class="btn-icon"><input type="checkbox" name="driverPickup" value="true"> Driver pickup required</label>
