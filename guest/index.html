@@ -70,7 +70,7 @@
         <input class="form-control" name="phone" type="tel" placeholder="Phone" required>
         <input class="form-control" name="organisation" placeholder="Organisation">
         <select class="form-control" name="gender" required><option value="">Select gender</option><option>Male</option><option>Female</option></select>
-        <select class="form-control" name="contractType" required><option value="">Select contract type</option><option>CARE Staff</option><option>Consultant</option><option>Implementing Partner</option><option>Partner Organisation</option><option>Visitor</option><option>Other</option></select>
+        <select class="form-control" name="contractType" required><option value="">Select contract type</option><option>CARE Staff</option><option>Consultant</option><option>Implementing Partner</option><option>Partner Organisation</option><option>Government</option><option>Visitor</option><option>Other</option></select>
         <label class="form-field conditional-field is-hidden" data-care-staff-location hidden><span>CARE Staff Location</span><select class="form-control" name="careStaffLocation"><option value="">Select staff location</option><option>CARE Kenya Staff</option><option>CARE International Staff</option></select></label>
         <select class="form-control" name="departureCountry" required><option value="">Select country of origin</option><option>Local (Kenyan)</option><option>International</option></select>
         <label class="form-field conditional-field is-hidden" data-kenya-office hidden><span>Kenya Office</span><select class="form-control" name="kenyaOffice"><option value="">Select Kenya office</option><option>Nakuru</option><option>Nairobi</option><option>Kisumu</option><option>Regional Office</option></select></label>
@@ -81,7 +81,7 @@
       <h3>Accommodation</h3>
       <div class="grid">
         <select class="form-control" name="campId" required><option value="">Choose camp</option></select>
-        <label class="form-field"><span>Stay type</span><select class="form-control" name="stayType" required><option value="Short Stay">Short Stay (up to 3 weeks)</option><option value="Long Stay">Long Stay (MOU-based)</option></select></label>
+        <label class="form-field"><span>Stay type</span><select class="form-control" name="stayType" required><option value="">Select stay type</option><option value="Short Stay">Short Stay (up to 3 weeks)</option><option value="Long Stay">Long Stay (MOU-based)</option></select></label>
         <label class="form-field" data-short-stay><span>Room rate</span><select class="form-control" name="rateId" required disabled><option value="">Choose a camp first</option></select></label>
         <label class="form-field hidden" data-long-stay><span>MOU reference</span><select class="form-control" name="mouId" disabled><option value="">Search active MOUs</option></select></label>
         <input class="form-control hidden" data-long-stay name="mouRate" placeholder="MOU rate" readonly>

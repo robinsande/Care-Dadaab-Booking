@@ -20,6 +20,7 @@ const CONTRACT_TYPES = [
   'Consultant',
   'Implementing Partner',
   'Partner Organisation',
+  'Government',
   'Visitor',
   'Other',
 ];

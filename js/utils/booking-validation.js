@@ -43,6 +43,11 @@ export function validateGuestFields(values, { requireLocation = true } = {}) {
         })(),
     },
     departureCountry: { required: true, label: 'Departure Country' },
+    mouId: {
+      custom: (value, all) => all.stayType === 'Long Stay' && !value
+        ? 'Select an active MOU for Long Stay bookings.'
+        : null,
+    },
     kenyaOffice: {
       custom: (value, all) => {
         const needsOffice = getBookingLocationState(all).showKenyaOffice;

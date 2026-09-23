@@ -12,7 +12,11 @@ import {
   formatMoney,
 } from '../utils/format.js';
 import { listMous } from '../api/mous.js';
-import { getBookingLocationState } from '../utils/booking-location.js';
+import {
+  getBookingLocationState,
+  getMouCategoryForContractType,
+  getMouCategoryLabel,
+} from '../utils/booking-location.js';
 
 function sliceDate(value) {
   if (!value) return '';
@@ -52,6 +56,7 @@ export function initGuestFieldSelects(form) {
   fillSelect(form.elements.kenyaOffice, constants.KENYA_OFFICES, { placeholder: 'Select Kenya office' });
   form.elements.contractType?.addEventListener('change', () => {
     updateLocationVisibility();
+    updateMouVisibility().catch(() => {});
   });
   form.elements.careStaffLocation?.addEventListener('change', () => {
     const state = getBookingLocationState({
@@ -68,18 +73,35 @@ export function initGuestFieldSelects(form) {
   fillSelect(form.elements.stayType, constants.STAY_TYPES, { placeholder: 'Select stay type' });
   const mouField = form.querySelector('[data-mou-field]');
   const mouSelect = form.elements.mouId;
+  let mouLoadVersion = 0;
   const updateMouVisibility = async () => {
     const longStay = form.elements.stayType?.value === 'Long Stay';
     if (mouField) mouField.hidden = !longStay;
     if (!mouSelect) return;
     mouSelect.required = longStay;
     mouSelect.disabled = !longStay;
-    if (longStay && mouSelect.options.length <= 1) {
-      const response = await listMous({ status: 'active' });
+    if (!longStay) {
+      mouSelect.value = '';
+      return;
+    }
+    const category = getMouCategoryForContractType(form.elements.contractType?.value);
+    const selectedMouId = mouSelect.value;
+    const loadVersion = ++mouLoadVersion;
+    if (!category) {
+      mouSelect.innerHTML = '<option value="">Select an eligible contract type first</option>';
+      mouSelect.disabled = true;
+      return;
+    }
+    try {
+      const response = await listMous({ status: 'active', counterpartyCategory: category });
+      if (loadVersion !== mouLoadVersion) return;
       const mous = response.data || [];
       mouSelect.innerHTML = mous.length
-        ? `<option value="">Select an active MOU</option>${mous.map((mou) => `<option value="${mou._id}">${mou.partyName} (${mou.mouType}) - ${mou.rateCurrency} ${Number(mou.rateAmount).toLocaleString()} / ${mou.ratePeriod === 'per_month' ? 'month' : 'year'}</option>`).join('')}`
-        : '<option value="">No active MOUs available</option>';
+        ? `<option value="">Select an active ${getMouCategoryLabel(category)} MOU</option>${mous.map((mou) => `<option value="${mou._id}">${mou.partyName} - ${mou.rateCurrency} ${Number(mou.rateAmount).toLocaleString()} / ${mou.ratePeriod === 'per_month' ? 'month' : 'year'}</option>`).join('')}`
+        : '<option value="">No eligible active MOUs available</option>';
+      mouSelect.value = selectedMouId;
+    } catch (_) {
+      mouSelect.innerHTML = '<option value="">Unable to load eligible MOUs</option>';
     }
   };
   form.elements.stayType?.addEventListener('change', () => updateMouVisibility().catch(() => {}));

@@ -19,3 +19,21 @@ export function getBookingLocationState({ contractType = '', careStaffLocation =
     showInternationalCountry: isInternationalStaff || (!isCareStaff && isInternationalResidence),
   };
 }
+
+export function getMouCategoryForContractType(contractType) {
+  return {
+    'CARE Staff': 'staff',
+    'Implementing Partner': 'implementing_partner',
+    'Partner Organisation': 'implementing_partner',
+    Government: 'government',
+  }[String(contractType || '').trim()] || '';
+}
+
+export function getMouCategoryLabel(category) {
+  return {
+    staff: 'CARE Staff',
+    implementing_partner: 'Implementing Partner',
+    government: 'Government',
+    municipality: 'Municipality',
+  }[category] || category || 'Other';
+}

@@ -2687,7 +2687,7 @@
   .reservation-log-heading {
     display: block;
     background: #173b63;
-    color: #ffff00;
+    color: #ffffff;
     font: 700 22px/1.2 Arial, sans-serif;
     text-align: center;
     padding: 10px;
@@ -2722,7 +2722,7 @@
 
   .reservation-log-print .table th {
     background: #173b63;
-    color: #ffff00;
+    color: #ffffff;
     font-weight: 700;
   }
 

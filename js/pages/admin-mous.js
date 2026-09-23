@@ -34,7 +34,6 @@ form.addEventListener('submit', async (event) => {
   try {
     await api.post('/mous', Object.fromEntries(new FormData(form)));
     form.reset();
-    form.elements.rateAmount.value = '6000';
     message('MOU created and payment schedule generated.');
     await loadMous();
   } catch (error) { message(error.message, true); }

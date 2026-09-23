@@ -69,6 +69,7 @@ function buildParams() {
   if (values.period) params.period = values.period;
   if (values.year) params.year = values.year;
   if (values.status) params.status = values.status;
+  if (values.counterpartyCategory) params.counterpartyCategory = values.counterpartyCategory;
   return params;
 }
 
@@ -132,15 +133,26 @@ async function generateReport() {
 }
 
 function renderReservationLog(rows) {
+  const columns = [
+    ['tableNo', 'Serial No.'],
+    ['roomType', 'Room Type / Room'],
+    ['checkInDate', 'Check-in Date'],
+    ['departureDate', 'Departure Date'],
+    ['unitPrice', 'Unit Price'],
+    ['rooms', 'Rooms'],
+    ['numberOfDays', 'No. of Days'],
+    ['typeOfRoom', 'Stay Type'],
+    ['remark', 'Remark / Occupant / MOU'],
+  ];
   const printableRows = [...rows];
   while (printableRows.length < 20) printableRows.push({});
   resultsEl.classList.add('reservation-log-print');
   resultsEl.innerHTML = `
-    <div class="reservation-log-heading">Reservation Log</div>
-    <div class="reservation-log-date">Date: ${new Date().toLocaleDateString('en-GB')}</div>
+    <div class="reservation-log-heading">ROOM RESERVATION FORM</div>
+    <div class="reservation-log-date">Recipient: Dadaab Accommodation Team &nbsp; | &nbsp; Sender: CARE International &nbsp; | &nbsp; Date: ${new Date().toLocaleDateString('en-GB')}</div>
     <table class="table" aria-label="Reservation Log">
-      <thead><tr><th>Table No</th><th>Customer Name</th><th># of Person</th><th>Phone #</th><th>Arrival Time</th><th>Checkout Time</th><th>Status</th></tr></thead>
-      <tbody>${printableRows.map((row) => `<tr><td>${escapeHtml(row.tableNo ?? '')}</td><td>${escapeHtml(row.customerName ?? '')}</td><td>${escapeHtml(row.persons ?? '')}</td><td>${escapeHtml(row.phoneNumber ?? '')}</td><td>${escapeHtml(row.arrivalTime ?? '')}</td><td>${escapeHtml(row.checkoutTime ?? '')}</td><td>${escapeHtml(row.status ?? '')}</td></tr>`).join('')}</tbody>
+      <thead><tr>${columns.map((column) => `<th>${column[1]}</th>`).join('')}</tr></thead>
+      <tbody>${printableRows.map((row) => `<tr>${columns.map((column) => `<td>${escapeHtml(row[column[0]] ?? '')}</td>`).join('')}</tr>`).join('')}</tbody>
     </table>
   `;
 }

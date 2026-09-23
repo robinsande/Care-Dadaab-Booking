@@ -32,7 +32,7 @@ export async function init() {
   const form = document.getElementById('spa-mou-form');
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    try { await api.post('/mous', Object.fromEntries(new FormData(form))); form.reset(); form.elements.rateAmount.value = '6000'; showMessage('MOU created and payment schedule generated.'); await loadMous(); } catch (error) { showMessage(error.message, true); }
+    try { await api.post('/mous', Object.fromEntries(new FormData(form))); form.reset(); showMessage('MOU created and payment schedule generated.'); await loadMous(); } catch (error) { showMessage(error.message, true); }
   });
   document.getElementById('spa-mou-rows').addEventListener('click', (event) => { const button = event.target.closest('[data-spa-mou]'); if (button) loadPayments(button.dataset.spaMou).catch((error) => showMessage(error.message, true)); });
   document.getElementById('spa-mou-payment-rows').addEventListener('click', async (event) => {

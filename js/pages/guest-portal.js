@@ -1,4 +1,5 @@
 import { listGuestCamps, listGuestCampRates, listPublicMous, submitPublicBookingRequest } from '../api/guest.js';
+import { getMouCategoryForContractType, getMouCategoryLabel } from '../utils/booking-location.js';
 import { getBookingLocationState } from '../utils/booking-location.js';
 
 const $ = (selector) => document.querySelector(selector);
@@ -43,6 +44,7 @@ const updateCareStaffFields = () => {
 const stayTypeSelect = bookingForm.elements.stayType;
 const rateField = bookingForm.querySelector('[data-short-stay]');
 const mouFields = bookingForm.querySelectorAll('[data-long-stay]');
+let mouLoadVersion = 0;
 
 arrivalDateInput.min = today;
 departureDateInput.min = today;
@@ -72,12 +74,29 @@ const setStayType = async () => {
   bookingForm.elements.mouId.disabled = !longStay;
   bookingForm.elements.mouId.required = longStay;
   bookingForm.elements.mouRate.value = '';
-  if (longStay && bookingForm.elements.mouId.options.length <= 1) {
-    const response = await listPublicMous({ status: 'active' });
+  if (!longStay) {
+    bookingForm.elements.mouId.value = '';
+    return;
+  }
+  const category = getMouCategoryForContractType(bookingForm.elements.contractType.value);
+  const selectedMouId = bookingForm.elements.mouId.value;
+  const loadVersion = ++mouLoadVersion;
+  if (!category) {
+    bookingForm.elements.mouId.innerHTML = '<option value="">Select an eligible contract type first</option>';
+    bookingForm.elements.mouId.disabled = true;
+    return;
+  }
+  try {
+    const response = await listPublicMous({ status: 'active', counterpartyCategory: category });
+    if (loadVersion !== mouLoadVersion) return;
     const mous = response.data || [];
     bookingForm.elements.mouId.innerHTML = mous.length
-      ? `<option value="">Choose an active MOU</option>${mous.map((mou) => `<option value="${mou._id}" data-rate="${mou.rateCurrency} ${Number(mou.rateAmount).toLocaleString()} / ${mou.ratePeriod === 'per_month' ? 'month' : 'year'}">${mou.partyName} (${mou.mouType}) - ${mou.status}</option>`).join('')}`
-      : '<option value="">No active MOUs available</option>';
+      ? `<option value="">Choose an active ${getMouCategoryLabel(category)} MOU</option>${mous.map((mou) => `<option value="${mou._id}" data-rate="${mou.rateCurrency} ${Number(mou.rateAmount).toLocaleString()} / ${mou.ratePeriod === 'per_month' ? 'month' : 'year'}">${mou.partyName} - ${mou.rateCurrency} ${Number(mou.rateAmount).toLocaleString()} / ${mou.ratePeriod === 'per_month' ? 'month' : 'year'}</option>`).join('')}`
+      : '<option value="">No eligible active MOUs available</option>';
+    bookingForm.elements.mouId.value = selectedMouId;
+  } catch (error) {
+    bookingForm.elements.mouId.innerHTML = '<option value="">Unable to load eligible MOUs</option>';
+    throw error;
   }
 };
 
@@ -113,12 +132,17 @@ bookingForm.elements.rateId.addEventListener('change', () => {
   bookingForm.elements.stayType.value = bookingForm.elements.rateId.selectedOptions[0]?.dataset.stayType || '';
 });
 stayTypeSelect.addEventListener('change', () => setStayType().catch((error) => message(error.message, true)));
+bookingForm.elements.contractType.addEventListener('change', () => setStayType().catch((error) => message(error.message, true)));
 bookingForm.elements.mouId.addEventListener('change', () => {
   bookingForm.elements.mouRate.value = bookingForm.elements.mouId.selectedOptions[0]?.dataset.rate || '';
 });
 
 bookingForm.addEventListener('submit', async (event) => {
   event.preventDefault();
+  if (!bookingForm.checkValidity()) {
+    bookingForm.reportValidity();
+    return;
+  }
   try {
     const values = formData(event.target);
     values.type = 'booking';
