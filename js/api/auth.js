@@ -13,7 +13,7 @@ export function wakeBackend() {
 }
 
 export function login(email, password) {
-  return api.post('/auth/login', { email, password }, { auth: false, retryTransient: true });
+  return api.post('/auth/login', { email, password }, { auth: false });
 }
 
 export function verifyMfa(mfaToken, code) {

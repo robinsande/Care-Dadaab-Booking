@@ -1,4 +1,4 @@
-import { login, wakeBackend } from '../api/auth.js?v=20260922-1';
+import { login } from '../api/auth.js?v=20260922-1';
 import { ApiError } from '../api/client.js?v=20260922-2';
 import { applyBrandLogos } from '../config.js';
 import { isAuthenticated, setSession } from '../auth/session.js';
@@ -19,8 +19,6 @@ function normalizeLoginUrl() {
 }
 
 normalizeLoginUrl();
-wakeBackend();
-
 if (isAuthenticated()) {
   window.location.href = '/';
 }
