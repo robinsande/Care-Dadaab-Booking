@@ -251,7 +251,7 @@ async function loadPageModule(route) {
     rooms: './spa-pages/spa-rooms.js',
     rates: './spa-pages/spa-rates.js',
     reports: './spa-pages/spa-reports.js',
-    mous: './spa-pages/spa-reports.js',
+    mous: './spa-pages/spa-mous.js',
     users: './spa-pages/spa-users.js',
     settings: './spa-pages/spa-settings.js',
     'change-password': './spa-pages/spa-change-password.js',

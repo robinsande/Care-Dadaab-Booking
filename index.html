@@ -441,6 +441,26 @@
           </div>
         </div>
 
+        <!-- ============ MOU TRACKER PAGE ============ -->
+        <div id="page-mous" class="admin-content page-container" data-route="mous" hidden>
+          <div class="page-header"><h2 style="font-size:var(--text-xl);">MOU Tracker</h2><p>Manage agreements, payment schedules, and MOU-specific Excel reports.</p></div>
+          <form class="panel form-grid two-col" id="spa-mou-form" style="margin-bottom:var(--space-6);">
+            <div class="form-group"><label class="form-label" for="spa-mou-type">MOU Type</label><select class="form-control" id="spa-mou-type" name="mouType" required><option value="individual">Individual MOU</option><option value="partner">Partner MOU</option></select></div>
+            <div class="form-group"><label class="form-label" for="spa-mou-party">Party Name</label><input class="form-control" id="spa-mou-party" name="partyName" required></div>
+            <div class="form-group"><label class="form-label" for="spa-mou-category">Counterparty Category</label><select class="form-control" id="spa-mou-category" name="counterpartyCategory" required><option value="staff">Staff</option><option value="implementing_partner">Implementing Partner</option><option value="government">Government</option><option value="municipality">Municipality</option></select></div>
+            <div class="form-group"><label class="form-label" for="spa-mou-rate">Rate Amount (KES)</label><input class="form-control" id="spa-mou-rate" name="rateAmount" type="number" min="0" value="6000" required></div>
+            <div class="form-group"><label class="form-label" for="spa-mou-start">Start Date</label><input class="form-control" id="spa-mou-start" name="startDate" type="date" required></div>
+            <div class="form-group"><label class="form-label" for="spa-mou-end">End Date</label><input class="form-control" id="spa-mou-end" name="endDate" type="date"></div>
+            <div class="form-group"><label class="form-label" for="spa-mou-status">Status</label><select class="form-control" id="spa-mou-status" name="status"><option value="active">Active</option><option value="draft">Draft</option></select></div>
+            <div class="form-group full-width"><label class="form-label" for="spa-mou-document">Signed Document Reference</label><input class="form-control" id="spa-mou-document" name="documentRef"></div>
+            <div class="form-actions full-width"><button class="btn btn-primary" type="submit">Create MOU</button></div>
+          </form>
+          <div class="toolbar" style="justify-content:flex-end;gap:var(--space-3);margin-bottom:var(--space-4);"><button class="btn btn-secondary" type="button" id="spa-mou-monthly-export">Export Monthly MOU Report</button><button class="btn btn-secondary" type="button" id="spa-mou-annual-export">Export Annual MOU Report</button></div>
+          <p id="spa-mou-message" class="notice" role="status"></p>
+          <div class="table-wrap"><table class="table"><thead><tr><th>Party</th><th>Type</th><th>Term</th><th>Rate</th><th>Status</th><th>Payments</th></tr></thead><tbody id="spa-mou-rows"></tbody></table></div>
+          <div class="table-wrap" id="spa-mou-payments" hidden style="margin-top:var(--space-6);"><h3 id="spa-mou-payment-title"></h3><table class="table"><thead><tr><th>Period</th><th>Due</th><th>Amount</th><th>Paid</th><th>Status</th><th>Action</th></tr></thead><tbody id="spa-mou-payment-rows"></tbody></table></div>
+        </div>
+
         <!-- ============ USERS PAGE ============ -->
         <div id="page-users" class="admin-content page-container" data-route="users" hidden>
           <div class="toolbar" style="justify-content:space-between;align-items:center;">
