@@ -179,15 +179,14 @@ function renderMouRevenue(rows, report, resultsEl) {
     groups.get(key).push(row);
   });
   const columns = [
-    ['person', 'Guest'], ['room', 'Room Occupied'], ['checkIn', 'Check-in'],
-    ['checkOut', 'Check-out'], ['days', 'Days'], ['rate', 'Rate'],
-    ['amountAccumulated', 'Accumulated Revenue'], ['personTotalRevenue', 'Guest Total'],
-    ['bookedBy', 'Booked By'], ['status', 'Status'],
+    ['tableNo', 'Serial No.'], ['room', 'Room Type / Room'], ['checkIn', 'Check-in Date'],
+    ['checkOut', 'Departure Date'], ['rate', 'Unit Price'], ['rooms', 'Rooms'],
+    ['days', 'No. of Days'], ['typeOfRoom', 'Type of Room'], ['remark', 'Remark'],
   ];
   resultsEl.classList.add('mou-revenue-print');
   resultsEl.innerHTML = [...groups.entries()].map(([, groupRows]) => {
     const total = groupRows.reduce((sum, row) => sum + Number(row.amountAccumulated || 0), 0);
-    return `<section class="mou-report-page"><div class="reservation-log-heading">ROOM RESERVATION FORM 1</div><h3>Room Reservation Form - ${escapeHtml(groupRows[0]?.mou || 'Unassigned MOU')}</h3><p class="reservation-log-date">Recipient: Dadaab Accommodation Team | Sender: CARE International | Period: ${escapeHtml(report.summary?.period || 'All selected dates')} | MOU subtotal: ${total.toLocaleString('en-KE', { maximumFractionDigits: 2 })}</p><table class="table"><thead><tr>${columns.map((column) => `<th>${column[1]}</th>`).join('')}</tr></thead><tbody>${groupRows.map((row) => `<tr>${columns.map((column) => `<td>${escapeHtml(row[column[0]] ?? '')}</td>`).join('')}</tr>`).join('')}</tbody></table><p class="form-hint">Remark: Hotel confirmation by: ____________________ Confirmation date: ____________________</p></section>`;
+    return `<section class="mou-report-page"><div class="reservation-log-heading">ROOM RESERVATION FORM 1</div><h3>Room Reservation Form - ${escapeHtml(groupRows[0]?.mou || 'Unassigned MOU')}</h3><p class="reservation-log-date">Recipient: Dadaab Accommodation Team | Sender: CARE International | Period: ${escapeHtml(report.summary?.period || 'All selected dates')} | MOU subtotal: ${total.toLocaleString('en-KE', { maximumFractionDigits: 2 })}</p><table class="table"><thead><tr>${columns.map((column) => `<th>${column[1]}</th>`).join('')}</tr></thead><tbody>${groupRows.map((row, index) => `<tr>${columns.map((column) => `<td>${escapeHtml(column[0] === 'tableNo' ? index + 1 : row[column[0]] ?? '')}</td>`).join('')}</tr>`).join('')}</tbody></table><p class="form-hint">Remark: Hotel confirmation by: ____________________ Confirmation date: ____________________</p></section>`;
   }).join('') || '<p class="empty-state">No MOU occupancy revenue found.</p>';
 }
 
