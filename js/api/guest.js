@@ -13,6 +13,7 @@ export const updateGuestProfile = (payload) => request('/guest/auth/me', { metho
 export const guestResetPassword = (token, newPassword) => apiRequest('/guest/auth/reset', { method: 'POST', body: { token, newPassword }, auth: false });
 export const listGuestCamps = () => apiRequest('/guest/camps', { auth: false });
 export const listGuestCampRates = (campId) => apiRequest(`/guest/camps/${campId}/rates`, { auth: false });
+export const submitPublicBookingRequest = (payload) => apiRequest('/guest/public-requests', { method: 'POST', body: payload, auth: false });
 export const listGuestBookings = () => request('/guest/bookings');
 export const getGuestInvoice = (bookingId) => request(`/guest/bookings/${bookingId}/invoice`);
 export const listGuestRequests = () => request('/guest/requests');

@@ -56,13 +56,9 @@
   </style>
 </head>
 <body><main>
-  <header class="guest-topbar"><div class="guest-brand"><span class="guest-brand-mark"><i data-lucide="sparkles"></i></span><div><h1>CARE Guest Portal</h1><p>Plan your stay, track requests, and keep every detail in one place.</p></div></div><div class="profile-menu hidden" id="account-menu"><button id="profile-toggle" class="btn btn-secondary btn-icon" type="button"><i data-lucide="user-round"></i> Profile</button><div id="profile-panel" class="profile-panel hidden"><h2><i data-lucide="user-round"></i> Your profile</h2><p class="form-hint">Save your details once and reuse them for future bookings.</p><form id="profile-form"><div class="grid"><input class="form-control" name="firstName" placeholder="First name" required><input class="form-control" name="lastName" placeholder="Last name" required><input class="form-control" name="phone" type="tel" placeholder="Phone"><input class="form-control" name="organisation" placeholder="Organisation"><select class="form-control" name="gender"><option value="">Select gender</option><option>Male</option><option>Female</option></select><select class="form-control" name="contractType"><option value="">Select contract type</option><option>CARE Staff</option><option>Consultant</option><option>Partner Organisation</option><option>Visitor</option><option>Other</option></select><select class="form-control" name="departureCountry"><option value="">Select country of origin</option><option>Local (Kenyan)</option><option>International</option></select><input class="form-control" name="kenyaOffice" placeholder="Kenya office"><input class="form-control" name="internationalCountry" placeholder="Country of origin"></div><button class="btn btn-secondary btn-icon" type="submit"><i data-lucide="save"></i> Save profile</button></form></div></div><button id="sign-out" class="btn btn-secondary btn-icon hidden"><i data-lucide="log-out"></i> Sign out</button></header>
+  <header class="guest-topbar"><div class="guest-brand"><span class="guest-brand-mark"><i data-lucide="sparkles"></i></span><div><h1>CARE Accommodation Booking</h1><p>Submit your accommodation request directly to the Dadaab accommodation team.</p></div></div></header>
   <div class="guest-hero"><section class="guest-hero-copy"><h2>Stay somewhere that feels cared for.</h2><p>Request accommodation at Dadaab, follow your booking status, and contact the accommodation team without calling back and forth.</p><div class="guest-hero-stat"><i data-lucide="shield-check"></i><span>Secure guest access with email recovery</span></div></section><section class="guest-spotlight"><div class="guest-spotlight-icon"><i data-lucide="bed-double"></i></div></section></div>
-  <section id="auth-section"><div class="guest-auth-grid">
-    <form id="login-form"><h2><i data-lucide="log-in"></i> Sign in</h2><input class="form-control" name="email" type="email" placeholder="Email" autocomplete="email" required><input class="form-control" name="password" type="password" placeholder="Password" autocomplete="current-password" required><button class="btn btn-primary btn-icon"><i data-lucide="arrow-right"></i> Sign in</button><button type="button" id="show-register" class="btn btn-ghost btn-icon"><i data-lucide="user-plus"></i> Create account</button><button type="button" id="forgot-password" class="btn btn-ghost btn-icon"><i data-lucide="key-round"></i> Forgot password?</button></form>
-    <form id="register-form" class="hidden"><h2><i data-lucide="user-round-plus"></i> Create account</h2><div class="grid"><input class="form-control" name="firstName" placeholder="First name" autocomplete="given-name" required><input class="form-control" name="lastName" placeholder="Last name" autocomplete="family-name" required></div><input class="form-control" name="email" type="email" placeholder="Email" autocomplete="email" required><input class="form-control" name="phone" placeholder="Phone" autocomplete="tel"><input class="form-control" name="password" type="password" minlength="8" placeholder="Password" autocomplete="new-password" required><button class="btn btn-primary btn-icon"><i data-lucide="user-check"></i> Register</button></form>
-  </div><form id="reset-form" class="hidden"><h2><i data-lucide="mail"></i> Recover account</h2><input class="form-control" name="email" type="email" placeholder="Email" autocomplete="email" required><button class="btn btn-primary btn-icon"><i data-lucide="send"></i> Send recovery link</button></form></section>
-  <section id="portal-section" class="hidden">
+  <section id="portal-section">
     <h2><i data-lucide="calendar-plus"></i> Start a booking</h2>
     <p class="form-hint">Complete the same guest and accommodation details used by the booking officer. Staff will assign the block and room after review.</p>
     <form id="booking-form">
@@ -70,6 +66,7 @@
       <div class="grid">
         <input class="form-control" name="firstName" placeholder="First name" required>
         <input class="form-control" name="lastName" placeholder="Last name" required>
+        <input class="form-control" name="email" type="email" placeholder="Email address" required>
         <input class="form-control" name="phone" type="tel" placeholder="Phone" required>
         <input class="form-control" name="organisation" placeholder="Organisation">
         <select class="form-control" name="gender" required><option value="">Select gender</option><option>Male</option><option>Female</option></select>
@@ -91,7 +88,7 @@
       <textarea class="form-control" name="remarks" placeholder="Remarks"></textarea>
       <button class="btn btn-primary btn-icon"><i data-lucide="send"></i> Request booking</button>
     </form>
-    <p id="message" class="notice"></p><h2><i data-lucide="calendar-check-2"></i> Your bookings</h2><div id="bookings"></div><h2><i data-lucide="inbox"></i> Your requests</h2><div id="requests"></div>
+    <p id="message" class="notice" role="status"></p>
   </section>
-</main><script type="module" src="../js/pages/guest-portal.js?v=20260908-03"></script></body>
+</main><script type="module" src="../js/pages/guest-portal.js?v=20260923-01"></script></body>
 </html>
