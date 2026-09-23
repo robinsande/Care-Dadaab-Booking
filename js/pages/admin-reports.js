@@ -66,6 +66,9 @@ function buildParams() {
   if (values.to) params.to = values.to;
   if (values.campId) params.campId = values.campId;
   if (values.stayType) params.stayType = values.stayType;
+  if (values.period) params.period = values.period;
+  if (values.year) params.year = values.year;
+  if (values.status) params.status = values.status;
   return params;
 }
 

@@ -203,7 +203,7 @@ async function onSave(event) {
 
   if (!validateBookingForm(form, values, { requireLocation })) return;
 
-  if (requireLocation && selectors.getAppliedRate() == null) {
+  if (requireLocation && values.stayType !== 'Long Stay' && selectors.getAppliedRate() == null) {
     showToast('A valid rate must be available for the selected camp and stay type.', 'error');
     return;
   }

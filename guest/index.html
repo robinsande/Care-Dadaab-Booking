@@ -57,7 +57,7 @@
 </head>
 <body><main>
   <header class="guest-topbar"><div class="guest-brand"><span class="guest-brand-mark"><i data-lucide="sparkles"></i></span><div><h1>CARE Accommodation Booking</h1><p>Submit your accommodation request directly to the Dadaab accommodation team.</p></div></div></header>
-  <div class="guest-hero"><section class="guest-hero-copy"><h2>Stay somewhere that feels cared for.</h2><p>Request accommodation at Dadaab, follow your booking status, and contact the accommodation team without calling back and forth.</p><div class="guest-hero-stat"><i data-lucide="shield-check"></i><span>Secure guest access with email recovery</span></div></section><section class="guest-spotlight"><div class="guest-spotlight-icon"><i data-lucide="bed-double"></i></div></section></div>
+  <div class="guest-hero"><section class="guest-hero-copy"><h2>Stay somewhere that feels cared for.</h2><p>Request accommodation at Dadaab and send your booking details directly to the accommodation team.</p><div class="guest-hero-stat"><i data-lucide="shield-check"></i><span>Every request is reviewed by the accommodation team</span></div></section><section class="guest-spotlight"><div class="guest-spotlight-icon"><i data-lucide="bed-double"></i></div></section></div>
   <section id="portal-section">
     <h2><i data-lucide="calendar-plus"></i> Start a booking</h2>
     <p class="form-hint">Complete the same guest and accommodation details used by the booking officer. Staff will assign the block and room after review.</p>
@@ -80,8 +80,10 @@
       <h3>Accommodation</h3>
       <div class="grid">
         <select class="form-control" name="campId" required><option value="">Choose camp</option></select>
-        <label class="form-field"><span>Room rate</span><select class="form-control" name="rateId" required disabled><option value="">Choose a camp first</option></select></label>
-        <input type="hidden" name="stayType">
+        <label class="form-field"><span>Stay type</span><select class="form-control" name="stayType" required><option value="Short Stay">Short Stay (up to 3 weeks)</option><option value="Long Stay">Long Stay (MOU-based)</option></select></label>
+        <label class="form-field" data-short-stay><span>Room rate</span><select class="form-control" name="rateId" required disabled><option value="">Choose a camp first</option></select></label>
+        <label class="form-field hidden" data-long-stay><span>MOU reference</span><select class="form-control" name="mouId" disabled><option value="">Search active MOUs</option></select></label>
+        <input class="form-control hidden" data-long-stay name="mouRate" placeholder="MOU rate" readonly>
         <label class="form-field"><span>Arrival date</span><input class="form-control" name="arrivalDate" type="date" required></label>
         <label class="form-field"><span>Departure date</span><input class="form-control" name="departureDate" type="date" required></label>
       </div>
@@ -90,5 +92,5 @@
     </form>
     <p id="message" class="notice" role="status"></p>
   </section>
-</main><script type="module" src="../js/pages/guest-portal.js?v=20260923-01"></script></body>
+</main><script type="module" src="../js/pages/guest-portal.js?v=20260923-02"></script></body>
 </html>

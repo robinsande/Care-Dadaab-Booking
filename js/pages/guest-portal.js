@@ -1,4 +1,4 @@
-import { listGuestCamps, listGuestCampRates, submitPublicBookingRequest } from '../api/guest.js';
+import { listGuestCamps, listGuestCampRates, listPublicMous, submitPublicBookingRequest } from '../api/guest.js';
 
 const $ = (selector) => document.querySelector(selector);
 const formData = (form) => Object.fromEntries(new FormData(form).entries());
@@ -11,6 +11,9 @@ const bookingForm = $('#booking-form');
 const arrivalDateInput = bookingForm.elements.arrivalDate;
 const departureDateInput = bookingForm.elements.departureDate;
 const today = new Date().toISOString().slice(0, 10);
+const stayTypeSelect = bookingForm.elements.stayType;
+const rateField = bookingForm.querySelector('[data-short-stay]');
+const mouFields = bookingForm.querySelectorAll('[data-long-stay]');
 
 arrivalDateInput.min = today;
 departureDateInput.min = today;
@@ -20,6 +23,30 @@ arrivalDateInput.addEventListener('change', () => {
     departureDateInput.value = '';
   }
 });
+departureDateInput.addEventListener('change', () => {
+  if (stayTypeSelect.value === 'Short Stay' && arrivalDateInput.value && departureDateInput.value) {
+    const nights = Math.ceil((new Date(departureDateInput.value) - new Date(arrivalDateInput.value)) / 86400000);
+    if (nights > 21) message('Short Stay is limited to 21 nights. Select Long Stay (MOU-based) for a longer visit.', true);
+  }
+});
+
+const setStayType = async () => {
+  const longStay = stayTypeSelect.value === 'Long Stay';
+  rateField.classList.toggle('hidden', longStay);
+  bookingForm.elements.rateId.required = !longStay;
+  bookingForm.elements.rateId.disabled = longStay || !bookingForm.elements.campId.value;
+  mouFields.forEach((field) => field.classList.toggle('hidden', !longStay));
+  bookingForm.elements.mouId.disabled = !longStay;
+  bookingForm.elements.mouId.required = longStay;
+  bookingForm.elements.mouRate.value = '';
+  if (longStay && bookingForm.elements.mouId.options.length <= 1) {
+    const response = await listPublicMous({ status: 'active' });
+    const mous = response.data || [];
+    bookingForm.elements.mouId.innerHTML = mous.length
+      ? `<option value="">Choose an active MOU</option>${mous.map((mou) => `<option value="${mou._id}" data-rate="${mou.rateCurrency} ${Number(mou.rateAmount).toLocaleString()} / ${mou.ratePeriod === 'per_month' ? 'month' : 'year'}">${mou.partyName} (${mou.mouType}) - ${mou.status}</option>`).join('')}`
+      : '<option value="">No active MOUs available</option>';
+  }
+};
 
 async function loadCamps() {
   const response = await listGuestCamps();
@@ -52,6 +79,10 @@ bookingForm.elements.campId.addEventListener('change', async () => {
 bookingForm.elements.rateId.addEventListener('change', () => {
   bookingForm.elements.stayType.value = bookingForm.elements.rateId.selectedOptions[0]?.dataset.stayType || '';
 });
+stayTypeSelect.addEventListener('change', () => setStayType().catch((error) => message(error.message, true)));
+bookingForm.elements.mouId.addEventListener('change', () => {
+  bookingForm.elements.mouRate.value = bookingForm.elements.mouId.selectedOptions[0]?.dataset.rate || '';
+});
 
 bookingForm.addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -59,6 +90,10 @@ bookingForm.addEventListener('submit', async (event) => {
     const values = formData(event.target);
     values.type = 'booking';
     values.driverPickup = event.target.elements.driverPickup.checked;
+    if (values.stayType === 'Short Stay' && values.arrivalDate && values.departureDate) {
+      const nights = Math.ceil((new Date(values.departureDate) - new Date(values.arrivalDate)) / 86400000);
+      if (nights > 21) throw new Error('Short Stay cannot exceed 21 nights. Select Long Stay (MOU-based).');
+    }
     await submitPublicBookingRequest(values);
     event.target.reset();
     bookingForm.elements.rateId.disabled = true;
@@ -68,5 +103,5 @@ bookingForm.addEventListener('submit', async (event) => {
   }
 });
 
-loadCamps().catch((error) => message(error.message, true));
+loadCamps().then(setStayType).catch((error) => message(error.message, true));
 window.addEventListener('load', refreshIcons, { once: true });

@@ -48,7 +48,7 @@ async function onSubmit(event) {
 
   await selectors.updateRateDisplay();
   const appliedRate = selectors.getAppliedRate();
-  if (appliedRate == null) {
+  if (values.stayType !== 'Long Stay' && appliedRate == null) {
     showToast('A valid rate must be available for the selected camp and stay type.', 'error');
     return;
   }

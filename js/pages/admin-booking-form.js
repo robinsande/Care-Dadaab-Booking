@@ -11,6 +11,7 @@ import {
   escapeHtml,
   formatMoney,
 } from '../utils/format.js';
+import { listMous } from '../api/mous.js';
 
 function sliceDate(value) {
   if (!value) return '';
@@ -61,6 +62,24 @@ export function initGuestFieldSelects(form) {
   form.elements.departureCountry?.addEventListener('change', updateOfficeVisibility);
   updateOfficeVisibility();
   fillSelect(form.elements.stayType, constants.STAY_TYPES, { placeholder: 'Select stay type' });
+  const mouField = form.querySelector('[data-mou-field]');
+  const mouSelect = form.elements.mouId;
+  const updateMouVisibility = async () => {
+    const longStay = form.elements.stayType?.value === 'Long Stay';
+    if (mouField) mouField.hidden = !longStay;
+    if (!mouSelect) return;
+    mouSelect.required = longStay;
+    mouSelect.disabled = !longStay;
+    if (longStay && mouSelect.options.length <= 1) {
+      const response = await listMous({ status: 'active' });
+      const mous = response.data || [];
+      mouSelect.innerHTML = mous.length
+        ? `<option value="">Select an active MOU</option>${mous.map((mou) => `<option value="${mou._id}">${mou.partyName} (${mou.mouType}) - ${mou.rateCurrency} ${Number(mou.rateAmount).toLocaleString()} / ${mou.ratePeriod === 'per_month' ? 'month' : 'year'}</option>`).join('')}`
+        : '<option value="">No active MOUs available</option>';
+    }
+  };
+  form.elements.stayType?.addEventListener('change', () => updateMouVisibility().catch(() => {}));
+  updateMouVisibility().catch(() => {});
 }
 
 export function setupDateInputs(arrivalInput, departureInput) {
@@ -72,15 +91,11 @@ export function setupDateInputs(arrivalInput, departureInput) {
     if (!arrivalInput.value) return;
     departureInput.min = arrivalInput.value;
     if (arrivalInput.form?.elements.stayType?.value === 'Long Stay') {
-      const minimum = new Date(`${arrivalInput.value}T00:00:00`);
-      minimum.setMonth(minimum.getMonth() + 1);
-      minimum.setDate(minimum.getDate() + 1);
-      const maximum = new Date(`${arrivalInput.value}T00:00:00`);
-      maximum.setMonth(maximum.getMonth() + 12);
-      departureInput.min = minimum.toISOString().slice(0, 10);
-      departureInput.max = maximum.toISOString().slice(0, 10);
-    } else {
       departureInput.removeAttribute('max');
+    } else {
+      const maximum = new Date(`${arrivalInput.value}T00:00:00`);
+      maximum.setDate(maximum.getDate() + 21);
+      departureInput.max = maximum.toISOString().slice(0, 10);
     }
   };
 
@@ -119,6 +134,7 @@ export function buildBookingPayload(values) {
     blockId: values.blockId,
     roomId: values.roomId,
     stayType: values.stayType,
+    mouId: values.mouId || undefined,
   };
 }
 
@@ -136,6 +152,7 @@ export function populateGuestFields(form, booking) {
   form.elements.reasonForVisit.value = booking.reasonForVisit || '';
   form.elements.arrivalDate.value = sliceDate(booking.arrivalDate);
   form.elements.departureDate.value = sliceDate(booking.departureDate);
+  if (form.elements.mouId) form.elements.mouId.value = booking.mou?._id || booking.mou || '';
   form.elements.driverPickup.checked = Boolean(booking.driverPickup);
   const departureCountry = guest.departureCountry || booking.departureCountry || '';
   form.elements.departureCountry.value = departureCountry === 'Kenya' || departureCountry === 'Kenyan'

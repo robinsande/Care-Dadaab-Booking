@@ -38,6 +38,8 @@ const REPORT_TYPES = [
   { value: 'arrivals', label: 'Arrivals' },
   { value: 'departures', label: 'Departures' },
   { value: 'reservation-log', label: 'Reservation Log' },
+  { value: 'mou-monthly', label: 'MOU Tracker - Monthly Payers' },
+  { value: 'mou-annual', label: 'MOU Tracker - Annual Payers' },
 ];
 
 export const constants = {
