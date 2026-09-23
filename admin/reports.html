@@ -47,6 +47,7 @@
             <div class="form-group"><label class="form-label" for="year">MOU Year</label><input class="form-control" type="number" id="year" name="year" min="2000" max="2100" placeholder="2026"></div>
             <div class="form-group"><label class="form-label" for="status">MOU Status</label><select class="form-control" id="status" name="status"><option value="">All statuses</option><option value="active">Active</option><option value="expiring_soon">Expiring soon</option><option value="expired">Expired</option></select></div>
             <div class="form-group"><label class="form-label" for="counterpartyCategory">MOU Category</label><select class="form-control" id="counterpartyCategory" name="counterpartyCategory"><option value="">All categories</option><option value="staff">CARE Staff</option><option value="implementing_partner">Implementing Partner</option><option value="government">Government</option><option value="municipality">Municipality</option></select></div>
+            <div class="form-group"><label class="form-label" for="mouId">MOU</label><select class="form-control" id="mouId" name="mouId"><option value="">All MOUs</option></select></div>
           </div>
           <div class="form-actions">
             <button type="submit" class="btn btn-primary" id="generate-report">Generate Report</button>
@@ -56,6 +57,7 @@
           </div>
         </form>
         <div class="table-wrap report-print-area" id="report-results" hidden>
+          <p id="report-summary" class="form-hint"></p>
           <table class="table" aria-label="Report results">
             <thead id="report-results-head"></thead>
             <tbody id="report-results-body"></tbody>

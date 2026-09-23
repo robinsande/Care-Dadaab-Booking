@@ -42,6 +42,7 @@ const REPORT_TYPES = [
   { value: 'reservation-log', label: 'Reservation Log' },
   { value: 'mou-monthly', label: 'MOU Tracker - Monthly Payers' },
   { value: 'mou-annual', label: 'MOU Tracker - Annual Payers' },
+  { value: 'mou-revenue', label: 'MOU Revenue by Occupant' },
 ];
 
 export const constants = {

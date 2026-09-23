@@ -1,4 +1,5 @@
 import { listCamps } from '../api/camps.js';
+import { listMous } from '../api/mous.js';
 import { getReport, downloadReportExport } from '../api/reports.js';
 import { ApiError } from '../api/client.js';
 import { requireAuth } from '../auth/session.js';
@@ -17,6 +18,7 @@ const printBtn = document.getElementById('print-report');
 const resultsEl = document.getElementById('report-results');
 const resultsHead = document.getElementById('report-results-head');
 const resultsBody = document.getElementById('report-results-body');
+const summaryEl = document.getElementById('report-summary');
 
 let lastParams = {};
 
@@ -29,6 +31,7 @@ function boot() {
     reportTypeSelect.value = requestedType;
   }
   fillSelect(form.elements.stayType, constants.STAY_TYPES, { placeholder: 'All stay types' });
+  loadMous();
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -59,6 +62,24 @@ async function loadCamps() {
   }
 }
 
+async function loadMous() {
+  if (!form.elements.mouId) return;
+  try {
+    const response = await listMous();
+    const mous = response.data || [];
+    fillSelect(
+      form.elements.mouId,
+      mous.map((mou) => ({
+        value: mou._id,
+        label: `${mou.partyName} (${mou.counterpartyCategory})`,
+      })),
+      { placeholder: 'All MOUs' },
+    );
+  } catch {
+    showToast('Unable to load MOUs for the report filter.', 'error');
+  }
+}
+
 function buildParams() {
   const values = Object.fromEntries(new FormData(form));
   const params = {};
@@ -70,6 +91,7 @@ function buildParams() {
   if (values.year) params.year = values.year;
   if (values.status) params.status = values.status;
   if (values.counterpartyCategory) params.counterpartyCategory = values.counterpartyCategory;
+  if (values.mouId) params.mouId = values.mouId;
   return params;
 }
 
@@ -92,9 +114,22 @@ async function generateReport() {
     const response = await getReport(reportType, lastParams);
     const report = response.data || {};
     const rows = report.rows || [];
+    if (summaryEl) {
+      const summary = report.summary || {};
+      summaryEl.textContent = Object.entries(summary)
+        .filter(([key]) => key !== 'personTotals')
+        .map(([key, value]) => `${key}: ${typeof value === 'number' ? value.toLocaleString('en-KE', { maximumFractionDigits: 2 }) : String(value ?? '')}`)
+        .join(' | ');
+    }
 
     if (reportType === 'reservation-log') {
       renderReservationLog(rows);
+      resultsEl.hidden = false;
+      setExportEnabled(true);
+      return;
+    }
+    if (reportType === 'mou-revenue') {
+      renderMouRevenue(rows, report, resultsEl);
       resultsEl.hidden = false;
       setExportEnabled(true);
       return;
@@ -130,6 +165,26 @@ async function generateReport() {
   } finally {
     setButtonLoading(generateBtn, false);
   }
+}
+
+function renderMouRevenue(rows, report, resultsEl) {
+  const groups = new Map();
+  rows.forEach((row) => {
+    const key = row.mouId || row.mou || 'unassigned';
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(row);
+  });
+  const columns = [
+    ['person', 'Guest'], ['room', 'Room Occupied'], ['checkIn', 'Check-in'],
+    ['checkOut', 'Check-out'], ['days', 'Days'], ['rate', 'Rate'],
+    ['amountAccumulated', 'Accumulated Revenue'], ['personTotalRevenue', 'Guest Total'],
+    ['bookedBy', 'Booked By'], ['status', 'Status'],
+  ];
+  resultsEl.classList.add('mou-revenue-print');
+  resultsEl.innerHTML = [...groups.entries()].map(([, groupRows]) => {
+    const total = groupRows.reduce((sum, row) => sum + Number(row.amountAccumulated || 0), 0);
+    return `<section class="mou-report-page"><div class="reservation-log-heading">ROOM RESERVATION FORM 1</div><h3>Room Reservation Form - ${escapeHtml(groupRows[0]?.mou || 'Unassigned MOU')}</h3><p class="reservation-log-date">Recipient: Dadaab Accommodation Team | Sender: CARE International | Period: ${escapeHtml(report.summary?.period || 'All selected dates')} | MOU subtotal: ${total.toLocaleString('en-KE', { maximumFractionDigits: 2 })}</p><table class="table"><thead><tr>${columns.map((column) => `<th>${column[1]}</th>`).join('')}</tr></thead><tbody>${groupRows.map((row) => `<tr>${columns.map((column) => `<td>${escapeHtml(row[column[0]] ?? '')}</td>`).join('')}</tr>`).join('')}</tbody></table><p class="form-hint">Remark: Hotel confirmation by: ____________________ Confirmation date: ____________________</p></section>`;
+  }).join('') || '<p class="empty-state">No MOU occupancy revenue found.</p>';
 }
 
 function renderReservationLog(rows) {

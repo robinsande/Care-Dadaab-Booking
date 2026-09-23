@@ -2726,6 +2726,16 @@
     font-weight: 700;
   }
 
+  .mou-report-page {
+    page-break-after: always;
+    break-after: page;
+  }
+
+  .mou-report-page:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
   .admin-main {
     margin: 0;
   }
