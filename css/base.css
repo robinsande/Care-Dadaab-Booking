@@ -36,6 +36,10 @@ a {
 [hidden] {
   display: none !important;
 }
+
+.conditional-field.is-hidden {
+  display: none !important;
+}
 }
 
 a:hover {

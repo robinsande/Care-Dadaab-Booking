@@ -29,7 +29,10 @@ export function initGuestFieldSelects(form) {
   let organisationAutoFilled = false;
   const updateInternationalVisibility = () => {
     const isInternational = form.elements.departureCountry?.value === 'International';
-    if (internationalGroup) internationalGroup.hidden = !isInternational;
+    if (internationalGroup) {
+      internationalGroup.hidden = !isInternational;
+      internationalGroup.classList.toggle('is-hidden', !isInternational);
+    }
     if (form.elements.internationalCountry) {
       form.elements.internationalCountry.required = isInternational;
       if (!isInternational) form.elements.internationalCountry.value = '';
