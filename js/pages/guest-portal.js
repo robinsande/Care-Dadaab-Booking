@@ -13,9 +13,14 @@ const departureDateInput = bookingForm.elements.departureDate;
 const today = new Date().toISOString().slice(0, 10);
 const careStaffLocation = bookingForm.elements.careStaffLocation;
 const internationalCountry = bookingForm.elements.internationalCountry;
+const careStaffLocationGroup = bookingForm.querySelector('[data-care-staff-location]');
 const updateCareStaffFields = () => {
   const isCareStaff = bookingForm.elements.contractType.value === 'CARE Staff';
   const isInternationalStaff = careStaffLocation.value === 'CARE International Staff';
+  careStaffLocationGroup.hidden = !isCareStaff;
+  careStaffLocationGroup.classList.toggle('is-hidden', !isCareStaff);
+  careStaffLocation.required = isCareStaff;
+  if (!isCareStaff) careStaffLocation.value = '';
   const countryGroup = internationalCountry.closest('.form-field, .form-group') || internationalCountry;
   countryGroup.hidden = !isInternationalStaff;
   countryGroup.classList.toggle('is-hidden', !isInternationalStaff);

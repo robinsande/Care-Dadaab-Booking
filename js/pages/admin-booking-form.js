@@ -35,9 +35,11 @@ export function initGuestFieldSelects(form) {
   };
   fillSelect(form.elements.kenyaOffice, constants.KENYA_OFFICES, { placeholder: 'Select Kenya office' });
   const internationalGroup = form.elements.internationalCountry?.closest('.form-group');
-  let organisationAutoFilled = false;
   const updateInternationalVisibility = () => {
-    const isInternational = form.elements.departureCountry?.value === 'International';
+    const isCareStaff = form.elements.contractType?.value === 'CARE Staff';
+    const isInternational = isCareStaff
+      ? form.elements.careStaffLocation?.value === 'CARE International Staff'
+      : form.elements.departureCountry?.value === 'International';
     if (internationalGroup) {
       internationalGroup.hidden = !isInternational;
       internationalGroup.classList.toggle('is-hidden', !isInternational);
@@ -47,29 +49,22 @@ export function initGuestFieldSelects(form) {
       if (!isInternational) form.elements.internationalCountry.value = '';
     }
   };
-  const updateOrganisationDefault = () => {
-    const organisation = form.elements.organisation;
-    const isLocalKenyan = form.elements.departureCountry?.value === 'Local (Kenyan)';
-    if (organisation && isLocalKenyan && !organisation.value.trim()) {
-      organisation.value = 'Individual';
-      organisationAutoFilled = true;
-    } else if (organisation && !isLocalKenyan && organisationAutoFilled) {
-      organisation.value = '';
-      organisationAutoFilled = false;
-    }
+  const toggleGroup = (group, visible) => {
+    if (!group) return;
+    group.hidden = !visible;
+    group.classList.toggle('is-hidden', !visible);
   };
   const updateOfficeVisibility = () => {
     const group = form.elements.kenyaOffice?.closest('.form-group');
     const isKenyaStaff = form.elements.contractType?.value === 'CARE Staff'
       && (form.elements.careStaffLocation?.value === 'CARE Kenya Staff'
         || (!form.elements.careStaffLocation && form.elements.departureCountry?.value.trim().toLowerCase() === 'local (kenyan)'));
-    if (group) group.hidden = !isKenyaStaff;
+    toggleGroup(group, isKenyaStaff);
     if (form.elements.kenyaOffice) {
       form.elements.kenyaOffice.required = isKenyaStaff;
       if (!isKenyaStaff) form.elements.kenyaOffice.value = '';
     }
     updateInternationalVisibility();
-    updateOrganisationDefault();
   };
   form.elements.contractType?.addEventListener('change', () => {
     updateCareStaffLocationVisibility();
