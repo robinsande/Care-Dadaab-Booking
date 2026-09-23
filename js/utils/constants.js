@@ -43,6 +43,7 @@ const REPORT_TYPES = [
   { value: 'mou-monthly', label: 'MOU Tracker - Monthly Payers' },
   { value: 'mou-annual', label: 'MOU Tracker - Annual Payers' },
   { value: 'mou-revenue', label: 'MOU Revenue by Occupant' },
+  { value: 'short-stay-revenue', label: 'Short Stay Revenue' },
 ];
 
 export const constants = {
