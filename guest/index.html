@@ -73,7 +73,7 @@
         <select class="form-control" name="contractType" required><option value="">Select contract type</option><option>CARE Staff</option><option>Consultant</option><option>Implementing Partner</option><option>Partner Organisation</option><option>Visitor</option><option>Other</option></select>
         <label class="form-field conditional-field is-hidden" data-care-staff-location hidden><span>CARE Staff Location</span><select class="form-control" name="careStaffLocation"><option value="">Select staff location</option><option>CARE Kenya Staff</option><option>CARE International Staff</option></select></label>
         <select class="form-control" name="departureCountry" required><option value="">Select country of origin</option><option>Local (Kenyan)</option><option>International</option></select>
-        <input class="form-control" name="kenyaOffice" placeholder="Kenya office (if applicable)">
+        <label class="form-field conditional-field is-hidden" data-kenya-office hidden><span>Kenya Office</span><select class="form-control" name="kenyaOffice"><option value="">Select Kenya office</option><option>Nakuru</option><option>Nairobi</option><option>Kisumu</option><option>Regional Office</option></select></label>
         <input class="form-control conditional-field is-hidden" name="internationalCountry" placeholder="International country of origin (if applicable)" hidden>
       </div>
       <textarea class="form-control" name="reasonForVisit" placeholder="Reason for visit" required></textarea>

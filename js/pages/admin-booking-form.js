@@ -12,6 +12,7 @@ import {
   formatMoney,
 } from '../utils/format.js';
 import { listMous } from '../api/mous.js';
+import { getBookingLocationState } from '../utils/booking-location.js';
 
 function sliceDate(value) {
   if (!value) return '';
@@ -24,60 +25,46 @@ export function initGuestFieldSelects(form) {
   fillSelect(form.elements.contractType, constants.CONTRACT_TYPES, {
     placeholder: 'Select contract type',
   });
-  const careStaffLocationGroup = form.elements.careStaffLocation?.closest('.form-group');
-  const updateCareStaffLocationVisibility = () => {
-    const isCareStaff = form.elements.contractType?.value === 'CARE Staff';
-    if (careStaffLocationGroup) careStaffLocationGroup.hidden = !isCareStaff;
-    if (form.elements.careStaffLocation) {
-      form.elements.careStaffLocation.required = isCareStaff;
-      if (!isCareStaff) form.elements.careStaffLocation.value = '';
-    }
+  const updateLocationVisibility = () => {
+    const state = getBookingLocationState({
+      contractType: form.elements.contractType?.value,
+      careStaffLocation: form.elements.careStaffLocation?.value,
+      departureCountry: form.elements.departureCountry?.value,
+    });
+    const careStaffLocationGroup = form.elements.careStaffLocation?.closest('.form-group');
+    const internationalGroup = form.elements.internationalCountry?.closest('.form-group');
+    const officeGroup = form.elements.kenyaOffice?.closest('.form-group');
+    const toggleField = (field, group, visible) => {
+      if (group) {
+        group.hidden = !visible;
+        group.classList.toggle('is-hidden', !visible);
+      }
+      if (field) {
+        field.required = visible;
+        if (!visible) field.value = '';
+      }
+    };
+
+    toggleField(form.elements.careStaffLocation, careStaffLocationGroup, state.isCareStaff);
+    toggleField(form.elements.kenyaOffice, officeGroup, state.showKenyaOffice);
+    toggleField(form.elements.internationalCountry, internationalGroup, state.showInternationalCountry);
   };
   fillSelect(form.elements.kenyaOffice, constants.KENYA_OFFICES, { placeholder: 'Select Kenya office' });
-  const internationalGroup = form.elements.internationalCountry?.closest('.form-group');
-  const updateInternationalVisibility = () => {
-    const isCareStaff = form.elements.contractType?.value === 'CARE Staff';
-    const isInternational = isCareStaff
-      ? form.elements.careStaffLocation?.value === 'CARE International Staff'
-      : form.elements.departureCountry?.value === 'International';
-    if (internationalGroup) {
-      internationalGroup.hidden = !isInternational;
-      internationalGroup.classList.toggle('is-hidden', !isInternational);
-    }
-    if (form.elements.internationalCountry) {
-      form.elements.internationalCountry.required = isInternational;
-      if (!isInternational) form.elements.internationalCountry.value = '';
-    }
-  };
-  const toggleGroup = (group, visible) => {
-    if (!group) return;
-    group.hidden = !visible;
-    group.classList.toggle('is-hidden', !visible);
-  };
-  const updateOfficeVisibility = () => {
-    const group = form.elements.kenyaOffice?.closest('.form-group');
-    const isKenyaStaff = form.elements.contractType?.value === 'CARE Staff'
-      && (form.elements.careStaffLocation?.value === 'CARE Kenya Staff'
-        || (!form.elements.careStaffLocation && form.elements.departureCountry?.value.trim().toLowerCase() === 'local (kenyan)'));
-    toggleGroup(group, isKenyaStaff);
-    if (form.elements.kenyaOffice) {
-      form.elements.kenyaOffice.required = isKenyaStaff;
-      if (!isKenyaStaff) form.elements.kenyaOffice.value = '';
-    }
-    updateInternationalVisibility();
-  };
   form.elements.contractType?.addEventListener('change', () => {
-    updateCareStaffLocationVisibility();
-    updateOfficeVisibility();
+    updateLocationVisibility();
   });
   form.elements.careStaffLocation?.addEventListener('change', () => {
-    const isInternationalStaff = form.elements.careStaffLocation.value === 'CARE International Staff';
-    if (form.elements.departureCountry) form.elements.departureCountry.value = isInternationalStaff ? 'International' : 'Local (Kenyan)';
-    updateOfficeVisibility();
+    const state = getBookingLocationState({
+      contractType: form.elements.contractType?.value,
+      careStaffLocation: form.elements.careStaffLocation.value,
+    });
+    if (form.elements.departureCountry && form.elements.careStaffLocation.value) {
+      form.elements.departureCountry.value = state.isInternationalStaff ? 'International' : 'Local (Kenyan)';
+    }
+    updateLocationVisibility();
   });
-  updateCareStaffLocationVisibility();
-  form.elements.departureCountry?.addEventListener('change', updateOfficeVisibility);
-  updateOfficeVisibility();
+  updateLocationVisibility();
+  form.elements.departureCountry?.addEventListener('change', updateLocationVisibility);
   fillSelect(form.elements.stayType, constants.STAY_TYPES, { placeholder: 'Select stay type' });
   const mouField = form.querySelector('[data-mou-field]');
   const mouSelect = form.elements.mouId;

@@ -60,6 +60,7 @@ async function onSubmit(event) {
     await createBooking(payload);
     showToast('Booking created successfully.', 'success');
     form.reset();
+    form.elements.contractType?.dispatchEvent(new Event('change'));
     selectors.setLocationLocked(false);
     await selectors.loadBlocks('');
     selectors.updatePriceSummary();

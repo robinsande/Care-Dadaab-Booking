@@ -1,4 +1,5 @@
 import { listGuestCamps, listGuestCampRates, listPublicMous, submitPublicBookingRequest } from '../api/guest.js';
+import { getBookingLocationState } from '../utils/booking-location.js';
 
 const $ = (selector) => document.querySelector(selector);
 const formData = (form) => Object.fromEntries(new FormData(form).entries());
@@ -15,19 +16,28 @@ const careStaffLocation = bookingForm.elements.careStaffLocation;
 const internationalCountry = bookingForm.elements.internationalCountry;
 const careStaffLocationGroup = bookingForm.querySelector('[data-care-staff-location]');
 const updateCareStaffFields = () => {
-  const isCareStaff = bookingForm.elements.contractType.value === 'CARE Staff';
-  const isInternationalStaff = careStaffLocation.value === 'CARE International Staff';
-  careStaffLocationGroup.hidden = !isCareStaff;
-  careStaffLocationGroup.classList.toggle('is-hidden', !isCareStaff);
-  careStaffLocation.required = isCareStaff;
-  if (!isCareStaff) careStaffLocation.value = '';
+  const state = getBookingLocationState({
+    contractType: bookingForm.elements.contractType.value,
+    careStaffLocation: careStaffLocation.value,
+    departureCountry: bookingForm.elements.departureCountry.value,
+  });
+  careStaffLocationGroup.hidden = !state.isCareStaff;
+  careStaffLocationGroup.classList.toggle('is-hidden', !state.isCareStaff);
+  careStaffLocation.required = state.isCareStaff;
+  if (!state.isCareStaff) careStaffLocation.value = '';
+  const office = bookingForm.elements.kenyaOffice;
+  const officeGroup = office.closest('.form-field, .form-group') || office;
+  officeGroup.hidden = !state.showKenyaOffice;
+  officeGroup.classList.toggle('is-hidden', !state.showKenyaOffice);
+  office.required = state.showKenyaOffice;
+  if (!state.showKenyaOffice) office.value = '';
   const countryGroup = internationalCountry.closest('.form-field, .form-group') || internationalCountry;
-  countryGroup.hidden = !isInternationalStaff;
-  countryGroup.classList.toggle('is-hidden', !isInternationalStaff);
-  internationalCountry.required = isInternationalStaff;
-  if (!isInternationalStaff) internationalCountry.value = '';
-  if (isCareStaff && careStaffLocation.value) {
-    bookingForm.elements.departureCountry.value = isInternationalStaff ? 'International' : 'Local (Kenyan)';
+  countryGroup.hidden = !state.showInternationalCountry;
+  countryGroup.classList.toggle('is-hidden', !state.showInternationalCountry);
+  internationalCountry.required = state.showInternationalCountry;
+  if (!state.showInternationalCountry) internationalCountry.value = '';
+  if (state.isCareStaff && careStaffLocation.value) {
+    bookingForm.elements.departureCountry.value = state.isInternationalStaff ? 'International' : 'Local (Kenyan)';
   }
 };
 const stayTypeSelect = bookingForm.elements.stayType;
@@ -50,6 +60,7 @@ departureDateInput.addEventListener('change', () => {
 });
 bookingForm.elements.contractType.addEventListener('change', updateCareStaffFields);
 careStaffLocation.addEventListener('change', updateCareStaffFields);
+bookingForm.elements.departureCountry.addEventListener('change', updateCareStaffFields);
 updateCareStaffFields();
 
 const setStayType = async () => {
@@ -118,6 +129,7 @@ bookingForm.addEventListener('submit', async (event) => {
     }
     await submitPublicBookingRequest(values);
     event.target.reset();
+    updateCareStaffFields();
     bookingForm.elements.rateId.disabled = true;
     message('Your booking request has been submitted. The accommodation team will review it and contact you by email.');
   } catch (error) {

@@ -3,6 +3,7 @@ import {
   isDepartureAfterArrival,
   validateFields,
 } from './validation.js';
+import { getBookingLocationState } from './booking-location.js';
 
 /** Shared guest + booking field validation for create/edit forms. */
 export function validateGuestFields(values, { requireLocation = true } = {}) {
@@ -44,13 +45,12 @@ export function validateGuestFields(values, { requireLocation = true } = {}) {
     departureCountry: { required: true, label: 'Departure Country' },
     kenyaOffice: {
       custom: (value, all) => {
-        const needsOffice = all.contractType === 'CARE Staff'
-          && String(all.departureCountry || '').trim().toLowerCase() === 'local (kenyan)';
+        const needsOffice = getBookingLocationState(all).showKenyaOffice;
         return needsOffice && !value ? 'Kenya Office is required for CARE Staff.' : null;
       },
     },
     internationalCountry: {
-      custom: (value, all) => all.departureCountry === 'International' && !value
+      custom: (value, all) => getBookingLocationState(all).showInternationalCountry && !value
         ? 'Country of Origin is required for International visitors.'
         : null,
     },
