@@ -2,6 +2,29 @@ import { config } from '../config.js';
 import { getToken } from '../auth/session.js';
 import { api } from './client.js';
 
+export function normalizeReportExportFormat(format = 'json') {
+  const value = String(format || 'json').trim().toLowerCase();
+
+  if (value === 'excel' || value === 'xlsx') return 'xlsx';
+  if (value === 'pdf') return 'pdf';
+  if (value === 'csv') return 'csv';
+
+  return value || 'json';
+}
+
+export function resolveReportDownloadFilename(type, format, contentDisposition) {
+  const normalizedFormat = normalizeReportExportFormat(format);
+  const headerValue = contentDisposition || '';
+  const utf8Match = headerValue.match(/filename\*=UTF-8''([^;]+)/i);
+  const asciiMatch = headerValue.match(/filename="?([^";]+)"?/i);
+  const explicitName = utf8Match ? decodeURIComponent(utf8Match[1]) : asciiMatch ? asciiMatch[1] : '';
+
+  if (explicitName) return explicitName;
+
+  const extension = normalizedFormat === 'xlsx' ? 'xlsx' : normalizedFormat === 'csv' ? 'csv' : normalizedFormat === 'pdf' ? 'pdf' : 'report';
+  return `report-${type}.${extension}`;
+}
+
 export function getReport(type, params = {}) {
   return api.get(`/reports/${type}`, { query: { ...params, format: 'json' } });
 }
@@ -14,7 +37,7 @@ export async function downloadReportExport(type, format, params = {}) {
   const base = config.API_BASE_URL.replace(/\/$/, '');
   const url = new URL(`${base}/reports/${type}`);
 
-  const apiFormat = format === 'excel' ? 'xlsx' : format;
+  const apiFormat = normalizeReportExportFormat(format);
   const query = { ...params, format: apiFormat };
 
   Object.entries(query).forEach(([key, value]) => {
@@ -33,13 +56,17 @@ export async function downloadReportExport(type, format, params = {}) {
   }
 
   const blob = await response.blob();
-  const filename =
-    response.headers.get('Content-Disposition')?.match(/filename="?([^"]+)"?/)?.[1]
-    || `report-${type}.${apiFormat === 'xlsx' ? 'xlsx' : apiFormat === 'csv' ? 'csv' : apiFormat}`;
+  const filename = resolveReportDownloadFilename(type, apiFormat, response.headers.get('Content-Disposition'));
 
   const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
+  const objectUrl = URL.createObjectURL(blob);
+  link.href = objectUrl;
   link.download = filename;
+  link.style.display = 'none';
+  document.body.appendChild(link);
   link.click();
-  URL.revokeObjectURL(link.href);
+  window.setTimeout(() => {
+    URL.revokeObjectURL(objectUrl);
+    link.remove();
+  }, 1000);
 }

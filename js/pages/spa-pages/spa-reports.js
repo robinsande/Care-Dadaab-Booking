@@ -9,6 +9,7 @@ import { escapeHtml } from '../../utils/format.js';
 
 let initialized = false;
 let lastParams = {};
+let summaryEl = null;
 
 export async function init() {
   if (initialized) return;
@@ -23,7 +24,7 @@ export async function init() {
   const resultsEl = document.getElementById('report-results');
   const resultsHead = document.getElementById('report-results-head');
   const resultsBody = document.getElementById('report-results-body');
-  const summaryEl = document.getElementById('report-summary');
+  summaryEl = document.getElementById('report-summary');
   fillSelect(reportTypeSelect, constants.REPORT_TYPES, { placeholder: 'Select report' });
   const hashQuery = window.location.hash.split('?')[1] || '';
   const requestedType = window.location.hash.split('/')[1] === 'reservation-log'
@@ -38,7 +39,7 @@ export async function init() {
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    generateReport(reportTypeSelect, generateBtn, resultsEl, resultsHead, resultsBody);
+    generateReport(reportTypeSelect, generateBtn, resultsEl, resultsHead, resultsBody, summaryEl);
   });
 
   exportPdfBtn.addEventListener('click', () => exportReport(reportTypeSelect, 'pdf'));
@@ -105,7 +106,7 @@ function setExportEnabled(enabled) {
   printBtn.disabled = !enabled;
 }
 
-async function generateReport(reportTypeSelect, generateBtn, resultsEl, resultsHead, resultsBody) {
+async function generateReport(reportTypeSelect, generateBtn, resultsEl, resultsHead, resultsBody, summaryElRef = summaryEl) {
   const reportType = reportTypeSelect.value;
   if (!reportType) {
     showToast('Select a report type.', 'error');
@@ -119,9 +120,9 @@ async function generateReport(reportTypeSelect, generateBtn, resultsEl, resultsH
     const response = await getReport(reportType, lastParams);
     const report = response.data || {};
     const rows = report.rows || [];
-    if (summaryEl) {
+    if (summaryElRef) {
       const summary = report.summary || {};
-      summaryEl.textContent = `Revenue Calculation: ${Object.entries(summary)
+      summaryElRef.textContent = `Revenue Calculation: ${Object.entries(summary)
         .filter(([key]) => key !== 'personTotals')
         .map(([key, value]) => `${key}: ${typeof value === 'number' ? value.toLocaleString('en-KE', { maximumFractionDigits: 2 }) : String(value ?? '')}`)
         .join(' | ') || 'No revenue data'}`;
@@ -180,7 +181,7 @@ function renderMouRevenue(rows, report, resultsEl) {
     groups.get(key).push(row);
   });
   const columns = [
-    ['tableNo', 'Serial No.'], ['room', 'Room Type / Room'], ['checkIn', 'Check-in Date'],
+    ['bookingReference', 'Booking Reference'], ['room', 'Room Type / Room'], ['checkIn', 'Check-in Date'],
     ['checkOut', 'Departure Date'], ['rate', 'Unit Price'], ['rooms', 'Rooms'],
     ['days', 'No. of Days'], ['typeOfRoom', 'Type of Room'], ['remark', 'Remark'],
   ];
@@ -188,13 +189,13 @@ function renderMouRevenue(rows, report, resultsEl) {
   resultsEl.innerHTML = [...groups.entries()].map(([, groupRows]) => {
     const total = groupRows.reduce((sum, row) => sum + Number(row.amountAccumulated || 0), 0);
     const moduleTitle = report.title === 'Short Stay Revenue' ? 'SHORT STAY REVENUE MODULE' : 'ROOM RESERVATION FORM 1';
-    return `<section class="mou-report-page"><div class="reservation-log-heading">${moduleTitle}</div><h3>${report.title === 'Short Stay Revenue' ? 'Short Stay Revenue Report' : `Room Reservation Form - ${escapeHtml(groupRows[0]?.mou || 'Unassigned MOU')}`}</h3><p class="reservation-log-date">Recipient: Dadaab Accommodation Team | Sender: CARE International | Period: ${escapeHtml(report.summary?.period || 'All selected dates')} | Revenue Calculation: ${report.title === 'Short Stay Revenue' ? 'Short stay subtotal' : 'MOU subtotal'} ${total.toLocaleString('en-KE', { maximumFractionDigits: 2 })}</p><table class="table"><thead><tr>${columns.map((column) => `<th>${column[1]}</th>`).join('')}</tr></thead><tbody>${groupRows.map((row, index) => `<tr>${columns.map((column) => `<td>${escapeHtml(column[0] === 'tableNo' ? index + 1 : row[column[0]] ?? '')}</td>`).join('')}</tr>`).join('')}</tbody></table><p class="form-hint">Remark: Hotel confirmation by: ____________________ Confirmation date: ____________________</p></section>`;
+    return `<section class="mou-report-page"><div class="reservation-log-heading">${moduleTitle}</div><h3>${report.title === 'Short Stay Revenue' ? 'Short Stay Revenue Report' : `Room Reservation Form - ${escapeHtml(groupRows[0]?.mou || 'Unassigned MOU')}`}</h3><p class="reservation-log-date">Recipient: Dadaab Accommodation Team | Sender: CARE International | Period: ${escapeHtml(report.summary?.period || 'All selected dates')} | Revenue Calculation: ${report.title === 'Short Stay Revenue' ? 'Short stay subtotal' : 'MOU subtotal'} ${total.toLocaleString('en-KE', { maximumFractionDigits: 2 })}</p><table class="table"><thead><tr>${columns.map((column) => `<th>${column[1]}</th>`).join('')}</tr></thead><tbody>${groupRows.map((row) => `<tr>${columns.map((column) => `<td>${escapeHtml(row[column[0]] ?? '')}</td>`).join('')}</tr>`).join('')}</tbody></table><p class="form-hint">Remark: Hotel confirmation by: ____________________ Confirmation date: ____________________</p></section>`;
   }).join('') || '<p class="empty-state">No MOU occupancy revenue found.</p>';
 }
 
 function renderReservationLog(rows, resultsEl) {
   const columns = [
-    ['tableNo', 'Serial No.'],
+    ['bookingReference', 'Booking Reference'],
     ['roomType', 'Room Type / Room'],
     ['checkInDate', 'Check-in Date'],
     ['departureDate', 'Departure Date'],
