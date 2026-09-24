@@ -91,6 +91,8 @@ function buildParams() {
   if (values.year) params.year = values.year;
   if (values.status) params.status = values.status;
   if (values.counterpartyCategory) params.counterpartyCategory = values.counterpartyCategory;
+  if (values.revenueCategory) params.revenueCategory = values.revenueCategory;
+  if (values.guestCategory) params.guestCategory = values.guestCategory;
   if (values.mouId) params.mouId = values.mouId;
   if (values.bookingReference) params.bookingReference = values.bookingReference.trim();
   return params;
@@ -177,7 +179,7 @@ function renderMouRevenue(rows, report, resultsEl) {
   });
   const columns = [
     ['bookingReference', 'Booking Reference'], ['roomType', 'Room Type / Room'], ['checkInDate', 'Check-in Date'],
-    ['departureDate', 'Departure Date'], ['unitPrice', 'Unit Price'], ['rooms', 'Rooms'],
+    ['departureDate', 'Departure Date'], ['unitPrice', 'Unit Price'], ['amountAccumulated', 'Total Revenue'], ['rooms', 'Rooms'],
     ['numberOfDays', 'No. of Days'], ['typeOfRoom', 'Stay Type'], ['remark', 'Remark / Occupant / MOU'],
   ];
   resultsEl.classList.add('mou-revenue-print');
