@@ -27,7 +27,7 @@ const CONTRACT_TYPES = [
 
 const KENYA_OFFICES = ['Nakuru', 'Nairobi', 'Kisumu', 'Regional Office'];
 
-const USER_ROLES = ['Accommodation Officer', 'Super Admin'];
+const USER_ROLES = ['Accommodation Officer', 'Super Admin', 'System Viewer'];
 
 const REPORT_TYPES = [
   { value: 'bookings-by-camp', label: 'Bookings by Camp' },

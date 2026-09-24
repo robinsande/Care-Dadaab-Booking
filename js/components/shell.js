@@ -1,7 +1,7 @@
 /** Shared admin shell: navigation, user chrome, logout. */
 
 import { config, applyBrandLogos } from '../config.js';
-import { getUser, clearSession, isSuperAdmin } from '../auth/session.js';
+import { getUser, clearSession, isSuperAdmin, isSystemViewer } from '../auth/session.js';
 
 export const ADMIN_NAV = [
   { href: '/', label: 'Dashboard', icon: 'home', superAdmin: false },
@@ -41,7 +41,7 @@ export function renderAdminNav(user = getUser()) {
   const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
 
   nav.innerHTML = ADMIN_NAV
-    .filter((item) => !item.superAdmin || isSuperAdmin(user))
+    .filter((item) => (!item.superAdmin || isSuperAdmin(user)) && (!isSystemViewer(user) || ['Dashboard', 'Rooms', 'Invoices'].includes(item.label)))
     .map((item) => {
       const isActive =
         (item.href === '/' && currentPage === 'dashboard.html')

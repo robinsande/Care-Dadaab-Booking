@@ -67,9 +67,12 @@ updateCareStaffFields();
 
 const setStayType = async () => {
   const longStay = stayTypeSelect.value === 'Long Stay';
-  rateField.classList.toggle('hidden', longStay);
-  bookingForm.elements.rateId.required = !longStay;
-  bookingForm.elements.rateId.disabled = longStay || !bookingForm.elements.campId.value;
+  const isCareStaff = /^(?:care\s*)?staff$/i.test(String(bookingForm.elements.contractType.value || '').trim());
+  const hideRate = longStay || isCareStaff;
+  rateField.classList.toggle('hidden', hideRate);
+  bookingForm.elements.rateId.required = !hideRate;
+  bookingForm.elements.rateId.disabled = hideRate || !bookingForm.elements.campId.value;
+  if (isCareStaff) bookingForm.elements.rateId.value = '';
   mouFields.forEach((field) => field.classList.toggle('hidden', !longStay));
   bookingForm.elements.mouId.disabled = !longStay;
   bookingForm.elements.mouId.required = longStay;

@@ -32,6 +32,10 @@ export function isSuperAdmin(user = getUser()) {
   return user?.role === 'Super Admin';
 }
 
+export function isSystemViewer(user = getUser()) {
+  return user?.role === 'System Viewer';
+}
+
 export function isAccommodationOfficer(user = getUser()) {
   return user?.role === 'Accommodation Officer' || isSuperAdmin(user);
 }
