@@ -36,6 +36,7 @@ const SPA_NAV = [
   { hash: '#/reports', label: 'Reports', route: 'reports', icon: 'chart-no-axes-combined', superAdmin: true },
   { hash: '#/mous', label: 'MOU Guest Tracker', route: 'mous', icon: 'file-chart-column', superAdmin: true },
   { href: 'admin/reservation-log.html', label: 'Reservation Log', route: 'reservation-log', icon: 'history', superAdmin: true },
+  { href: 'admin/guest-requests.html', label: 'Guest Requests', route: 'guest-requests', icon: 'inbox' },
   { hash: '#/users', label: 'Users', route: 'users', icon: 'users', superAdmin: true },
   { hash: '#/settings', label: 'Settings', route: 'settings', icon: 'settings', superAdmin: true },
 ];

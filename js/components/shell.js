@@ -5,6 +5,7 @@ import { getUser, clearSession, isSuperAdmin, isSystemViewer } from '../auth/ses
 
 export const ADMIN_NAV = [
   { href: '/', label: 'Dashboard', icon: 'home', superAdmin: false },
+  { href: '/admin/guest-requests.html', label: 'Guest Requests', icon: 'inbox', superAdmin: false },
   { href: '/#/booking/create', label: 'Create Booking', icon: 'calendar-plus' },
   { href: '/#/camps', label: 'Camps', icon: 'map', superAdmin: true },
   { href: '/#/blocks', label: 'Blocks', icon: 'layout-grid', superAdmin: true },
@@ -29,6 +30,7 @@ export const NAV_ICONS = {
   receipt: '<path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1z"/><path d="M8 8h8M8 12h8M8 16h5"/>',
   'chart-no-axes-combined': '<path d="M3 3v18h18"/><path d="m7 16 4-5 3 3 5-7"/>',
   history: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>',
+  inbox: '<path d="M4 4h16v12H4z"/><path d="M4 12h4l2 3h4l2-3h4M8 20h8"/>',
   'file-chart-column': '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v6h6M8 17v-3M12 17v-6M16 17v-2"/>',
   users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
   settings: '<path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="m19.4 15 .1.1a2 2 0 1 1-2.8 2.8l-.1-.1a2 2 0 0 0-3.4 1.4V19a2 2 0 1 1-4 0v-.2a2 2 0 0 0-3.4-1.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A2 2 0 0 0 3.6 11H3a2 2 0 1 1 0-4h.2a2 2 0 0 0 1.4-3.4l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A2 2 0 0 0 11 2.4V2a2 2 0 1 1 4 0v.2a2 2 0 0 0 3.4 1.4l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A2 2 0 0 0 20.4 10h.2a2 2 0 1 1 0 4h-.2a2 2 0 0 0-1 1Z"/>',
