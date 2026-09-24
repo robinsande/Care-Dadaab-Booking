@@ -176,9 +176,9 @@ function renderMouRevenue(rows, report, resultsEl) {
     groups.get(key).push(row);
   });
   const columns = [
-    ['bookingReference', 'Booking Reference'], ['room', 'Room Type / Room'], ['checkIn', 'Check-in Date'],
-    ['checkOut', 'Departure Date'], ['rate', 'Unit Price'], ['rooms', 'Rooms'],
-    ['days', 'No. of Days'], ['typeOfRoom', 'Type of Room'], ['remark', 'Remark'],
+    ['bookingReference', 'Booking Reference'], ['roomType', 'Room Type / Room'], ['checkInDate', 'Check-in Date'],
+    ['departureDate', 'Departure Date'], ['unitPrice', 'Unit Price'], ['rooms', 'Rooms'],
+    ['numberOfDays', 'No. of Days'], ['typeOfRoom', 'Stay Type'], ['remark', 'Remark / Occupant / MOU'],
   ];
   resultsEl.classList.add('mou-revenue-print');
   resultsEl.innerHTML = [...groups.entries()].map(([, groupRows]) => {
