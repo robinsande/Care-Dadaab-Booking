@@ -15,6 +15,11 @@ const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (character
 let selectedMouId = null;
 
 const configureGenerator = () => {
+  document.title = 'CAMS - MOU Guest Tracker';
+  document.querySelector('.admin-topbar h1')?.replaceChildren('MOU Guest Tracker');
+  document.querySelector('.page-header h2')?.replaceChildren('MOU Guest Tracker');
+  const pageDescription = document.querySelector('.page-header p');
+  if (pageDescription) pageDescription.textContent = 'Generate one combined guest-stay list from existing reservation records.';
   form.innerHTML = `
     <div class="form-group"><label class="form-label" for="mou-from">Start date</label><input class="form-control" id="mou-from" name="from" type="date" required></div>
     <div class="form-group"><label class="form-label" for="mou-to">End date</label><input class="form-control" id="mou-to" name="to" type="date" required></div>

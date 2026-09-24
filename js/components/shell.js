@@ -13,7 +13,7 @@ export const ADMIN_NAV = [
   { href: '/#/invoices', label: 'Invoices', icon: 'receipt' },
   { href: '/#/reports', label: 'Reports', icon: 'chart-no-axes-combined', superAdmin: true },
   { href: '/admin/reservation-log.html', label: 'Reservation Log', icon: 'history', superAdmin: true },
-  { href: '/admin/mous.html', label: 'MOU Tracker', icon: 'file-chart-column', superAdmin: true },
+  { href: '/admin/mous.html', label: 'MOU Guest Tracker', icon: 'file-chart-column', superAdmin: true },
   { href: '/#/users', label: 'Users', icon: 'users', superAdmin: true },
   { href: '/#/settings', label: 'Settings', icon: 'settings', superAdmin: true },
 ];
