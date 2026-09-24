@@ -60,6 +60,7 @@ async function loadDashboard({ manual = false } = {}) {
     renderCampStats(data.bookingsByCamp || []);
     renderRoomStatuses(data.roomStatuses || []);
     renderRecentBookings(data.recentBookings || []);
+    renderPendingGuestRequests(data.pendingGuestRequests || []);
   } catch (error) {
     showDashboardError();
     if (manual) showToast(error instanceof ApiError ? error.message : 'Unable to sync dashboard.', 'error');
@@ -75,12 +76,31 @@ function showDashboardError() {
     ['room-status-body', 4],
     ['camp-stats-body', 2],
     ['recent-bookings-body', 6],
+    ['pending-guest-requests-body', 5],
   ].forEach(([id, columns]) => {
     const tbody = document.getElementById(id);
     if (tbody && (tbody.querySelector('.empty-state') || tbody.querySelector('.skeleton'))) {
       tbody.innerHTML = `<tr><td colspan="${columns}" class="empty-state">Dashboard data is temporarily unavailable. Refresh to try again.</td></tr>`;
     }
   });
+}
+
+function renderPendingGuestRequests(requests) {
+  const tbody = document.getElementById('pending-guest-requests-body');
+  if (!tbody) return;
+  if (!requests.length) {
+    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No pending guest booking requests.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = requests.map((request) => `
+    <tr>
+      <td data-label="Guest">${escapeHtml(fullName(request.guest || {}))}</td>
+      <td data-label="Camp">${escapeHtml(request.camp?.name || '—')}</td>
+      <td data-label="Arrival">${escapeHtml(formatDate(request.arrivalDate))}</td>
+      <td data-label="Departure">${escapeHtml(formatDate(request.departureDate))}</td>
+      <td data-label="Stay Type">${escapeHtml(request.stayType || '—')}</td>
+    </tr>
+  `).join('');
 }
 
 function renderRoomStatuses(rooms) {
