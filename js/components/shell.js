@@ -6,6 +6,7 @@ import { getUser, clearSession, isSuperAdmin, isSystemViewer } from '../auth/ses
 export const ADMIN_NAV = [
   { href: '/', label: 'Dashboard', icon: 'home', superAdmin: false },
   { href: '/admin/guest-requests.html', label: 'Guest Requests', icon: 'inbox', superAdmin: false },
+  { href: '/#/bookings', label: 'Bookings', icon: 'calendar' },
   { href: '/#/booking/create', label: 'Create Booking', icon: 'calendar-plus' },
   { href: '/#/camps', label: 'Camps', icon: 'map', superAdmin: true },
   { href: '/#/blocks', label: 'Blocks', icon: 'layout-grid', superAdmin: true },
@@ -47,6 +48,7 @@ export function renderAdminNav(user = getUser()) {
     .map((item) => {
       const isActive =
         (item.href === '/' && currentPage === 'dashboard.html')
+        || (item.href === '/#/bookings' && ['#/bookings', '#/booking/edit'].includes(window.location.hash.split('?')[0]))
         || (item.href === '/#/booking/create' && ['booking-create.html', 'booking-edit.html'].includes(currentPage))
         || (item.href === '/admin/reservation-log.html' && currentPage === 'reservation-log.html');
       const attrs = isActive ? ' aria-current="page"' : '';
