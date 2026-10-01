@@ -23,6 +23,58 @@ function sliceDate(value) {
   return String(value).slice(0, 10);
 }
 
+const bookingDraftKey = (form) => `cams.bookingDraft.${form.id || 'create'}`;
+
+export function initBookingDraft(form) {
+  const key = bookingDraftKey(form);
+  let draft;
+  try {
+    draft = JSON.parse(window.sessionStorage.getItem(key) || 'null');
+  } catch (_) {
+    draft = null;
+  }
+
+  if (draft && typeof draft === 'object') {
+    if (draft.mouId) form.dataset.bookingDraftMouId = draft.mouId;
+    Object.entries(draft).forEach(([name, value]) => {
+      const field = form.elements[name];
+      if (!field) return;
+      if (field.type === 'checkbox') {
+        field.checked = Boolean(value);
+      } else if (field.tagName !== 'SELECT' || value === ''
+        || Array.from(field.options).some((option) => option.value === value)) {
+        field.value = value;
+      }
+    });
+
+    ['contractType', 'careStaffLocation', 'departureCountry', 'stayType', 'arrivalDate', 'departureDate']
+      .forEach((name) => form.elements[name]?.dispatchEvent(new Event('change', { bubbles: true })));
+  }
+
+  const saveDraft = () => {
+    const values = draft && typeof draft === 'object' ? { ...draft } : {};
+    Array.from(form.elements).forEach((field) => {
+      if (!field.name || ['button', 'submit', 'reset', 'file'].includes(field.type)) return;
+      if (field.tagName === 'SELECT' && !field.value && values[field.name]
+        && !Array.from(field.options).some((option) => option.value === values[field.name])) return;
+      values[field.name] = field.type === 'checkbox' ? field.checked : field.value;
+    });
+    try {
+      window.sessionStorage.setItem(key, JSON.stringify(values));
+    } catch (_) { /* Draft storage must not block booking. */ }
+  };
+
+  form.addEventListener('input', saveDraft);
+  form.addEventListener('change', saveDraft);
+  return draft;
+}
+
+export function clearBookingDraft(form) {
+  try {
+    window.sessionStorage.removeItem(bookingDraftKey(form));
+  } catch (_) { /* Ignore unavailable session storage. */ }
+}
+
 export function initGuestFieldSelects(form) {
   fillSelect(form.elements.gender, constants.GENDERS, { placeholder: 'Select gender' });
   fillSelect(form.elements.departureCountry, constants.DEPARTURE_COUNTRIES, { placeholder: 'Select country of origin' });
@@ -83,10 +135,11 @@ export function initGuestFieldSelects(form) {
     mouSelect.disabled = !longStay || isCareStaff;
     if (!longStay || isCareStaff) {
       mouSelect.value = '';
+      delete form.dataset.bookingDraftMouId;
       return;
     }
     const category = getMouCategoryForContractType(form.elements.contractType?.value);
-    const selectedMouId = mouSelect.value;
+    const selectedMouId = mouSelect.value || form.dataset.bookingDraftMouId || '';
     const loadVersion = ++mouLoadVersion;
     if (!category) {
       mouSelect.innerHTML = '<option value="">Select an eligible contract type first</option>';
@@ -101,6 +154,7 @@ export function initGuestFieldSelects(form) {
         ? `<option value="">Optional ${getMouCategoryLabel(category)} MOU</option>${mous.map((mou) => `<option value="${mou._id}">${mou.partyName}</option>`).join('')}`
         : '<option value="">No eligible active MOUs available</option>';
       mouSelect.value = selectedMouId;
+      if (mouSelect.value === selectedMouId) delete form.dataset.bookingDraftMouId;
     } catch (_) {
       mouSelect.innerHTML = '<option value="">Unable to load eligible MOUs</option>';
     }

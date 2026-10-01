@@ -35,19 +35,11 @@ export function validateGuestFields(values, { requireLocation = true } = {}) {
           const departure = new Date(`${value}T00:00:00`);
           const minimum = new Date(arrival);
           minimum.setMonth(minimum.getMonth() + 1);
-          const maximum = new Date(arrival);
-          maximum.setMonth(maximum.getMonth() + 12);
           if (departure <= minimum) return 'Long Stay must be more than one month.';
-          if (departure > maximum) return 'Long Stay cannot exceed 12 months.';
           return null;
         })(),
     },
     departureCountry: { required: true, label: 'Departure Country' },
-    mouId: {
-      custom: (value, all) => all.stayType === 'Long Stay' && !value
-        ? 'Select an active MOU for Long Stay bookings.'
-        : null,
-    },
     kenyaOffice: {
       custom: (value, all) => {
         const needsOffice = getBookingLocationState(all).showKenyaOffice;

@@ -25,7 +25,7 @@ const CONTRACT_TYPES = [
   'Other',
 ];
 
-const KENYA_OFFICES = ['Nakuru', 'Nairobi', 'Kisumu', 'Regional Office'];
+const KENYA_OFFICES = ['Nakuru', 'Nairobi', 'Garissa', 'Kisumu', 'Regional Office'];
 
 const USER_ROLES = ['Accommodation Officer', 'Super Admin', 'System Viewer'];
 

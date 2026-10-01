@@ -11,7 +11,9 @@ import {
   buildBookingPayload,
   validateBookingForm,
   wireCampSelectors,
-} from './admin-booking-form.js';
+  initBookingDraft,
+  clearBookingDraft,
+} from './admin-booking-form.js?v=20261001-1';
 
 const form = document.getElementById('booking-form');
 const submitBtn = document.getElementById('booking-submit');
@@ -23,11 +25,17 @@ if (user) {
   initAdminShell();
   initGuestFieldSelects(form);
   setupDateInputs(form.elements.arrivalDate, form.elements.departureDate);
+  const draft = initBookingDraft(form);
   selectors = wireCampSelectors(form, {
     priceSummaryEl,
     onReady: async (s) => {
       try {
-        await s.init();
+        await s.init({
+          campId: draft?.campId || '',
+          blockId: draft?.blockId || '',
+          roomId: draft?.roomId || '',
+          stayType: draft?.stayType || '',
+        });
       } catch (error) {
         showToast(
           error instanceof ApiError ? error.message : 'Unable to load camps.',
@@ -68,6 +76,7 @@ async function onSubmit(event) {
     form.querySelectorAll('[data-error-for]').forEach((element) => {
       element.textContent = '';
     });
+    clearBookingDraft(form);
   } catch (error) {
     showToast(
       error instanceof ApiError ? error.message : 'Unable to create booking.',
