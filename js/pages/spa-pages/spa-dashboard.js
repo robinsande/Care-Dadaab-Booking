@@ -76,7 +76,7 @@ function showDashboardError() {
     ['room-status-body', 4],
     ['camp-stats-body', 2],
     ['recent-bookings-body', 6],
-    ['pending-guest-requests-body', 5],
+    ['pending-guest-requests-body', 6],
   ].forEach(([id, columns]) => {
     const tbody = document.getElementById(id);
     if (tbody && (tbody.querySelector('.empty-state') || tbody.querySelector('.skeleton'))) {
@@ -89,7 +89,7 @@ function renderPendingGuestRequests(requests) {
   const tbody = document.getElementById('pending-guest-requests-body');
   if (!tbody) return;
   if (!requests.length) {
-    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No pending guest booking requests.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No guest booking requests.</td></tr>';
     return;
   }
   tbody.innerHTML = requests.map((request) => `
@@ -99,6 +99,7 @@ function renderPendingGuestRequests(requests) {
       <td data-label="Arrival">${escapeHtml(formatDate(request.arrivalDate))}</td>
       <td data-label="Departure">${escapeHtml(formatDate(request.departureDate))}</td>
       <td data-label="Stay Type">${escapeHtml(request.stayType || '—')}</td>
+      <td data-label="Status">${statusBadge(request.status)}</td>
     </tr>
   `).join('');
 }
