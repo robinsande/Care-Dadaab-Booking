@@ -33,9 +33,8 @@ export function validateGuestFields(values, { requireLocation = true } = {}) {
           if (all.stayType !== 'Long Stay') return null;
           const arrival = new Date(`${all.arrivalDate}T00:00:00`);
           const departure = new Date(`${value}T00:00:00`);
-          const minimum = new Date(arrival);
-          minimum.setMonth(minimum.getMonth() + 1);
-          if (departure <= minimum) return 'Long Stay must be more than one month.';
+          const nights = Math.round((departure - arrival) / (24 * 60 * 60 * 1000));
+          if (nights <= 21) return 'Long Stay must be more than 21 nights.';
           return null;
         })(),
     },

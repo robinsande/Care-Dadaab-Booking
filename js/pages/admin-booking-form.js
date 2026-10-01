@@ -5,7 +5,7 @@ import {
   getFormValues,
   todayISODate,
 } from '../utils/validation.js';
-import { validateGuestFields } from '../utils/booking-validation.js';
+import { validateGuestFields } from '../utils/booking-validation.js?v=20261001-1';
 import {
   calculateBookingTotal,
   escapeHtml,

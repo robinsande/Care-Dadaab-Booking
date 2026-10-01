@@ -13,7 +13,7 @@ import {
   wireCampSelectors,
   initBookingDraft,
   clearBookingDraft,
-} from '../admin-booking-form.js?v=20261001-2';
+} from '../admin-booking-form.js?v=20261001-3';
 
 let initialized = false;
 let globalSelectors;
