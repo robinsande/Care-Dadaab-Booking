@@ -24,7 +24,7 @@ import {
   populateGuestFields,
   resolveBookingIds,
   renderBookingPriceSummary,
-} from '../admin-booking-form.js?v=20261001-1';
+} from '../admin-booking-form.js?v=20261001-2';
 import { validateCancellationReason } from '../../utils/booking-validation.js';
 import { applyFieldErrors } from '../../utils/validation.js';
 import {

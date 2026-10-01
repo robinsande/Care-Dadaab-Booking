@@ -10,7 +10,7 @@ import {
   calculateBookingTotal,
   escapeHtml,
   formatMoney,
-} from '../utils/format.js';
+} from '../utils/format.js?v=20261001-1';
 import { listMous } from '../api/mous.js';
 import {
   getBookingLocationState,
