@@ -162,10 +162,31 @@ export function nightsBetween(arrivalDate, departureDate) {
   return Math.max(0, Math.round(diff / (1000 * 60 * 60 * 24)));
 }
 
+export function billableMonthsBetween(arrivalDate, departureDate) {
+  const parts = (value) => {
+    const match = String(value || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
+    return match ? [Number(match[1]), Number(match[2]) - 1, Number(match[3])] : null;
+  };
+  const arrival = parts(arrivalDate);
+  const departure = parts(departureDate);
+  if (!arrival || !departure) return 0;
+  const compare = (left, right) => left[0] - right[0] || left[1] - right[1] || left[2] - right[2];
+  if (compare(departure, arrival) <= 0) return 0;
+  const monthDifference = (departure[0] - arrival[0]) * 12 + departure[1] - arrival[1];
+  const targetMonthIndex = arrival[1] + monthDifference;
+  const targetYear = arrival[0] + Math.floor(targetMonthIndex / 12);
+  const targetMonth = targetMonthIndex % 12;
+  const days = (year, month) => new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+  const arrivalIsMonthEnd = arrival[2] === days(arrival[0], arrival[1]);
+  const anniversaryDay = arrivalIsMonthEnd ? days(targetYear, targetMonth) : Math.min(arrival[2], days(targetYear, targetMonth));
+  const anniversary = [targetYear, targetMonth, anniversaryDay];
+  return Math.max(1, monthDifference + (compare(departure, anniversary) > 0 ? 1 : 0));
+}
+
 export function calculateBookingTotal(arrivalDate, departureDate, appliedRate, stayType = 'Short Stay') {
   const nights = nightsBetween(arrivalDate, departureDate);
   const rate = Number(appliedRate);
   if (nights === null || nights <= 0 || Number.isNaN(rate)) return null;
-  const months = stayType === 'Long Stay' ? Math.ceil(nights / 30) : null;
+  const months = stayType === 'Long Stay' ? billableMonthsBetween(arrivalDate, departureDate) : null;
   return { nights, months, total: (months || nights) * rate };
 }
