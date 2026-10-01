@@ -64,7 +64,6 @@ export async function init() {
   actionBar?.addEventListener('click', onAction);
 
   const invoiceLinkEl = document.getElementById('invoice-link');
-  const timeSummaryEl = document.getElementById('booking-time-summary');
   invoiceLinkEl?.addEventListener('click', onInvoiceLinkClick);
 
   const params = getCurrentParams();
@@ -93,6 +92,7 @@ async function loadBooking(bId) {
     }
     const form = document.getElementById('booking-form');
     const statusEl = document.getElementById('booking-status');
+    const timeSummaryEl = document.getElementById('booking-time-summary');
     populateGuestFields(form, booking);
     statusEl.innerHTML = statusBadge(booking.status);
     if (timeSummaryEl) {
