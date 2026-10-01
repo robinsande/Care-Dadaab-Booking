@@ -184,7 +184,7 @@ export function createCampSelectors({
         state.appliedRate = null;
       } else {
         state.appliedRate = Number(rateValue);
-        setRateMessage(`${stayType}: ${formatMoney(rateValue, state.currency)}`);
+        setRateMessage(`${stayType}: ${formatMoney(rateValue, state.currency)} per ${stayType === 'Long Stay' ? 'month' : 'night'}`);
       }
       onRateChange?.(state.appliedRate, state.currency);
     } catch {

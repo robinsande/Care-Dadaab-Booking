@@ -70,8 +70,8 @@ async function loadRates() {
     form.elements.longStayRate.value = longRate?.amount ?? '';
 
     currentRatesEl.innerHTML = `
-      Short Stay: ${formatMoney(shortRate?.amount, currency)}
-      · Long Stay: ${formatMoney(longRate?.amount, currency)}
+      Short Stay: ${formatMoney(shortRate?.amount, currency)} / night
+      · Long Stay: ${formatMoney(longRate?.amount, currency)} / month
     `;
   } catch (error) {
     showToast(error instanceof ApiError ? error.message : 'Unable to load rates.', 'error');

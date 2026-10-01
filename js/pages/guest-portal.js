@@ -57,7 +57,7 @@ arrivalDateInput.addEventListener('change', () => {
 departureDateInput.addEventListener('change', () => {
   if (stayTypeSelect.value === 'Short Stay' && arrivalDateInput.value && departureDateInput.value) {
     const nights = Math.ceil((new Date(departureDateInput.value) - new Date(arrivalDateInput.value)) / 86400000);
-    if (nights > 21) message('Short Stay is limited to 21 nights. Select Long Stay (MOU-based) for a longer visit.', true);
+    if (nights > 21) message('Short Stay is limited to 21 nights. Select Long Stay for a longer visit.', true);
   }
 });
 bookingForm.elements.contractType.addEventListener('change', updateCareStaffFields);
@@ -73,11 +73,11 @@ const setStayType = async () => {
   bookingForm.elements.rateId.required = !hideRate;
   bookingForm.elements.rateId.disabled = hideRate || !bookingForm.elements.campId.value;
   if (isCareStaff) bookingForm.elements.rateId.value = '';
-  mouFields.forEach((field) => field.classList.toggle('hidden', !longStay));
-  bookingForm.elements.mouId.disabled = !longStay;
-  bookingForm.elements.mouId.required = longStay;
+  mouFields.forEach((field) => field.classList.toggle('hidden', !longStay || isCareStaff));
+  bookingForm.elements.mouId.disabled = !longStay || isCareStaff;
+  bookingForm.elements.mouId.required = false;
   bookingForm.elements.mouRate.value = '';
-  if (!longStay) {
+  if (!longStay || isCareStaff) {
     bookingForm.elements.mouId.value = '';
     return;
   }
@@ -94,7 +94,7 @@ const setStayType = async () => {
     if (loadVersion !== mouLoadVersion) return;
     const mous = response.data || [];
     bookingForm.elements.mouId.innerHTML = mous.length
-      ? `<option value="">Choose an active ${getMouCategoryLabel(category)} MOU</option>${mous.map((mou) => `<option value="${mou._id}" data-rate="${mou.rateCurrency} ${Number(mou.rateAmount).toLocaleString()} / ${mou.ratePeriod === 'per_month' ? 'month' : 'year'}">${mou.partyName} - ${mou.rateCurrency} ${Number(mou.rateAmount).toLocaleString()} / ${mou.ratePeriod === 'per_month' ? 'month' : 'year'}</option>`).join('')}`
+      ? `<option value="">Optional ${getMouCategoryLabel(category)} MOU</option>${mous.map((mou) => `<option value="${mou._id}">${mou.partyName}</option>`).join('')}`
       : '<option value="">No eligible active MOUs available</option>';
     bookingForm.elements.mouId.value = selectedMouId;
   } catch (error) {
@@ -122,7 +122,7 @@ bookingForm.elements.campId.addEventListener('change', async () => {
     const response = await listGuestCampRates(bookingForm.elements.campId.value);
     const rates = Array.isArray(response.data) ? response.data : (response.data?.rates || response.data?.items || []);
     rateSelect.innerHTML = rates.length
-      ? `<option value="">Choose room rate</option>${rates.map((rate) => `<option value="${rate._id}" data-stay-type="${rate.stayType}">${rate.stayType} - ${rate.currency} ${Number(rate.amount).toLocaleString()} per night</option>`).join('')}`
+      ? `<option value="">Choose room rate</option>${rates.map((rate) => `<option value="${rate._id}" data-stay-type="${rate.stayType}">${rate.stayType} - ${rate.currency} ${Number(rate.amount).toLocaleString()} per ${rate.stayType === 'Long Stay' ? 'month' : 'night'}</option>`).join('')}`
       : '<option value="">No rates configured for this camp</option>';
     rateSelect.disabled = !rates.length;
   } catch (error) {
@@ -152,7 +152,7 @@ bookingForm.addEventListener('submit', async (event) => {
     values.driverPickup = event.target.elements.driverPickup.checked;
     if (values.stayType === 'Short Stay' && values.arrivalDate && values.departureDate) {
       const nights = Math.ceil((new Date(values.departureDate) - new Date(values.arrivalDate)) / 86400000);
-      if (nights > 21) throw new Error('Short Stay cannot exceed 21 nights. Select Long Stay (MOU-based).');
+      if (nights > 21) throw new Error('Short Stay cannot exceed 21 nights. Select Long Stay.');
     }
     await submitPublicBookingRequest(values);
     event.target.reset();

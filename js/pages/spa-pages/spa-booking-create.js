@@ -49,7 +49,8 @@ async function onSubmit(event) {
   if (!validateBookingForm(form, values, { requireLocation: true })) return;
   await globalSelectors.updateRateDisplay();
   const appliedRate = globalSelectors.getAppliedRate();
-  if (appliedRate == null) {
+  const isCareStaff = /^(?:care\s*)?staff$/i.test(String(values.contractType || '').trim());
+  if (!isCareStaff && appliedRate == null) {
     showToast('A valid rate must be available for the selected camp and stay type.', 'error');
     return;
   }

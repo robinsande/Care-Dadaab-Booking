@@ -162,9 +162,10 @@ export function nightsBetween(arrivalDate, departureDate) {
   return Math.max(0, Math.round(diff / (1000 * 60 * 60 * 24)));
 }
 
-export function calculateBookingTotal(arrivalDate, departureDate, appliedRate) {
+export function calculateBookingTotal(arrivalDate, departureDate, appliedRate, stayType = 'Short Stay') {
   const nights = nightsBetween(arrivalDate, departureDate);
   const rate = Number(appliedRate);
   if (nights === null || nights <= 0 || Number.isNaN(rate)) return null;
-  return { nights, total: nights * rate };
+  const months = stayType === 'Long Stay' ? Math.ceil(nights / 30) : null;
+  return { nights, months, total: (months || nights) * rate };
 }

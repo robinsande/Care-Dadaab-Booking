@@ -140,7 +140,7 @@ Selected manually by the officer. Never auto-determined from nights.
 
 # Rates
 
-Per camp: Short Stay Rate, Long Stay Rate.
+Per camp: Short Stay Rate per night, Long Stay Rate per month. Long Stay bookings are billed by whole months; CARE Staff bookings are waived and do not display rates.
 
 Super Admin only. Never hardcoded.
 

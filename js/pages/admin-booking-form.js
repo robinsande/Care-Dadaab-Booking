@@ -76,11 +76,12 @@ export function initGuestFieldSelects(form) {
   let mouLoadVersion = 0;
   const updateMouVisibility = async () => {
     const longStay = form.elements.stayType?.value === 'Long Stay';
-    if (mouField) mouField.hidden = !longStay;
+    const isCareStaff = /^(?:care\s*)?staff$/i.test(String(form.elements.contractType?.value || '').trim());
+    if (mouField) mouField.hidden = !longStay || isCareStaff;
     if (!mouSelect) return;
-    mouSelect.required = longStay;
-    mouSelect.disabled = !longStay;
-    if (!longStay) {
+    mouSelect.required = false;
+    mouSelect.disabled = !longStay || isCareStaff;
+    if (!longStay || isCareStaff) {
       mouSelect.value = '';
       return;
     }
@@ -97,7 +98,7 @@ export function initGuestFieldSelects(form) {
       if (loadVersion !== mouLoadVersion) return;
       const mous = response.data || [];
       mouSelect.innerHTML = mous.length
-        ? `<option value="">Select an active ${getMouCategoryLabel(category)} MOU</option>${mous.map((mou) => `<option value="${mou._id}">${mou.partyName} - ${mou.rateCurrency} ${Number(mou.rateAmount).toLocaleString()} / ${mou.ratePeriod === 'per_month' ? 'month' : 'year'}</option>`).join('')}`
+        ? `<option value="">Optional ${getMouCategoryLabel(category)} MOU</option>${mous.map((mou) => `<option value="${mou._id}">${mou.partyName}</option>`).join('')}`
         : '<option value="">No eligible active MOUs available</option>';
       mouSelect.value = selectedMouId;
     } catch (_) {
@@ -214,11 +215,12 @@ export function renderBookingPriceSummary(container, {
     return;
   }
 
-  const pricing = calculateBookingTotal(arrivalDate, departureDate, appliedRate);
+  const pricing = calculateBookingTotal(arrivalDate, departureDate, appliedRate, stayType);
   const rateLabel = appliedAtBooking ? 'Applied rate' : 'Rate';
+  const period = stayType === 'Long Stay' ? 'month' : 'night';
 
   if (!pricing) {
-    container.innerHTML = `<p class="form-hint mb-0">${escapeHtml(stayType)} ${rateLabel.toLowerCase()}: ${escapeHtml(formatMoney(appliedRate, currency))}. Select arrival and departure dates to see the total.</p>`;
+    container.innerHTML = `<p class="form-hint mb-0">${escapeHtml(stayType)} ${rateLabel.toLowerCase()}: ${escapeHtml(formatMoney(appliedRate, currency))} per ${period}. Select arrival and departure dates to see the total.</p>`;
     return;
   }
 
@@ -227,8 +229,8 @@ export function renderBookingPriceSummary(container, {
       <p class="price-summary-title">Estimated price</p>
       <dl class="detail-list">
         <div><dt>Stay type</dt><dd>${escapeHtml(stayType)}</dd></div>
-        <div><dt>${escapeHtml(rateLabel)}</dt><dd>${escapeHtml(formatMoney(appliedRate, currency))}</dd></div>
-        <div><dt>Nights</dt><dd>${pricing.nights}</dd></div>
+        <div><dt>${escapeHtml(rateLabel)}</dt><dd>${escapeHtml(formatMoney(appliedRate, currency))} per ${period}</dd></div>
+        <div><dt>${stayType === 'Long Stay' ? 'Months' : 'Nights'}</dt><dd>${stayType === 'Long Stay' ? pricing.months : pricing.nights}</dd></div>
         <div><dt>Total</dt><dd><strong class="price-summary-total">${escapeHtml(formatMoney(pricing.total, currency))}</strong></dd></div>
       </dl>
     </div>
@@ -240,6 +242,12 @@ export function wireCampSelectors(form, { priceSummaryEl, rateDisplay, onReady }
 
   function updatePriceSummary() {
     if (!summaryEl) return;
+    const isCareStaff = /^(?:care\s*)?staff$/i.test(String(form.elements.contractType?.value || '').trim());
+    summaryEl.hidden = isCareStaff;
+    if (isCareStaff) {
+      summaryEl.textContent = '';
+      return;
+    }
 
     const campId = form.elements.campId?.value;
     const stayType = form.elements.stayType?.value;
@@ -293,6 +301,7 @@ export function wireCampSelectors(form, { priceSummaryEl, rateDisplay, onReady }
 
   form.elements.arrivalDate?.addEventListener('change', updatePriceSummary);
   form.elements.departureDate?.addEventListener('change', updatePriceSummary);
+  form.elements.contractType?.addEventListener('change', updatePriceSummary);
 
   selectors.updatePriceSummary = updatePriceSummary;
 

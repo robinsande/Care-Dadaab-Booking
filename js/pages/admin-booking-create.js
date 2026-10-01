@@ -48,7 +48,8 @@ async function onSubmit(event) {
 
   await selectors.updateRateDisplay();
   const appliedRate = selectors.getAppliedRate();
-  if (values.stayType !== 'Long Stay' && appliedRate == null) {
+  const isCareStaff = /^(?:care\s*)?staff$/i.test(String(values.contractType || '').trim());
+  if (!isCareStaff && appliedRate == null) {
     showToast('A valid rate must be available for the selected camp and stay type.', 'error');
     return;
   }

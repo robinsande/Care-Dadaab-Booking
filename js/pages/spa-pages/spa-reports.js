@@ -189,9 +189,12 @@ function renderMouRevenue(rows, report, resultsEl) {
   ];
   resultsEl.classList.add('mou-revenue-print');
   resultsEl.innerHTML = [...groups.entries()].map(([, groupRows]) => {
-    const total = groupRows.reduce((sum, row) => sum + Number(row.amountAccumulated || 0), 0);
+    const total = groupRows.reduce((sum, row) => sum + (Number(row.amountAccumulated) || 0), 0);
+    const totalLabel = groupRows.every((row) => row.amountAccumulated === 'Waived')
+      ? 'Waived'
+      : total.toLocaleString('en-KE', { maximumFractionDigits: 2 });
     const moduleTitle = report.title === 'Short Stay Revenue' ? 'SHORT STAY REVENUE MODULE' : 'ROOM RESERVATION FORM 1';
-    return `<section class="mou-report-page"><div class="reservation-log-heading">${moduleTitle}</div><h3>${report.title === 'Short Stay Revenue' ? 'Short Stay Revenue Report' : `Room Reservation Form - ${escapeHtml(groupRows[0]?.mou || 'Unassigned MOU')}`}</h3><p class="reservation-log-date">Recipient: Dadaab Accommodation Team | Sender: CARE International | Period: ${escapeHtml(report.summary?.period || 'All selected dates')} | Revenue Calculation: ${report.title === 'Short Stay Revenue' ? 'Short stay subtotal' : 'MOU subtotal'} ${total.toLocaleString('en-KE', { maximumFractionDigits: 2 })}</p><table class="table"><thead><tr>${columns.map((column) => `<th>${column[1]}</th>`).join('')}</tr></thead><tbody>${groupRows.map((row) => `<tr>${columns.map((column) => `<td>${escapeHtml(row[column[0]] ?? '')}</td>`).join('')}</tr>`).join('')}</tbody></table><p class="form-hint">Remark: Hotel confirmation by: ____________________ Confirmation date: ____________________</p></section>`;
+    return `<section class="mou-report-page"><div class="reservation-log-heading">${moduleTitle}</div><h3>${report.title === 'Short Stay Revenue' ? 'Short Stay Revenue Report' : `Room Reservation Form - ${escapeHtml(groupRows[0]?.mou || 'Unassigned MOU')}`}</h3><p class="reservation-log-date">Recipient: Dadaab Accommodation Team | Sender: CARE International | Period: ${escapeHtml(report.summary?.period || 'All selected dates')} | Revenue Calculation: ${report.title === 'Short Stay Revenue' ? 'Short stay subtotal' : 'MOU subtotal'} ${totalLabel}</p><table class="table"><thead><tr>${columns.map((column) => `<th>${column[1]}</th>`).join('')}</tr></thead><tbody>${groupRows.map((row) => `<tr>${columns.map((column) => `<td>${escapeHtml(row[column[0]] ?? '')}</td>`).join('')}</tr>`).join('')}</tbody></table><p class="form-hint">Remark: Hotel confirmation by: ____________________ Confirmation date: ____________________</p></section>`;
   }).join('') || '<p class="empty-state">No MOU occupancy revenue found.</p>';
 }
 

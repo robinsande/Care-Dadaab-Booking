@@ -5,7 +5,7 @@ const HOUSEKEEPING_STATUSES = ['Clean', 'Dirty', 'Inspected'];
 
 const STAY_TYPES = [
   { value: 'Short Stay', label: 'Short Stay' },
-  { value: 'Long Stay', label: 'Long Stay (over 1 month, up to 12 months)' },
+  { value: 'Long Stay', label: 'Long Stay (1 month or longer)' },
 ];
 
 const GENDERS = ['Male', 'Female'];
