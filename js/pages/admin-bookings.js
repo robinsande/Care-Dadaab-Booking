@@ -19,7 +19,7 @@ import { confirmDialog } from '../components/modal.js';
 import { renderPagination } from '../components/pagination.js';
 import { constants, fillSelect } from '../utils/constants.js';
 import { isSuperAdmin } from '../auth/session.js';
-import { listStaffGuestRequests, resolveGuestRequest } from '../api/guest.js';
+import { listStaffGuestRequests, resolveGuestRequest, deleteStaffGuestRequest } from '../api/guest.js';
 import {
   escapeHtml,
   formatDate,
@@ -124,10 +124,20 @@ function boot() {
   async function onGuestRequestAction(event) {
     const approve = event.target.closest('[data-guest-request]');
     const reject = event.target.closest('[data-guest-reject]');
-    const id = approve?.dataset.guestRequest || reject?.dataset.guestReject;
+    const remove = event.target.closest('[data-guest-delete]');
+    const id = approve?.dataset.guestRequest || reject?.dataset.guestReject || remove?.dataset.guestDelete;
     if (!id) return;
     try {
-      if (reject) {
+      if (remove) {
+        const confirmed = await confirmDialog({
+          title: 'Delete guest request?',
+          message: 'This will permanently delete the selected guest request.',
+          confirmLabel: 'Delete',
+          danger: true,
+        });
+        if (!confirmed) return;
+        await deleteStaffGuestRequest(id);
+      } else if (reject) {
         const note = window.prompt('Reason for rejecting this request:');
         await resolveGuestRequest(id, { action: 'reject', resolutionNote: note || '' });
       } else {
@@ -142,7 +152,7 @@ function boot() {
         }
         await resolveGuestRequest(id, payload);
       }
-      showToast('Guest request updated.', 'success');
+      showToast(remove ? 'Guest request deleted.' : 'Guest request updated.', 'success');
       await loadGuestRequests();
       await loadBookings();
     } catch (error) {
@@ -192,7 +202,7 @@ async function loadGuestRequests() {
     guestRequestsEl.innerHTML = requests.length ? `<div class="table-wrap"><table class="table"><thead><tr><th>Guest</th><th>Type</th><th>Dates / booking</th><th>Reason</th><th>Action</th></tr></thead><tbody>${requests.map((request) => {
       const booking = request.booking || {};
       const dates = request.arrivalDate ? `${String(request.arrivalDate).slice(0, 10)} → ${String(request.departureDate).slice(0, 10)}` : (booking.bookingReference || '—');
-      return `<tr><td>${escapeHtml(`${request.guest?.firstName || ''} ${request.guest?.lastName || ''}`)}<br>${escapeHtml(request.guest?.email || '')}</td><td>${escapeHtml(request.type)}</td><td>${escapeHtml(dates)}<br>${escapeHtml(request.camp?.name || booking.campName || '')}</td><td>${escapeHtml(request.reason || '—')}</td><td><button class="btn btn-primary btn-sm" data-guest-request="${escapeHtml(request._id)}">Approve</button> <button class="btn btn-secondary btn-sm" data-guest-reject="${escapeHtml(request._id)}">Reject</button></td></tr>`;
+      return `<tr><td>${escapeHtml(`${request.guest?.firstName || ''} ${request.guest?.lastName || ''}`)}<br>${escapeHtml(request.guest?.email || '')}</td><td>${escapeHtml(request.type)}</td><td>${escapeHtml(dates)}<br>${escapeHtml(request.camp?.name || booking.campName || '')}</td><td>${escapeHtml(request.reason || '—')}</td><td><button class="btn btn-primary btn-sm" data-guest-request="${escapeHtml(request._id)}">Approve</button> <button class="btn btn-secondary btn-sm" data-guest-reject="${escapeHtml(request._id)}">Reject</button> <button class="btn btn-danger btn-sm" data-guest-delete="${escapeHtml(request._id)}">Delete</button></td></tr>`;
     }).join('')}</tbody></table></div>` : '<p>No pending guest requests.</p>';
   } catch { guestRequestsEl.innerHTML = '<p>Unable to load guest requests.</p>'; }
 }

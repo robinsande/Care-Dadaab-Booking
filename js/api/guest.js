@@ -22,5 +22,6 @@ export const submitBookingRequest = (payload) => request('/guest/requests', { me
 export const submitBookingAdjustment = (bookingId, payload) => request(`/guest/bookings/${bookingId}/requests`, { method: 'POST', body: payload });
 export const listStaffGuestRequests = (params = {}) => apiRequest('/guest/staff/requests', { query: params });
 export const resolveGuestRequest = (id, payload) => apiRequest(`/guest/staff/requests/${id}/resolve`, { method: 'POST', body: payload });
+export const deleteStaffGuestRequest = (id) => apiRequest(`/guest/staff/requests/${id}`, { method: 'DELETE' });
 export const listAvailableRoomsForGuestRequest = (params = {}) => apiRequest('/rooms/available', { query: params });
 export const listCampRoomsForGuestRequest = (campId) => apiRequest('/rooms', { query: { campId } });

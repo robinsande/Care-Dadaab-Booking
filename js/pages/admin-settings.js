@@ -24,7 +24,6 @@ async function loadSettings() {
     form.elements.facilityName.value = settings.facilityName || '';
     form.elements.supportEmail.value = settings.supportEmail || '';
     form.elements.supportPhone.value = settings.supportPhone || '';
-    form.elements.sendBookingConfirmation.checked = settings.notifications?.sendBookingConfirmation !== false;
     form.elements.mpesaTill.value = payment.mpesaTillNumber || payment.mpesaPaybillNumber || '';
   } catch (error) {
     showToast(error instanceof ApiError ? error.message : 'Unable to load settings.', 'error');
@@ -53,9 +52,6 @@ form.addEventListener('submit', async (event) => {
       facilityName: values.facilityName || '',
       supportEmail: values.supportEmail || '',
       supportPhone: values.supportPhone || '',
-      notifications: {
-        sendBookingConfirmation: values.sendBookingConfirmation,
-      },
       payment: {
         mpesaTillNumber: values.mpesaTill,
         mpesaPaybillNumber: values.mpesaTill,
