@@ -74,6 +74,9 @@ export async function apiRequest(path, options = {}) {
     signal,
     headers = {},
     retryTransient = false,
+    retryStatuses = [502, 503, 504],
+    retryAttempts,
+    timeoutMs = 15000,
     ...rest
   } = options;
 
@@ -94,7 +97,7 @@ export async function apiRequest(path, options = {}) {
   }
 
   const controller = new AbortController();
-  const timeoutId = window.setTimeout(() => controller.abort(), 15000);
+  const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
   let requestSignal = controller.signal;
   if (signal) {
     if (typeof AbortSignal.any === 'function') {
@@ -114,7 +117,7 @@ export async function apiRequest(path, options = {}) {
     signal: requestSignal,
     ...rest,
   };
-  const maxAttempts = retryTransient ? 4 : 1;
+  const maxAttempts = retryTransient ? Math.max(1, Number(retryAttempts) || 4) : 1;
 
   try {
     let response;
@@ -127,7 +130,7 @@ export async function apiRequest(path, options = {}) {
         continue;
       }
 
-      if (![502, 503, 504].includes(response.status) || attempt === maxAttempts) break;
+      if (!retryStatuses.includes(response.status) || attempt === maxAttempts) break;
       await new Promise((resolve) => window.setTimeout(resolve, 300 * attempt));
     }
 

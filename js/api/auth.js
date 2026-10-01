@@ -1,4 +1,4 @@
-import { api } from './client.js?v=20260922-2';
+import { api } from './client.js?v=20261001-1';
 import { config } from '../config.js';
 
 export function wakeBackend() {
@@ -13,7 +13,13 @@ export function wakeBackend() {
 }
 
 export function login(email, password) {
-  return api.post('/auth/login', { email, password }, { auth: false });
+  return api.post('/auth/login', { email, password }, {
+    auth: false,
+    retryTransient: true,
+    retryStatuses: [503],
+    retryAttempts: 16,
+    timeoutMs: 45000,
+  });
 }
 
 export function verifyMfa(mfaToken, code) {

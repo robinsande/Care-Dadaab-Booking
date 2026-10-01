@@ -1,6 +1,6 @@
 import { navigate } from '../spa-main.js';
-import { login } from '../../api/auth.js';
-import { ApiError } from '../../api/client.js';
+import { login } from '../../api/auth.js?v=20261001-1';
+import { ApiError } from '../../api/client.js?v=20261001-1';
 import { applyBrandLogos } from '../../config.js';
 import { isAuthenticated, setSession } from '../../auth/session.js';
 import { setButtonLoading } from '../../components/loading.js';
@@ -72,7 +72,6 @@ export async function init() {
   const successOverlay = document.getElementById('spa-login-success');
   const successTitle = document.getElementById('spa-login-success-title');
   const authStatus = document.getElementById('spa-login-auth-status');
-  });
 
   const finishLogin = (user, token) => {
     setSession(token, user);
