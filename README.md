@@ -83,10 +83,11 @@ See `system-contract.md` for full business rules and `js/api/` for client wrappe
 - `POST /guest/auth/register` · `POST /guest/auth/login`
 - `POST /guest/auth/request-reset` · `POST /guest/auth/reset`
 - `GET /guest/camps` (public)
-- `POST /guest/requests` — request a booking without selecting a room
+- `POST /guest/public-requests` — public booking request (no room selection)
 - `GET /guest/bookings` · `GET /guest/requests`
-- Staff review requests at `GET /guest/staff/requests` and resolve them with
-  `POST /guest/staff/requests/:id/resolve`.
+- The guest receives an acknowledgement email; staff receive a separate request email.
+- Staff review requests at `GET /guest/staff/requests`, select an available room, and resolve them with `POST /guest/staff/requests/:id/resolve`.
+- Completing a request emails the guest their booking confirmation and billable PDF invoice.
 
 ### Bookings
 

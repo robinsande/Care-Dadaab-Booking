@@ -12,17 +12,17 @@ This document is the single source of truth for CAMS.
 
 Both the frontend and backend MUST follow this specification.
 
-CAMS Version 2 replaces all Version 1 requirements. Public booking, approval workflows, and guest self-service are retired.
+CAMS supports guest booking requests. Staff approval creates the actual room booking.
 
 ---
 
 # System Overview
 
-CAMS is an internal accommodation management system for CARE Kenya facilities.
+CAMS is an accommodation management system for CARE Kenya facilities.
 
 Multiple camps are supported. Each booking belongs to exactly one camp.
 
-Guests do not access the application. Accommodation Officers create bookings on behalf of guests.
+Guests can submit booking requests through the public guest portal. Accommodation Officers review requests, assign available rooms, and create bookings.
 
 ---
 
@@ -67,22 +67,19 @@ Everything Accommodation Officer can do, plus: manage users, camps, blocks, room
 
 ## Guest
 
-No account. No login. No application access. Interacts via email only.
+Can submit a booking request through the guest portal and receive request and booking-status emails.
 
 ---
 
 # Booking Workflow
 
-1. Accommodation Officer logs in
-2. Creates booking (camp → block → room → stay type)
-3. Booking is created immediately with status **Booked**
-4. Guest receives confirmation email
-5. Officer checks guest in → **Checked In**
-6. Officer checks guest out → **Checked Out**
-7. Invoice generated automatically on check-out
-8. Invoice emailed to guest and creating officer
+1. Guest submits a booking request with their requested camp, stay type, and dates.
+2. Guest receives an acknowledgement email; active Accommodation Officers/Super Admins and the support address receive a separate action-needed email.
+3. An officer reviews the request and selects an available room for the requested camp and dates.
+4. The officer completes the request. The system creates the booking with status **Booked** and emails the guest a confirmation and, for billable bookings, a PDF invoice attachment.
+5. The officer checks the guest in → **Checked In**, then checks the guest out → **Checked Out**.
 
-There is NO approval workflow. There is NO Pending Review status.
+Guest requests do not reserve rooms and remain separate from booking statuses until completed by staff.
 
 ---
 
