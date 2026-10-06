@@ -369,7 +369,7 @@ async function onTableAction(event) {
     const reference = booking?.bookingReference || 'this booking';
     const confirmed = await confirmDialog({
       title: 'Resend Booking Emails',
-      message: `Resend the booking confirmation and invoice for ${reference}?`,
+      message: `Resend the guest booking confirmation and invoice, and notify active booking officers and super admins for ${reference}?`,
       confirmLabel: 'Resend Emails',
     });
     if (!confirmed) return;
@@ -377,10 +377,10 @@ async function onTableAction(event) {
     try {
       const response = await resendBookingEmails(resendButton.dataset.bookingId);
       const result = response.data || {};
-      const allSent = result.bookingEmailSent && result.invoiceEmailSent;
+      const allSent = result.bookingEmailSent && result.invoiceEmailSent && result.staffEmailSent;
       showToast(
         allSent
-          ? `Booking and invoice emails sent for ${reference}.`
+          ? `Guest booking email and staff booking alerts sent for ${reference}.`
           : 'One or more emails could not be sent. Check Render email logs.',
         allSent ? 'success' : 'error',
       );
