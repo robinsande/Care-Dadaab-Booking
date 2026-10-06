@@ -17,8 +17,8 @@ export function login(email, password) {
     auth: false,
     retryTransient: true,
     retryStatuses: [503],
-    retryAttempts: 16,
-    timeoutMs: 45000,
+    retryAttempts: 4,
+    timeoutMs: 15000,
   });
 }
 
