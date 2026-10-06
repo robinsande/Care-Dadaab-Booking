@@ -10,7 +10,7 @@ Consumes the production private REST API at `/api/v1/`. No backend code lives in
 
 ## Entry point
 
-- Root (`index.html`) redirects to `admin/login.html`
+- Root (`index.html`) provides staff sign-in and a link to the public guest portal
 - Staff pages and a public guest portal at `guest/index.html`
 
 ## Admin pages
