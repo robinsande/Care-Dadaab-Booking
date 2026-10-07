@@ -1,4 +1,4 @@
-import { getInvoice, downloadInvoicePdf } from '../api/invoices.js';
+import { getInvoice, downloadInvoicePdf, printInvoicePdf } from '../api/invoices.js';
 import { ApiError } from '../api/client.js';
 import { getBrandLogoDataUrl } from '../config.js';
 import { renderInvoiceDocument } from '../components/invoice-document.js';
@@ -27,14 +27,12 @@ function applyPrintHook() {
 }
 
 async function printInvoice() {
-  const img = document.querySelector('.invoice-document-logo');
-  if (img && !img.complete) {
-    await new Promise((resolve) => {
-      img.addEventListener('load', resolve, { once: true });
-      img.addEventListener('error', resolve, { once: true });
-    });
+  if (!currentInvoiceId) return;
+  try {
+    await withLoading(() => printInvoicePdf(currentInvoiceId), 'Preparing document for printing…');
+  } catch (err) {
+    showToast(err instanceof ApiError ? err.message : err.message || 'Unable to print document.', 'error');
   }
-  window.print();
 }
 
 function renderEmailStatus(inv) {
@@ -61,9 +59,10 @@ export async function openInvoiceDetailModal(id) {
     const inv = response.data?.invoice || response.data;
     const logoSrc = await getBrandLogoDataUrl();
     currentInvoiceId = inv._id || inv.id || id;
-    document.getElementById('invoice-modal-title').textContent = inv.invoiceNumber
-      ? `Invoice ${inv.invoiceNumber}`
-      : 'Invoice';
+    document.getElementById('invoice-modal-title').textContent =
+      String(inv.paymentStatus || '').toLowerCase() === 'paid'
+        ? `Receipt RCPT-${inv.invoiceNumber || inv.bookingReference}`
+        : inv.invoiceNumber ? `Invoice ${inv.invoiceNumber}` : 'Invoice';
     document.getElementById('invoice-detail-body').innerHTML = `<div class="invoice-print-area">${renderInvoiceDocument(inv, { logoSrc })}</div>`;
     renderEmailStatus(inv);
     document.getElementById('invoice-print-btn').onclick = () => printInvoice();

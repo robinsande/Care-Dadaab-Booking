@@ -18,11 +18,7 @@ export function initiateInvoiceStkPush(id, phoneNumber) {
   return api.post(`/mpesa/stk/${id}`, { phoneNumber });
 }
 
-/**
- * Download invoice as PDF via authenticated fetch.
- * Backend: GET /invoices/:id?format=pdf
- */
-export async function downloadInvoicePdf(id) {
+async function fetchInvoicePdf(id) {
   const base = config.API_BASE_URL.replace(/\/$/, '');
   const url = new URL(`${base}/invoices/${id}`);
   url.searchParams.set('format', 'pdf');
@@ -36,14 +32,50 @@ export async function downloadInvoicePdf(id) {
     throw new Error(`PDF download failed (${response.status}).`);
   }
 
-  const blob = await response.blob();
-  const filename =
+  return {
+    blob: await response.blob(),
+    filename:
     response.headers.get('Content-Disposition')?.match(/filename="?([^"]+)"?/)?.[1]
-    || `invoice-${id}.pdf`;
+      || `invoice-${id}.pdf`,
+  };
+}
 
+/**
+ * Download the server-rendered invoice or saved receipt PDF.
+ */
+export async function downloadInvoicePdf(id) {
+  const { blob, filename } = await fetchInvoicePdf(id);
+  const objectUrl = URL.createObjectURL(blob);
   const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
+  link.href = objectUrl;
   link.download = filename;
   link.click();
-  URL.revokeObjectURL(link.href);
+  window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+}
+
+/**
+ * Print the same server-rendered PDF that is offered for download.
+ */
+export async function printInvoicePdf(id) {
+  const printWindow = window.open('', '_blank');
+  if (!printWindow) {
+    throw new Error('Allow pop-ups for this site to print the invoice or receipt.');
+  }
+
+  let objectUrl;
+  try {
+    const pdf = await fetchInvoicePdf(id);
+    objectUrl = URL.createObjectURL(pdf.blob);
+    printWindow.addEventListener('load', () => {
+      window.setTimeout(() => {
+        printWindow.focus();
+        printWindow.print();
+      }, 250);
+    }, { once: true });
+    printWindow.location.href = objectUrl;
+    window.setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
+  } catch (error) {
+    printWindow.close();
+    throw error;
+  }
 }

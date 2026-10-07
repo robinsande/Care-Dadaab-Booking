@@ -2,6 +2,7 @@ import {
   listInvoices,
   getInvoice,
   downloadInvoicePdf,
+  printInvoicePdf,
   updateInvoicePaymentStatus,
   initiateInvoiceStkPush,
 } from '../api/invoices.js';
@@ -205,14 +206,15 @@ async function handlePaymentChange(button) {
 }
 
 async function printInvoice() {
-  const img = document.querySelector('.invoice-document-logo');
-  if (img && !img.complete) {
-    await new Promise((resolve) => {
-      img.addEventListener('load', resolve, { once: true });
-      img.addEventListener('error', resolve, { once: true });
-    });
+  if (!currentInvoiceId) return;
+  try {
+    await withLoading(() => printInvoicePdf(currentInvoiceId), 'Preparing document for printing…');
+  } catch (error) {
+    showToast(
+      error instanceof ApiError ? error.message : error.message || 'Unable to print document.',
+      'error',
+    );
   }
-  window.print();
 }
 
 function renderEmailStatus(invoice) {
@@ -245,7 +247,9 @@ async function openInvoiceDetail(id) {
     currentInvoiceId = invoice._id || invoice.id || id;
 
     document.getElementById('invoice-modal-title').textContent =
-      invoice.invoiceNumber ? `Invoice ${invoice.invoiceNumber}` : 'Invoice';
+      String(invoice.paymentStatus || '').toLowerCase() === 'paid'
+        ? `Receipt RCPT-${invoice.invoiceNumber || invoice.bookingReference}`
+        : invoice.invoiceNumber ? `Invoice ${invoice.invoiceNumber}` : 'Invoice';
 
     document.getElementById('invoice-detail-body').innerHTML = `
       <div class="invoice-print-area">

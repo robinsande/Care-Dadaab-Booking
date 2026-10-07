@@ -166,5 +166,5 @@ If login fails with **Route not found: POST /api/v1/auth/login**, another app is
 - Rates: `POST /camps/:campId/rates` per stay type (`stayType`, `amount`, `currency`)
 - Reports: `GET /reports/:type` with `from`, `to`, `campId`, `stayType`, and `format=json|pdf|xlsx|excel` (no booking status filter on backend)
 - Settings payment fields: nested under `payment` (`mpesaPaybillNumber`, `bankName`, etc.)
-- Invoices: display email status; use Print or Download PDF in the UI
+- Invoices: display email status; Print and Download use the same server-generated invoice PDF or saved payment receipt PDF.
 - Bookings: backend snapshots `appliedRate` on create; do not send `appliedRate` from the form
