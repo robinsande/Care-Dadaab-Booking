@@ -52,7 +52,10 @@ function invoiceLine(invoice, currency, amount, quantity, rateAmount) {
 /**
  * Renders the invoice or paid-receipt layout used for both screen and print.
  */
-export function renderInvoiceDocument(invoice, { logoSrc = config.BRAND_LOGO_SRC } = {}) {
+export function renderInvoiceDocument(invoice, {
+  logoSrc = config.BRAND_LOGO_SRC,
+  stampSrc = config.DOCUMENT_STAMP_SRC,
+} = {}) {
   const guest = invoice.guest || invoice;
   const payment = invoice.paymentInstructions || invoice.payment || {};
   const currency = invoice.appliedRate?.currency || 'KES';
@@ -154,7 +157,11 @@ export function renderInvoiceDocument(invoice, { logoSrc = config.BRAND_LOGO_SRC
             : `<dl class="invoice-detail-list">${paymentRows || detailRow('Contact', 'accommodation.dadaab@care.org')}</dl>`}
         </div>
       </section>
-      <footer class="invoice-document-footer">Thank You!<span>CARE Kenya · Dadaab Accommodation Management System</span></footer>
+      <footer class="invoice-document-footer">
+        <span>CARE Kenya · Dadaab Accommodation Management System</span>
+        <strong>Thank You!</strong>
+        <img class="invoice-document-stamp" src="${escapeHtml(stampSrc)}" alt="CARE International Refugee Assistance Project Dadaab stamp">
+      </footer>
     </article>
   `;
 }

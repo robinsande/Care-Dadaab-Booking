@@ -431,13 +431,24 @@
   gap: 16px;
   padding: 10px 12px 0;
   color: #0e2540;
+}
+
+.invoice-document-footer strong {
   font-size: 1.4rem;
+  font-weight: 400;
 }
 
 .invoice-document-footer span {
   color: #68737a;
   font-size: 0.68rem;
-  text-align: right;
+}
+
+.invoice-document-stamp {
+  display: block;
+  width: 145px;
+  max-width: 28%;
+  height: auto;
+  object-fit: contain;
 }
 
 .invoice-document-receipt .invoice-document-header,
@@ -501,12 +512,17 @@
   }
 
   .invoice-document-footer {
-    align-items: flex-start;
-    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
   }
 
   .invoice-document-footer span {
-    text-align: left;
+    flex: 1 1 100%;
+  }
+
+  .invoice-document-stamp {
+    width: 125px;
+    max-width: 40%;
   }
 }
 
