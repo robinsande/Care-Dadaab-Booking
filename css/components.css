@@ -189,7 +189,7 @@
   min-height: 150px;
   padding: 24px 34px 36px;
   color: #fff;
-  background: #145092;
+  background: var(--color-purple);
   border-radius: 0 0 45% 5% / 0 0 18% 10%;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
@@ -305,7 +305,7 @@
 .invoice-stay-details {
   padding: 12px;
   background: #f5f7f8;
-  border-left: 4px solid #145092;
+  border-left: 4px solid var(--color-purple);
 }
 
 .invoice-detail-list {
@@ -349,7 +349,7 @@
   font-size: 0.78rem;
   font-weight: 600;
   color: #fff;
-  background: #145092;
+  background: var(--color-purple);
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
@@ -387,8 +387,8 @@
 
 .invoice-document-totals .invoice-document-grand-total {
   color: #fff;
-  background: #145092;
-  border-color: #145092;
+  background: var(--color-purple);
+  border-color: var(--color-purple);
   font-size: 0.95rem;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
@@ -430,7 +430,7 @@
   justify-content: space-between;
   gap: 16px;
   padding: 10px 12px 0;
-  color: #0e2540;
+  color: var(--color-purple-dark);
 }
 
 .invoice-document-footer strong {
@@ -454,11 +454,11 @@
 .invoice-document-receipt .invoice-document-header,
 .invoice-document-receipt .invoice-charges-table th,
 .invoice-document-receipt .invoice-document-totals .invoice-document-grand-total {
-  background-color: #355b68;
+  background-color: var(--color-purple);
 }
 
 .invoice-document-receipt .invoice-stay-details {
-  border-left-color: #355b68;
+  border-left-color: var(--color-purple);
 }
 
 .invoice-document-receipt .invoice-document-header {
