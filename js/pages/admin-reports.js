@@ -31,6 +31,12 @@ function boot() {
     reportTypeSelect.value = requestedType;
   }
   fillSelect(form.elements.stayType, constants.STAY_TYPES, { placeholder: 'All stay types' });
+  const bookingStatusFilter = form.querySelector('[data-booking-status-filter]');
+  const updateBookingStatusFilter = () => {
+    if (bookingStatusFilter) bookingStatusFilter.hidden = reportTypeSelect.value !== 'reservation-log';
+  };
+  reportTypeSelect.addEventListener('change', updateBookingStatusFilter);
+  updateBookingStatusFilter();
   loadMous();
 
   form.addEventListener('submit', (event) => {
@@ -87,6 +93,7 @@ function buildParams() {
   if (values.to) params.to = values.to;
   if (values.campId) params.campId = values.campId;
   if (values.stayType) params.stayType = values.stayType;
+  if (values.bookingStatus) params.bookingStatus = values.bookingStatus;
   if (values.period) params.period = values.period;
   if (values.year) params.year = values.year;
   if (values.status) params.status = values.status;
@@ -126,7 +133,7 @@ async function generateReport() {
     }
 
     if (reportType === 'reservation-log') {
-      renderReservationLog(rows);
+      renderReservationLog(rows, report.summary || {});
       resultsEl.hidden = false;
       setExportEnabled(true);
       return;
@@ -193,16 +200,21 @@ function renderMouRevenue(rows, report, resultsEl) {
   }).join('') || '<p class="empty-state">No MOU occupancy revenue found.</p>';
 }
 
-function renderReservationLog(rows) {
+function renderReservationLog(rows, summary) {
   const columns = [
     ['bookingReference', 'Booking Reference'],
+    ['guestName', 'Guest Name'],
+    ['guestPhone', 'Phone'],
+    ['guestEmail', 'Email'],
     ['roomType', 'Room Type / Room'],
     ['checkInDate', 'Check-in Date'],
     ['departureDate', 'Departure Date'],
     ['unitPrice', 'Unit Price'],
+    ['amountAccumulated', 'Revenue'],
     ['rooms', 'Rooms'],
     ['numberOfDays', 'No. of Days'],
     ['typeOfRoom', 'Stay Type'],
+    ['status', 'Booking Status'],
     ['remark', 'Remark / Occupant / MOU'],
   ];
   const printableRows = [...rows];
@@ -211,6 +223,7 @@ function renderReservationLog(rows) {
   resultsEl.innerHTML = `
     <div class="reservation-log-heading">ROOM RESERVATION FORM</div>
     <div class="reservation-log-date">Recipient: Dadaab Accommodation Team &nbsp; | &nbsp; Sender: CARE International &nbsp; | &nbsp; Date: ${new Date().toLocaleDateString('en-GB')}</div>
+    <p class="form-hint">Bookings: ${Number(summary.totalBookings || 0).toLocaleString('en-KE')} &nbsp; | &nbsp; Total Revenue: ${summary.totalRevenue === 'Waived' ? 'Waived' : `KES ${Number(summary.totalRevenue || 0).toLocaleString('en-KE', { maximumFractionDigits: 2 })}`}</p>
     <table class="table" aria-label="Reservation Log">
       <thead><tr>${columns.map((column) => `<th>${column[1]}</th>`).join('')}</tr></thead>
       <tbody>${printableRows.map((row) => `<tr>${columns.map((column) => `<td>${escapeHtml(row[column[0]] ?? '')}</td>`).join('')}</tr>`).join('')}</tbody>
