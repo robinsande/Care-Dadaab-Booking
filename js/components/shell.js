@@ -184,7 +184,7 @@ export function adminPageHead(title) {
     <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;650;700;750&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/components.css?v=20260922-1">
+    <link rel="stylesheet" href="../css/components.css?v=20261008-1">
     <link rel="stylesheet" href="../css/layout.css?v=20260922-1">
   `;
 }
