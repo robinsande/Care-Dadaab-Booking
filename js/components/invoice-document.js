@@ -63,6 +63,7 @@ export function renderInvoiceDocument(invoice, {
   const nights = invoiceNights(invoice);
   const quantity = invoice.durationMonths || nights || 0;
   const period = invoice.durationMonths ? 'months' : 'nights';
+  const bookingOfficerEmail = invoice.recipientOfficer?.email || '';
   const isPaid = String(invoice.paymentStatus || '').toLowerCase() === 'paid';
   const documentDate = formatDate(
     isPaid
@@ -110,7 +111,7 @@ export function renderInvoiceDocument(invoice, {
           <h2>From:</h2>
           <p class="invoice-party-name">CARE Kenya — Dadaab</p>
           <p>Accommodation Management System</p>
-          <p>accommodation.dadaab@care.org</p>
+          ${bookingOfficerEmail ? `<p>${escapeHtml(bookingOfficerEmail)}</p>` : ''}
           <p>Dadaab, Kenya</p>
         </div>
       </section>
@@ -154,7 +155,7 @@ export function renderInvoiceDocument(invoice, {
           <h2>${isPaid ? 'Payment Confirmation' : 'Payment Information:'}</h2>
           ${isPaid
             ? `<p><strong>Status:</strong> Paid</p><p><strong>Reference:</strong> ${escapeHtml(paymentReference || '—')}</p>`
-            : `<dl class="invoice-detail-list">${paymentRows || detailRow('Contact', 'accommodation.dadaab@care.org')}</dl>`}
+            : `<dl class="invoice-detail-list">${paymentRows || detailRow('Contact', bookingOfficerEmail)}</dl>`}
         </div>
       </section>
       <footer class="invoice-document-footer">
