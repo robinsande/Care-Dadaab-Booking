@@ -310,15 +310,27 @@ function renderTable() {
     .map((booking) => {
       const id = booking._id || booking.id;
       const actions = [
-        `<a class="btn btn-secondary btn-sm" href="booking-edit.html?id=${escapeHtml(id)}">Edit</a>`,
-        `<button type="button" class="btn btn-secondary btn-sm" data-action="resend-emails" data-booking-id="${escapeHtml(id)}">Resend Emails</button>`,
+        `<a class="action-dropdown-item" href="booking-edit.html?id=${escapeHtml(id)}">Edit</a>`,
+        `<button type="button" class="action-dropdown-item" data-action="resend-emails" data-booking-id="${escapeHtml(id)}">Resend Emails</button>`,
       ];
       const guestEmail = booking.email || booking.guest?.email || '';
       if (guestEmail) {
-        actions.push(`<button type="button" class="btn btn-secondary btn-sm" data-action="guest-history" data-guest-search="${escapeHtml(guestEmail)}">Guest History</button>`);
+        actions.push(`<button type="button" class="action-dropdown-item" data-action="guest-history" data-guest-search="${escapeHtml(guestEmail)}">Guest History</button>`);
       }
       if (isSuperAdmin()) {
-        actions.push(`<button type="button" class="btn btn-danger btn-sm" data-action="delete" data-booking-id="${escapeHtml(id)}">Delete</button>`);
+        actions.push(`<button type="button" class="action-dropdown-item action-dropdown-item-danger" data-action="delete" data-booking-id="${escapeHtml(id)}">Delete</button>`);
+      }
+      if (booking.status === 'Booked') {
+        actions.push(`<label class="action-dropdown-item action-dropdown-check">
+          <input type="checkbox" data-action="check-in" aria-label="Check in ${escapeHtml(booking.bookingReference || 'visitor')}" />
+          <span>Check in</span>
+        </label>`);
+      }
+      if (booking.status === 'Checked In') {
+        actions.push(`<button type="button" class="action-dropdown-item" data-action="early-check-out" data-booking-id="${escapeHtml(id)}">Emergency Early Check Out</button>`);
+      }
+      if (['Booked', 'Checked In'].includes(booking.status)) {
+        actions.push(`<button type="button" class="action-dropdown-item" data-list-action="extend-stay" data-booking-id="${escapeHtml(id)}">Extend Stay</button>`);
       }
       return `
         <tr data-id="${escapeHtml(id)}">
@@ -333,21 +345,10 @@ function renderTable() {
           <td>${escapeHtml(booking.stayType || '—')}</td>
           <td>${statusBadge(booking.status)}</td>
           <td>${escapeHtml(roomLabel(booking.room, booking))}</td>
-          <td><div class="button-group" style="gap:var(--space-2);flex-wrap:wrap;">
-            ${actions.join(' ')}
-            ${booking.status === 'Booked'
-              ? `<label class="form-check" title="Check in visitor">
-                   <input type="checkbox" data-action="check-in" aria-label="Check in ${escapeHtml(booking.bookingReference || 'visitor')}" />
-                   <span>Check in</span>
-                 </label>`
-              : '—'}
-           ${booking.status === 'Checked In'
-             ? `<button type="button" class="btn btn-secondary btn-sm" data-action="early-check-out" data-booking-id="${escapeHtml(id)}">Emergency Early Check Out</button>`
-             : ''}
-           ${['Booked', 'Checked In'].includes(booking.status)
-             ? `<button type="button" class="btn btn-secondary btn-sm" data-list-action="extend-stay" data-booking-id="${escapeHtml(id)}">Extend Stay</button>`
-             : ''}
-          </div></td>
+          <td><details class="action-dropdown">
+            <summary class="btn btn-secondary btn-sm action-dropdown-trigger">Actions</summary>
+            <div class="action-dropdown-menu">${actions.join('')}</div>
+          </details></td>
         </tr>
       `;
     })
@@ -355,6 +356,9 @@ function renderTable() {
 }
 
 async function onTableAction(event) {
+  const actionMenu = event.target.closest('.action-dropdown');
+  if (actionMenu && !event.target.closest('summary')) actionMenu.open = false;
+
   const historyButton = event.target.closest('button[data-action="guest-history"]');
   if (historyButton) {
     state.search = historyButton.dataset.guestSearch || '';

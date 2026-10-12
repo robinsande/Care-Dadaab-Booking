@@ -200,30 +200,30 @@ function renderTable(tableBody) {
     .map((booking) => {
       const id = booking._id || booking.id;
       const actions = [];
-      actions.push(`<a class="btn btn-secondary btn-sm" data-nav-link data-list-action="edit" href="#/booking/edit?id=${escapeHtml(id)}">Edit</a>`);
-      actions.push(`<button type="button" class="btn btn-secondary btn-sm" data-list-action="resend-emails" data-booking-id="${escapeHtml(id)}">Resend Emails</button>`);
+      actions.push(`<a class="action-dropdown-item" data-nav-link data-list-action="edit" href="#/booking/edit?id=${escapeHtml(id)}">Edit</a>`);
+      actions.push(`<button type="button" class="action-dropdown-item" data-list-action="resend-emails" data-booking-id="${escapeHtml(id)}">Resend Emails</button>`);
       const guestEmail = booking.email || booking.guest?.email || '';
       if (guestEmail) {
-        actions.push(`<button type="button" class="btn btn-secondary btn-sm" data-list-action="guest-history" data-guest-search="${escapeHtml(guestEmail)}">Guest History</button>`);
+        actions.push(`<button type="button" class="action-dropdown-item" data-list-action="guest-history" data-guest-search="${escapeHtml(guestEmail)}">Guest History</button>`);
       }
       if (booking.invoiceId || booking.invoice?._id || booking.invoice?.id) {
         const invId = booking.invoiceId || booking.invoice?._id || booking.invoice?.id;
-        actions.push(`<button type="button" class="btn btn-secondary btn-sm" data-list-action="invoice" data-invoice-id="${escapeHtml(invId)}">Invoice</button>`);
+        actions.push(`<button type="button" class="action-dropdown-item" data-list-action="invoice" data-invoice-id="${escapeHtml(invId)}">Invoice</button>`);
       }
       if (canDelete) {
-        actions.push(`<button type="button" class="btn btn-danger btn-sm" data-list-action="delete" data-booking-id="${escapeHtml(id)}">Delete</button>`);
+        actions.push(`<button type="button" class="action-dropdown-item action-dropdown-item-danger" data-list-action="delete" data-booking-id="${escapeHtml(id)}">Delete</button>`);
       }
       if (booking.status === 'Booked') {
-        actions.push(`<label class="form-check" title="Check in visitor">
+        actions.push(`<label class="action-dropdown-item action-dropdown-check">
           <input type="checkbox" data-list-action="check-in" data-booking-id="${escapeHtml(id)}" aria-label="Check in ${escapeHtml(booking.bookingReference || 'visitor')}" />
           <span>Check in</span>
         </label>`);
       }
       if (booking.status === 'Checked In') {
-        actions.push(`<button type="button" class="btn btn-secondary btn-sm" data-list-action="early-check-out" data-booking-id="${escapeHtml(id)}">Emergency Early Check Out</button>`);
+        actions.push(`<button type="button" class="action-dropdown-item" data-list-action="early-check-out" data-booking-id="${escapeHtml(id)}">Emergency Early Check Out</button>`);
       }
       if (['Booked', 'Checked In'].includes(booking.status)) {
-        actions.push(`<button type="button" class="btn btn-secondary btn-sm" data-list-action="extend-stay" data-booking-id="${escapeHtml(id)}">Extend Stay</button>`);
+        actions.push(`<button type="button" class="action-dropdown-item" data-list-action="extend-stay" data-booking-id="${escapeHtml(id)}">Extend Stay</button>`);
       }
       return `
         <tr data-id="${escapeHtml(id)}">
@@ -238,7 +238,10 @@ function renderTable(tableBody) {
           <td data-label="Stay type">${escapeHtml(booking.stayType || '—')}</td>
           <td data-label="Status">${statusBadge(booking.status)}</td>
           <td data-label="Room">${escapeHtml(roomLabel(booking.room, booking))}</td>
-          <td data-label="Actions"><div class="button-group" style="gap:var(--space-2);flex-wrap:wrap;">${actions.join('')}</div></td>
+          <td data-label="Actions"><details class="action-dropdown">
+            <summary class="btn btn-secondary btn-sm action-dropdown-trigger">Actions</summary>
+            <div class="action-dropdown-menu">${actions.join('')}</div>
+          </details></td>
         </tr>
       `;
     })
@@ -248,6 +251,8 @@ function renderTable(tableBody) {
 async function onTableAction(event) {
   const btn = event.target.closest('[data-list-action]');
   if (!btn) return;
+  const actionMenu = btn.closest('.action-dropdown');
+  if (actionMenu) actionMenu.open = false;
   const action = btn.dataset.listAction;
 
   if (action === 'guest-history') {
