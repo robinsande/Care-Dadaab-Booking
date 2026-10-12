@@ -1,11 +1,16 @@
 import { getCurrentParams } from '../spa-main.js';
 import { openInvoiceDetailModal } from '../invoice-actions.js';
-import { listInvoices, updateInvoicePaymentStatus, initiateInvoiceStkPush } from '../../api/invoices.js';
+import {
+  listInvoices,
+  updateInvoicePaymentStatus,
+  initiateInvoiceStkPush,
+  confirmMpesaInvoicePayment,
+} from '../../api/invoices.js';
 import { ApiError } from '../../api/client.js';
 import { withLoading } from '../../components/loading.js';
 import { showToast } from '../../components/toast.js';
 import { renderPagination } from '../../components/pagination.js';
-import { confirmDialog } from '../../components/modal.js';
+import { confirmDialog, openModal } from '../../components/modal.js';
 import { escapeHtml, formatMoney, fullName, invoiceEmailStatus, emailStatusBadge, paymentStatusBadge } from '../../utils/format.js';
 
 const state = { page: 1, limit: 10, search: '', total: 0, totalPages: 1, invoices: [] };
@@ -26,6 +31,11 @@ export async function init() {
   });
 
   tableBody.addEventListener('click', (e) => {
+    const mpesaButton = e.target.closest('[data-mpesa-action]');
+    if (mpesaButton) {
+      openMpesaConfirmation(mpesaButton);
+      return;
+    }
     if (e.target.closest('[data-stk-action]')) {
       handleStkPush(e.target.closest('[data-stk-action]'));
       return;
@@ -37,6 +47,7 @@ export async function init() {
     const row = e.target.closest('[data-invoice-id]');
     if (row) openInvoiceDetailModal(row.dataset.invoiceId);
   });
+  document.getElementById('mpesa-confirmation-form')?.addEventListener('submit', handleMpesaConfirmation);
   tableBody.addEventListener('keydown', (e) => {
     if (e.key !== 'Enter' && e.key !== ' ') return;
     const row = e.target.closest('[data-invoice-id]');
@@ -112,11 +123,42 @@ function renderTable() {
         <td>${emailStatusBadge(emailStatus)}</td>
         <td>${paid ? 'Paid' : `
           <button type="button" class="btn btn-primary btn-sm" data-payment-action data-invoice-id="${escapeHtml(id)}">Record cash</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-mpesa-action data-invoice-id="${escapeHtml(id)}">Confirm M-Pesa</button>
           <button type="button" class="btn btn-secondary btn-sm" data-stk-action data-invoice-id="${escapeHtml(id)}">Request payment</button>
         `}</td>
       </tr>
     `;
   }).join('');
+}
+
+function openMpesaConfirmation(button) {
+  const form = document.getElementById('mpesa-confirmation-form');
+  if (!form) return;
+  form.reset();
+  form.elements.invoiceId.value = button.dataset.invoiceId;
+  openModal('mpesa-confirmation');
+}
+
+async function handleMpesaConfirmation(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  if (!form.reportValidity()) return;
+  const submit = form.querySelector('[type="submit"]');
+  submit.disabled = true;
+  try {
+    await confirmMpesaInvoicePayment(
+      form.elements.invoiceId.value,
+      form.elements.message.value,
+      form.elements.confirmed.checked,
+    );
+    document.querySelector('[data-close-modal="mpesa-confirmation"]')?.click();
+    showToast('M-Pesa payment confirmed and invoice marked as paid.', 'success');
+    await loadInvoices();
+  } catch (error) {
+    showToast(error instanceof ApiError ? error.message : 'Unable to confirm M-Pesa payment.', 'error');
+  } finally {
+    submit.disabled = false;
+  }
 }
 
 async function handleStkPush(button) {

@@ -602,6 +602,30 @@
       </div>
     </div>
 
+    <div class="modal-backdrop" data-modal="mpesa-confirmation" hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mpesa-confirmation-title">
+        <div class="modal-header">
+          <h2 id="mpesa-confirmation-title">Confirm M-Pesa payment</h2>
+          <button type="button" class="modal-close" data-close-modal="mpesa-confirmation" aria-label="Close">&times;</button>
+        </div>
+        <form id="mpesa-confirmation-form">
+          <div class="modal-body">
+            <input type="hidden" name="invoiceId">
+            <label class="form-label" for="mpesa-message">Paste the full M-Pesa confirmation message</label>
+            <textarea class="form-control" id="mpesa-message" name="message" rows="5" minlength="10" maxlength="2000" required></textarea>
+            <label class="form-check" style="margin-top:var(--space-4);">
+              <input type="checkbox" name="confirmed" required>
+              <span>I verified this M-Pesa message and its amount matches the invoice.</span>
+            </label>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-close-modal="mpesa-confirmation">Cancel</button>
+            <button type="submit" class="btn btn-primary">Confirm payment</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <!-- Camp Modal -->
     <div class="modal-backdrop" data-modal="camp" hidden>
       <div class="modal" role="dialog" aria-modal="true" aria-labelledby="camp-modal-title">

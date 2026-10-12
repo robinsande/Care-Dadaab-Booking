@@ -18,6 +18,10 @@ export function initiateInvoiceStkPush(id, phoneNumber) {
   return api.post(`/mpesa/stk/${id}`, { phoneNumber });
 }
 
+export function confirmMpesaInvoicePayment(id, message, confirmed) {
+  return api.post(`/invoices/${id}/mpesa-confirmation`, { message, confirmed });
+}
+
 async function fetchInvoicePdf(id) {
   const base = config.API_BASE_URL.replace(/\/$/, '');
   const url = new URL(`${base}/invoices/${id}`);

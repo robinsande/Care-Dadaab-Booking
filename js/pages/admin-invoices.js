@@ -5,6 +5,7 @@ import {
   printInvoicePdf,
   updateInvoicePaymentStatus,
   initiateInvoiceStkPush,
+  confirmMpesaInvoicePayment,
 } from '../api/invoices.js';
 import { ApiError } from '../api/client.js';
 import { getBrandLogoDataUrl } from '../config.js';
@@ -68,6 +69,11 @@ function boot() {
   });
 
   tableBody.addEventListener('click', (event) => {
+    const mpesaButton = event.target.closest('[data-mpesa-action]');
+    if (mpesaButton) {
+      openMpesaConfirmation(mpesaButton);
+      return;
+    }
     const stkButton = event.target.closest('[data-stk-action]');
     if (stkButton) {
       handleStkPush(stkButton);
@@ -80,6 +86,7 @@ function boot() {
     const row = event.target.closest('[data-invoice-id]');
     if (row) openInvoiceDetail(row.dataset.invoiceId);
   });
+  document.getElementById('mpesa-confirmation-form')?.addEventListener('submit', handleMpesaConfirmation);
 
   tableBody.addEventListener('keydown', (event) => {
     if (event.key !== 'Enter' && event.key !== ' ') return;
@@ -165,12 +172,43 @@ function renderTable() {
           <td>${emailStatusBadge(emailStatus)}</td>
           <td>${paid ? 'Paid' : `
             <button type="button" class="btn btn-primary btn-sm" data-payment-action data-invoice-id="${escapeHtml(id)}">Record cash</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-mpesa-action data-invoice-id="${escapeHtml(id)}">Confirm M-Pesa</button>
             <button type="button" class="btn btn-secondary btn-sm" data-stk-action data-invoice-id="${escapeHtml(id)}">Request payment</button>
           `}</td>
         </tr>
       `;
     })
     .join('');
+}
+
+function openMpesaConfirmation(button) {
+  const form = document.getElementById('mpesa-confirmation-form');
+  if (!form) return;
+  form.reset();
+  form.elements.invoiceId.value = button.dataset.invoiceId;
+  openModal('mpesa-confirmation');
+}
+
+async function handleMpesaConfirmation(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  if (!form.reportValidity()) return;
+  const submit = form.querySelector('[type="submit"]');
+  submit.disabled = true;
+  try {
+    await confirmMpesaInvoicePayment(
+      form.elements.invoiceId.value,
+      form.elements.message.value,
+      form.elements.confirmed.checked,
+    );
+    document.querySelector('[data-close-modal="mpesa-confirmation"]')?.click();
+    showToast('M-Pesa payment confirmed and invoice marked as paid.', 'success');
+    await loadInvoices();
+  } catch (error) {
+    showToast(error instanceof ApiError ? error.message : 'Unable to confirm M-Pesa payment.', 'error');
+  } finally {
+    submit.disabled = false;
+  }
 }
 
 async function handleStkPush(button) {

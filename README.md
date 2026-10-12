@@ -80,6 +80,8 @@ See `system-contract.md` for full business rules and `js/api/` for client wrappe
 
 ### Guest portal
 
+Guests can sign in or create a guest account at the guest portal and enable browser push notifications. Push notifications require HTTPS and backend VAPID configuration; check-in/check-out emails continue to be sent to the guest address.
+
 - `POST /guest/auth/register` · `POST /guest/auth/login`
 - `POST /guest/auth/request-reset` · `POST /guest/auth/reset`
 - `GET /guest/camps` (public)
