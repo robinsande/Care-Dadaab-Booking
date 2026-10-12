@@ -105,6 +105,12 @@ export function initAdminShell() {
   const adminUser = document.querySelector('.admin-user');
   const mobileQuery = window.matchMedia('(max-width: 959px)');
   const isMobile = () => mobileQuery.matches;
+  if (sidebar && !sidebar.id) sidebar.id = 'admin-sidebar-nav';
+  toggle?.setAttribute('aria-controls', sidebar?.id || 'admin-sidebar-nav');
+  const syncMenuToggle = (isOpen) => {
+    toggle?.setAttribute('aria-expanded', String(isOpen));
+    toggle?.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+  };
 
   const syncAdminUserPlacement = () => {
     if (!adminUser) return;
@@ -136,14 +142,19 @@ export function initAdminShell() {
     }
   });
 
-  toggle?.setAttribute('aria-expanded', 'false');
-  if (isMobile() && sidebar?.classList.contains('is-open')) {
-    toggle.setAttribute('aria-expanded', 'true');
-  }
+  syncMenuToggle(isMobile() && Boolean(sidebar?.classList.contains('is-open')));
   toggle?.addEventListener('click', () => {
     const isOpen = sidebar?.classList.toggle('is-open') || false;
     window.localStorage.setItem('cams.sidebarOpen', String(isOpen));
-    toggle.setAttribute('aria-expanded', String(isOpen));
+    syncMenuToggle(isOpen);
+  });
+  const closeMobileNav = () => {
+    sidebar?.classList.remove('is-open');
+    window.localStorage.setItem('cams.sidebarOpen', 'false');
+    syncMenuToggle(false);
+  };
+  sidebar?.addEventListener('click', (event) => {
+    if (event.target.closest('a')) closeMobileNav();
   });
 
   const closeActionDropdown = (event) => {
@@ -157,28 +168,23 @@ export function initAdminShell() {
   document.addEventListener('click', (event) => {
     if (!isMobile() || !sidebar?.classList.contains('is-open')) return;
     if (sidebar.contains(event.target) || toggle?.contains(event.target)) return;
-    sidebar.classList.remove('is-open');
-    window.localStorage.setItem('cams.sidebarOpen', 'false');
-    toggle?.setAttribute('aria-expanded', 'false');
+    closeMobileNav();
   });
 
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape' || !isMobile()) return;
-    sidebar?.classList.remove('is-open');
-    window.localStorage.setItem('cams.sidebarOpen', 'false');
-    toggle?.setAttribute('aria-expanded', 'false');
+    closeMobileNav();
   });
 
   const syncNavigationForViewport = (event) => {
     if (!event.matches) {
-      sidebar?.classList.remove('is-open');
-      toggle?.setAttribute('aria-expanded', 'false');
+      closeMobileNav();
       return;
     }
 
     const shouldOpen = window.localStorage.getItem('cams.sidebarOpen') === 'true';
     sidebar?.classList.toggle('is-open', shouldOpen);
-    toggle?.setAttribute('aria-expanded', String(shouldOpen));
+    syncMenuToggle(shouldOpen);
   };
   if (mobileQuery.addEventListener) {
     mobileQuery.addEventListener('change', (event) => {
@@ -229,7 +235,7 @@ export function adminPageHead(title) {
     <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;650;700;750&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/components.css?v=20261012-3">
+    <link rel="stylesheet" href="../css/components.css?v=20261012-4">
     <link rel="stylesheet" href="../css/layout.css?v=20261012-2">
   `;
 }

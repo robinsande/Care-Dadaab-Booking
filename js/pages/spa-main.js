@@ -137,6 +137,12 @@ function initAdminChromeOnce() {
   const viewportQuery = window.matchMedia('(max-width: 959px)');
   const logoutBtn = document.querySelector('[data-logout]');
   const globalSearch = document.querySelector('[data-global-search]');
+  if (sidebar && !sidebar.id) sidebar.id = 'admin-sidebar-nav';
+  toggle?.setAttribute('aria-controls', sidebar?.id || 'admin-sidebar-nav');
+  const syncMenuToggle = (isOpen) => {
+    toggle?.setAttribute('aria-expanded', String(isOpen));
+    toggle?.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+  };
 
   const syncAdminUserPlacement = () => {
     if (!adminUser) return;
@@ -150,12 +156,6 @@ function initAdminChromeOnce() {
   buildNav(user);
   syncAdminUserPlacement();
   initResponsiveTableLabels();
-  if (viewportQuery.addEventListener) {
-    viewportQuery.addEventListener('change', syncAdminUserPlacement);
-  } else {
-    viewportQuery.addListener(syncAdminUserPlacement);
-  }
-
   const mobileNavOpen = window.localStorage.getItem('cams.sidebarOpen') === 'true';
   if (window.innerWidth < 960 && mobileNavOpen) {
     sidebar?.classList.add('is-open');
@@ -171,29 +171,46 @@ function initAdminChromeOnce() {
     if (!isSuperAdmin(user)) el.hidden = true;
   });
 
-  toggle?.setAttribute('aria-expanded', 'false');
-  if (window.innerWidth < 960 && sidebar?.classList.contains('is-open')) {
-    toggle.setAttribute('aria-expanded', 'true');
-  }
+  syncMenuToggle(window.innerWidth < 960 && Boolean(sidebar?.classList.contains('is-open')));
   toggle?.addEventListener('click', () => {
     const isOpen = sidebar?.classList.toggle('is-open') || false;
     window.localStorage.setItem('cams.sidebarOpen', String(isOpen));
-    toggle.setAttribute('aria-expanded', String(isOpen));
+    syncMenuToggle(isOpen);
   });
+  function closeMobileNav() {
+    sidebar?.classList.remove('is-open');
+    window.localStorage.setItem('cams.sidebarOpen', 'false');
+    syncMenuToggle(false);
+  }
+  sidebar?.addEventListener('click', (event) => {
+    if (event.target.closest('a')) closeMobileNav();
+  });
+  const syncNavigationForViewport = (event) => {
+    syncAdminUserPlacement();
+    if (!event.matches) {
+      closeMobileNav();
+      return;
+    }
+
+    const shouldOpen = window.localStorage.getItem('cams.sidebarOpen') === 'true';
+    sidebar?.classList.toggle('is-open', shouldOpen);
+    syncMenuToggle(shouldOpen);
+  };
+  if (viewportQuery.addEventListener) {
+    viewportQuery.addEventListener('change', syncNavigationForViewport);
+  } else {
+    viewportQuery.addListener(syncNavigationForViewport);
+  }
 
   document.addEventListener('click', (event) => {
     if (window.innerWidth >= 960 || !sidebar?.classList.contains('is-open')) return;
     if (sidebar.contains(event.target) || toggle?.contains(event.target)) return;
-    sidebar.classList.remove('is-open');
-    window.localStorage.setItem('cams.sidebarOpen', 'false');
-    toggle?.setAttribute('aria-expanded', 'false');
+    closeMobileNav();
   });
 
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape' || window.innerWidth >= 960) return;
-    sidebar?.classList.remove('is-open');
-    window.localStorage.setItem('cams.sidebarOpen', 'false');
-    toggle?.setAttribute('aria-expanded', 'false');
+    closeMobileNav();
   });
 
   logoutBtn?.addEventListener('click', (event) => {

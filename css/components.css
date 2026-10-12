@@ -1155,6 +1155,61 @@ button,
   to { background-position: -200% 0; }
 }
 
+@media (max-width: 959px) {
+  .admin-topbar .admin-menu-toggle {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-width: 5.25rem;
+    min-height: 44px;
+    padding: 0.55rem 0.8rem;
+    border: 1px solid rgba(189, 123, 255, 0.5);
+    border-radius: 0.8rem;
+    background: linear-gradient(135deg, #6f35a6, #351b52);
+    color: #fff;
+    box-shadow: 0 0 18px rgba(156, 77, 235, 0.2);
+    font-weight: 700;
+  }
+
+  .admin-topbar .admin-menu-toggle::before,
+  .admin-topbar .admin-menu-toggle::after {
+    display: block;
+    width: 18px;
+    height: 2px;
+    flex: 0 0 18px;
+    border-radius: 2px;
+    background: currentColor;
+    content: "";
+    transition: transform 180ms ease, box-shadow 180ms ease;
+  }
+
+  .admin-topbar .admin-menu-toggle::before {
+    box-shadow: 0 -6px currentColor, 0 6px currentColor;
+  }
+
+  .admin-topbar .admin-menu-toggle[aria-expanded="true"]::before {
+    transform: rotate(45deg);
+    box-shadow: none;
+  }
+
+  .admin-topbar .admin-menu-toggle[aria-expanded="true"]::after {
+    position: absolute;
+    transform: rotate(-45deg);
+  }
+
+  .admin-topbar .admin-menu-toggle:hover:not(:disabled) {
+    border-color: #dfb8ff;
+    background: linear-gradient(135deg, #8249bc, #452264);
+    color: #fff;
+    box-shadow: 0 0 0 3px rgba(189, 123, 255, 0.16), 0 0 24px rgba(156, 77, 235, 0.35);
+    transform: translateY(-1px);
+  }
+}
+
 @media (max-width: 767px) {
   .admin-content {
     min-width: 0;
