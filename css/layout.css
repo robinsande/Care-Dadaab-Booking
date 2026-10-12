@@ -2051,46 +2051,29 @@
   min-height: 190px;
 }
 
-.occupancy-chart-ring {
-  display: grid;
-  width: 138px;
-  aspect-ratio: 1;
+.occupancy-chart-svg {
+  display: block;
+  width: min(100%, 154px);
+  height: auto;
   flex: 0 0 auto;
-  place-items: center;
-  border-radius: 50%;
-  position: relative;
 }
 
-.occupancy-chart-ring::before {
-  position: absolute;
-  inset: 15px;
-  border-radius: 50%;
-  background: var(--color-surface);
-  content: "";
-}
-
-.occupancy-chart-ring > span {
-  z-index: 1;
-  display: grid;
-  text-align: center;
-}
-
-.occupancy-chart-ring strong {
+.occupancy-chart-rate {
   color: var(--color-ink);
   font-family: var(--font-display);
-  font-size: var(--text-2xl);
-  line-height: 1.1;
+  font-size: 28px;
+  font-weight: 700;
 }
 
-.occupancy-chart-ring small {
+.occupancy-chart-label {
   color: var(--color-ink-muted);
-  font-size: 0.85rem;
+  font-size: 12px;
 }
 
 .chart-legend {
   display: grid;
   gap: 0.65rem;
-  min-width: 145px;
+  min-width: 125px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -2139,70 +2122,79 @@
   font-size: 0.85rem;
 }
 
-.revenue-chart-bars,
-.stay-type-chart-rows {
-  display: grid;
-  gap: 0.8rem;
+.dashboard-chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
 }
 
-.revenue-chart-row {
-  display: grid;
-  grid-template-columns: 2.75rem minmax(2rem, 1fr) minmax(6.5rem, auto);
-  align-items: center;
-  gap: 0.75rem;
+.chart-grid-line {
+  stroke: #e9e9e6;
+  stroke-width: 1;
 }
 
-.revenue-chart-month {
+.chart-axis-line {
+  stroke: #aeb6ae;
+  stroke-width: 1.2;
+}
+
+.chart-axis-label,
+.stay-type-axis-label,
+.stay-type-count-label,
+.stay-type-revenue-label {
+  fill: var(--color-ink-muted);
+  font-family: var(--font-sans);
+  font-size: 14px;
+}
+
+.chart-y-label {
+  font-size: 12px;
+}
+
+.chart-x-label {
+  font-size: 14px;
+}
+
+.revenue-chart-bar {
+  fill: url(#revenue-bar-gradient);
+  transition: opacity var(--transition);
+}
+
+.revenue-chart-svg g:hover .revenue-chart-bar {
+  opacity: 0.76;
+}
+
+.stay-type-chart-key {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.4rem;
   color: var(--color-ink-muted);
   font-size: 0.9rem;
 }
 
-.revenue-chart-track,
-.stay-type-chart-track {
-  display: block;
-  height: 0.65rem;
-  overflow: hidden;
-  border-radius: var(--radius-pill);
-  background: var(--color-neutral-100);
-}
-
-.revenue-chart-track i,
-.stay-type-chart-track i {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, var(--color-brand), var(--color-brand-accent));
-}
-
-.revenue-chart-row > strong {
-  text-align: right;
-  font-size: 0.82rem;
-  font-variant-numeric: tabular-nums;
-}
-
-.stay-type-chart-row {
-  display: grid;
-  gap: 0.55rem;
-}
-
-.stay-type-chart-heading {
+.stay-type-chart-key span:first-child {
   display: flex;
-  justify-content: space-between;
-  gap: 0.75rem;
-  font-size: 0.98rem;
+  align-items: center;
+  gap: 0.45rem;
 }
 
-.stay-type-chart-heading span {
-  color: var(--color-ink-muted);
-  font-size: 0.85rem;
+.stay-type-chart-key i {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 2px;
+  background: var(--color-brand);
 }
 
-.stay-type-chart-row:nth-child(even) .stay-type-chart-track i {
-  background: linear-gradient(90deg, var(--color-purple), #9b70b0);
+.stay-type-count-label {
+  fill: var(--color-ink);
+  font-weight: 700;
 }
 
-.stay-type-chart-revenue {
-  font-size: 0.88rem;
+.stay-type-revenue-label {
+  font-size: 11px;
+  font-weight: 600;
 }
 
 @media (min-width: 760px) {
@@ -2245,18 +2237,13 @@
     gap: 1.25rem;
   }
 
-  .occupancy-chart-ring {
-    width: 128px;
+  .occupancy-chart-svg {
+    width: 126px;
   }
 
   .chart-legend {
     min-width: 0;
     width: 100%;
-  }
-
-  .revenue-chart-row {
-    grid-template-columns: 2.25rem minmax(2rem, 1fr) minmax(5rem, auto);
-    gap: 0.5rem;
   }
 
   .login-page {
