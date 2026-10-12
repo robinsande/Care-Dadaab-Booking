@@ -61,6 +61,40 @@ export function renderAdminNav(user = getUser()) {
     .join('');
 }
 
+export function initResponsiveTableLabels() {
+  if (document.documentElement.dataset.responsiveTableLabelsInitialized === 'true') return;
+  document.documentElement.dataset.responsiveTableLabelsInitialized = 'true';
+
+  const updateTableLabels = () => {
+    document.querySelectorAll('.table-wrap .table').forEach((table) => {
+      const headers = Array.from(table.tHead?.rows[0]?.cells || []);
+      if (!headers.length) return;
+
+      const labels = headers.map((header) => header.textContent.trim().replace(/\s+/g, ' '));
+      table.querySelectorAll('tbody tr').forEach((row) => {
+        Array.from(row.cells).forEach((cell, index) => {
+          if (!cell.hasAttribute('data-label') && !cell.hasAttribute('colspan') && labels[index]) {
+            cell.setAttribute('data-label', labels[index]);
+          }
+        });
+      });
+    });
+  };
+
+  let updateScheduled = false;
+  const observer = new MutationObserver(() => {
+    if (updateScheduled) return;
+    updateScheduled = true;
+    window.requestAnimationFrame(() => {
+      updateScheduled = false;
+      updateTableLabels();
+    });
+  });
+
+  updateTableLabels();
+  observer.observe(document.body, { childList: true, subtree: true });
+}
+
 export function initAdminShell() {
   const user = getUser();
   const nameEl = document.querySelector('[data-admin-name]');
@@ -83,6 +117,7 @@ export function initAdminShell() {
 
   renderAdminNav(user);
   syncAdminUserPlacement();
+  initResponsiveTableLabels();
 
   const mobileNavOpen = window.localStorage.getItem('cams.sidebarOpen') === 'true';
   if (isMobile() && mobileNavOpen) {
@@ -194,7 +229,7 @@ export function adminPageHead(title) {
     <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;650;700;750&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/components.css?v=20261012-2">
+    <link rel="stylesheet" href="../css/components.css?v=20261012-3">
     <link rel="stylesheet" href="../css/layout.css?v=20261012-2">
   `;
 }

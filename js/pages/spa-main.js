@@ -2,7 +2,7 @@ import { isAuthenticated, getUser, clearSession, isSuperAdmin } from '../auth/se
 import { config, applyBrandLogos } from '../config.js';
 import { initModals } from '../components/modal.js';
 import { showToast } from '../components/toast.js';
-import { NAV_ICONS } from '../components/shell.js';
+import { NAV_ICONS, initResponsiveTableLabels } from '../components/shell.js';
 
 const PAGE_TITLES = {
   login: 'Staff Login',
@@ -149,6 +149,7 @@ function initAdminChromeOnce() {
 
   buildNav(user);
   syncAdminUserPlacement();
+  initResponsiveTableLabels();
   if (viewportQuery.addEventListener) {
     viewportQuery.addEventListener('change', syncAdminUserPlacement);
   } else {

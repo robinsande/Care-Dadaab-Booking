@@ -1157,6 +1157,42 @@ button,
 
 @media (max-width: 767px) {
   .admin-content {
+    min-width: 0;
+    padding: var(--space-4) var(--space-3) 5.5rem;
+  }
+
+  .admin-topbar {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: var(--space-3);
+  }
+
+  .admin-topbar > h1 {
+    min-width: 0;
+    flex: 1 1 8rem;
+    font-size: clamp(1rem, 5vw, var(--text-lg)) !important;
+    overflow-wrap: anywhere;
+  }
+
+  .admin-content .toolbar {
+    align-items: stretch;
+  }
+
+  .admin-content .toolbar > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .admin-content .toolbar > .btn {
+    margin-left: 0 !important;
+  }
+
+  .admin-content .toolbar .form-group,
+  .admin-content .toolbar .form-group.search {
+    min-width: min(100%, 12rem);
+  }
+
+  .admin-content {
     padding-bottom: 5.5rem;
   }
 
@@ -1209,6 +1245,30 @@ button,
     font-weight: var(--weight-semibold);
     text-transform: uppercase;
     letter-spacing: 0.04em;
+  }
+
+  .action-dropdown-menu {
+    min-width: min(12rem, calc(100vw - 2.5rem));
+    max-width: calc(100vw - 2.5rem);
+  }
+
+  .action-dropdown-item {
+    min-height: 44px;
+  }
+
+  .table-wrap .action-dropdown-menu {
+    right: 0;
+    left: auto;
+  }
+
+  .booking-progress {
+    gap: var(--space-1);
+  }
+
+  .booking-progress li {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--space-1);
   }
 
   .table-wrap .table td[colspan] {
