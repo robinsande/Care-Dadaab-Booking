@@ -42,15 +42,17 @@ export function renderAdminNav(user = getUser()) {
   if (!nav) return;
 
   const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+  const currentRoute = window.location.hash.split('?')[0];
 
   nav.innerHTML = ADMIN_NAV
     .filter((item) => (!item.superAdmin || isSuperAdmin(user)) && (!isSystemViewer(user) || ['Dashboard', 'Rooms', 'Invoices'].includes(item.label)))
     .map((item) => {
       const isActive =
-        (item.href === '/' && currentPage === 'dashboard.html')
-        || (item.href === '/#/bookings' && ['#/bookings', '#/booking/edit'].includes(window.location.hash.split('?')[0]))
-        || (item.href === '/#/booking/create' && ['booking-create.html', 'booking-edit.html'].includes(currentPage))
-        || (item.href === '/admin/reservation-log.html' && currentPage === 'reservation-log.html');
+        (item.href === '/' && (currentPage === 'dashboard.html' || currentRoute === '#/dashboard'))
+        || (item.href === '/#/bookings' && ['#/bookings', '#/booking/edit'].includes(currentRoute))
+        || (item.href === '/#/booking/create' && (currentPage === 'booking-create.html' || currentRoute === '#/booking/create'))
+        || (item.href.startsWith('/#/') && item.href.slice(1) === currentRoute)
+        || (item.href.startsWith('/admin/') && currentPage === item.href.split('/').pop());
       const attrs = isActive ? ' aria-current="page"' : '';
       const superAttr = item.superAdmin ? ' data-super-admin-only' : '';
       const icon = NAV_ICONS[item.icon] || '';
@@ -185,6 +187,6 @@ export function adminPageHead(title) {
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/components.css?v=20261008-1">
-    <link rel="stylesheet" href="../css/layout.css?v=20260922-1">
+    <link rel="stylesheet" href="../css/layout.css?v=20261012-2">
   `;
 }
