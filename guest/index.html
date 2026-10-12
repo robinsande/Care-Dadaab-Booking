@@ -93,30 +93,5 @@
     </form>
     <p id="message" class="notice" role="status"></p>
   </section>
-  <section id="push-notifications-section">
-    <h2><i data-lucide="bell"></i> Booking status notifications</h2>
-    <p>Sign in or create an account using the same email address as your booking, then enable browser notifications for check-in and check-out updates.</p>
-    <form id="guest-notification-account">
-      <div class="grid">
-        <label class="form-field" data-account-registration><span>First name</span><input class="form-control" name="firstName" autocomplete="given-name" required></label>
-        <label class="form-field" data-account-registration><span>Last name</span><input class="form-control" name="lastName" autocomplete="family-name" required></label>
-        <label class="form-field"><span>Email address</span><input class="form-control" name="email" type="email" autocomplete="email" required></label>
-        <label class="form-field" data-account-registration><span>Phone</span><input class="form-control" name="phone" type="tel" autocomplete="tel"></label>
-        <label class="form-field"><span>Password</span><input class="form-control" name="password" type="password" minlength="8" autocomplete="current-password" required></label>
-      </div>
-      <div class="guest-notification-actions">
-        <button class="btn btn-primary" type="submit" name="accountMode" value="register" id="guest-register-button">Create account</button>
-        <button class="btn btn-ghost" type="submit" name="accountMode" value="login" id="guest-login-button">Sign in</button>
-      </div>
-      <button class="btn btn-ghost" type="button" id="guest-reset-request-button">Forgot password?</button>
-    </form>
-    <form id="guest-password-reset-form" hidden>
-      <label class="form-field"><span>New password</span><input class="form-control" name="newPassword" type="password" minlength="8" autocomplete="new-password" required></label>
-      <button class="btn btn-primary" type="submit">Reset password</button>
-    </form>
-    <button class="btn btn-primary hidden" id="enable-push-button" type="button">Enable booking notifications</button>
-    <button class="btn btn-ghost hidden" id="guest-sign-out-button" type="button">Sign out</button>
-    <p id="push-message" class="notice" role="status" hidden></p>
-  </section>
-</main><script type="module" src="../js/pages/guest-portal.js?v=20261001-1"></script></body>
+</main><script type="module" src="../js/pages/guest-portal.js?v=20261012-1"></script></body>
 </html>

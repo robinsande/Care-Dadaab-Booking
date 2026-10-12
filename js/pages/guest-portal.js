@@ -3,15 +3,7 @@ import {
   listGuestCampRates,
   listPublicMous,
   submitPublicBookingRequest,
-  guestRegister,
-  guestLogin,
-  guestRequestReset,
-  guestResetPassword,
-  getGuestPushPublicKey,
-  saveGuestPushSubscription,
-  removeGuestPushSubscription,
 } from '../api/guest.js';
-import { getGuestToken, setGuestSession, clearGuestSession } from '../auth/guest-session.js';
 import { getMouCategoryForContractType, getMouCategoryLabel } from '../utils/booking-location.js';
 import { getBookingLocationState } from '../utils/booking-location.js';
 
@@ -22,12 +14,6 @@ const message = (text, error = false) => {
   $('#message').style.background = error ? '#fee2e2' : '#eef6ff';
 };
 const refreshIcons = () => window.lucide?.createIcons();
-const accountForm = $('#guest-notification-account');
-const pushButton = $('#enable-push-button');
-const signOutButton = $('#guest-sign-out-button');
-const pushMessage = $('#push-message');
-const passwordResetForm = $('#guest-password-reset-form');
-const resetRequestButton = $('#guest-reset-request-button');
 const bookingForm = $('#booking-form');
 const arrivalDateInput = bookingForm.elements.arrivalDate;
 const departureDateInput = bookingForm.elements.departureDate;
@@ -64,162 +50,6 @@ const stayTypeSelect = bookingForm.elements.stayType;
 const rateField = bookingForm.querySelector('[data-short-stay]');
 const mouFields = bookingForm.querySelectorAll('[data-long-stay]');
 let mouLoadVersion = 0;
-
-const setAccountMode = (mode) => {
-  const registration = mode === 'register';
-  accountForm.querySelectorAll('[data-account-registration]').forEach((field) => {
-    field.hidden = !registration;
-    const input = field.querySelector('input');
-    input.required = registration && input.name !== 'phone';
-    if (!registration) input.value = '';
-  });
-};
-
-accountForm.querySelector('#guest-login-button').addEventListener('click', () => setAccountMode('login'));
-accountForm.querySelector('#guest-register-button').addEventListener('click', () => setAccountMode('register'));
-accountForm.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  if (!accountForm.reportValidity()) return;
-  const values = formData(accountForm);
-  const mode = event.submitter?.value || 'register';
-  delete values.accountMode;
-  try {
-    const response = mode === 'login' ? await guestLogin(values) : await guestRegister(values);
-    const session = response.data || {};
-    setGuestSession(session.token, session.guest);
-    accountForm.hidden = true;
-    accountForm.classList.add('hidden');
-    pushButton.classList.remove('hidden');
-    signOutButton.classList.remove('hidden');
-    pushMessage.hidden = false;
-    pushMessage.textContent = `Signed in as ${session.guest?.email || values.email}. Enable notifications on this device.`;
-  } catch (error) {
-    pushMessage.hidden = false;
-    pushMessage.textContent = error.message || 'Unable to sign in or create an account.';
-  }
-});
-
-resetRequestButton.addEventListener('click', async () => {
-  const email = accountForm.elements.email;
-  if (!email.checkValidity()) {
-    email.reportValidity();
-    return;
-  }
-  try {
-    await guestRequestReset(email.value.trim());
-    pushMessage.hidden = false;
-    pushMessage.textContent = 'If an account exists, a password reset link has been sent to that email.';
-  } catch (error) {
-    pushMessage.hidden = false;
-    pushMessage.textContent = error.message || 'Unable to request a password reset.';
-  }
-});
-
-passwordResetForm.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  if (!passwordResetForm.reportValidity()) return;
-  const resetToken = new URLSearchParams(window.location.search).get('resetToken');
-  if (!resetToken) {
-    pushMessage.hidden = false;
-    pushMessage.textContent = 'The password reset link is missing or invalid.';
-    return;
-  }
-  try {
-    const response = await guestResetPassword(resetToken, passwordResetForm.elements.newPassword.value);
-    const session = response.data || {};
-    setGuestSession(session.token, session.guest);
-    passwordResetForm.hidden = true;
-    accountForm.hidden = true;
-    accountForm.classList.add('hidden');
-    pushButton.classList.remove('hidden');
-    signOutButton.classList.remove('hidden');
-    pushMessage.hidden = false;
-    pushMessage.textContent = 'Password reset. You are signed in; enable booking notifications on this device.';
-    window.history.replaceState({}, '', window.location.pathname);
-  } catch (error) {
-    pushMessage.hidden = false;
-    pushMessage.textContent = error.message || 'Unable to reset your password.';
-  }
-});
-
-const decodePushKey = (value) => {
-  const padding = '='.repeat((4 - value.length % 4) % 4);
-  const base64 = `${value}${padding}`.replace(/-/g, '+').replace(/_/g, '/');
-  const raw = window.atob(base64);
-  return Uint8Array.from(raw, (character) => character.charCodeAt(0));
-};
-
-pushButton.addEventListener('click', async () => {
-  pushButton.disabled = true;
-  pushMessage.hidden = false;
-  try {
-    if (!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)) {
-      throw new Error('Push notifications are not supported by this browser.');
-    }
-    const keyResponse = await getGuestPushPublicKey();
-    const publicKey = keyResponse.data?.publicKey;
-    if (!publicKey) throw new Error('Push notifications are not configured yet. Please contact the accommodation team.');
-    const registration = await navigator.serviceWorker.register('/service-worker.js');
-    const permission = await Notification.requestPermission();
-    if (permission !== 'granted') throw new Error('Allow notifications in your browser to receive booking updates.');
-    const subscription = await registration.pushManager.getSubscription()
-      || await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: decodePushKey(publicKey),
-      });
-    await saveGuestPushSubscription(subscription.toJSON());
-    pushMessage.textContent = 'Booking check-in and check-out notifications are enabled on this device.';
-  } catch (error) {
-    pushMessage.textContent = error.message || 'Unable to enable booking notifications.';
-  } finally {
-    pushButton.disabled = false;
-  }
-});
-
-signOutButton.addEventListener('click', async () => {
-  let subscriptionCleanupError = null;
-  try {
-    const registration = 'serviceWorker' in navigator
-      ? await navigator.serviceWorker.getRegistration('/')
-      : null;
-    const subscription = await registration?.pushManager.getSubscription();
-    if (subscription) {
-      try {
-        await removeGuestPushSubscription(subscription.endpoint);
-      } catch (error) {
-        subscriptionCleanupError = error;
-      }
-      await subscription.unsubscribe();
-    }
-  } catch (error) {
-    subscriptionCleanupError = error;
-  }
-  clearGuestSession();
-  accountForm.reset();
-  accountForm.hidden = false;
-  accountForm.classList.remove('hidden');
-  setAccountMode('register');
-  pushButton.classList.add('hidden');
-  signOutButton.classList.add('hidden');
-  pushMessage.hidden = false;
-  pushMessage.textContent = subscriptionCleanupError
-    ? `Signed out, but this device's push subscription could not be removed: ${subscriptionCleanupError.message}`
-    : 'Signed out and notifications disabled on this device.';
-});
-
-if (getGuestToken()) {
-  accountForm.hidden = true;
-  accountForm.classList.add('hidden');
-  pushButton.classList.remove('hidden');
-  signOutButton.classList.remove('hidden');
-}
-if (new URLSearchParams(window.location.search).has('resetToken')) {
-  accountForm.hidden = true;
-  accountForm.classList.add('hidden');
-  passwordResetForm.hidden = false;
-  pushMessage.hidden = false;
-  pushMessage.textContent = 'Choose a new password to finish signing in.';
-}
 
 arrivalDateInput.min = today;
 departureDateInput.min = today;
