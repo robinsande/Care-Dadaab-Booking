@@ -22,6 +22,12 @@ export function confirmMpesaInvoicePayment(id, message, confirmed) {
   return api.post(`/invoices/${id}/mpesa-confirmation`, { message, confirmed });
 }
 
+export function confirmMpesaInvoiceScreenshot(id, screenshot) {
+  const formData = new FormData();
+  formData.append('screenshot', screenshot);
+  return api.post(`/invoices/${id}/mpesa-screenshot`, formData, { timeoutMs: 120000 });
+}
+
 async function fetchInvoicePdf(id) {
   const base = config.API_BASE_URL.replace(/\/$/, '');
   const url = new URL(`${base}/invoices/${id}`);

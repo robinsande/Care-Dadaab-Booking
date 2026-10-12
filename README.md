@@ -118,6 +118,7 @@ Guests can sign in or create a guest account at the guest portal and enable brow
 ### Invoices
 
 - `GET /invoices` · `GET /invoices/:id` · `GET /invoices/:id?format=pdf`
+- Staff can confirm M-Pesa by pasting the SMS with a verification checkbox or uploading a JPEG/PNG screenshot (up to 5 MB); a successfully read confirmed transaction matching the invoice amount is applied automatically.
 
 ### Reports (Super Admin)
 

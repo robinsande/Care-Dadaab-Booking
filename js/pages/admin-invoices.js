@@ -6,6 +6,7 @@ import {
   updateInvoicePaymentStatus,
   initiateInvoiceStkPush,
   confirmMpesaInvoicePayment,
+  confirmMpesaInvoiceScreenshot,
 } from '../api/invoices.js';
 import { ApiError } from '../api/client.js';
 import { getBrandLogoDataUrl } from '../config.js';
@@ -87,6 +88,7 @@ function boot() {
     if (row) openInvoiceDetail(row.dataset.invoiceId);
   });
   document.getElementById('mpesa-confirmation-form')?.addEventListener('submit', handleMpesaConfirmation);
+  document.getElementById('mpesa-screenshot-upload')?.addEventListener('click', handleMpesaScreenshotUpload);
 
   tableBody.addEventListener('keydown', (event) => {
     if (event.key !== 'Enter' && event.key !== ' ') return;
@@ -208,6 +210,27 @@ async function handleMpesaConfirmation(event) {
     showToast(error instanceof ApiError ? error.message : 'Unable to confirm M-Pesa payment.', 'error');
   } finally {
     submit.disabled = false;
+  }
+}
+
+async function handleMpesaScreenshotUpload(event) {
+  const form = document.getElementById('mpesa-confirmation-form');
+  const screenshot = form?.elements.screenshot.files[0];
+  if (!screenshot) {
+    form?.elements.screenshot.reportValidity();
+    return;
+  }
+  const button = event.currentTarget;
+  button.disabled = true;
+  try {
+    await confirmMpesaInvoiceScreenshot(form.elements.invoiceId.value, screenshot);
+    document.querySelector('[data-close-modal="mpesa-confirmation"]')?.click();
+    showToast('M-Pesa screenshot verified and invoice marked as paid.', 'success');
+    await loadInvoices();
+  } catch (error) {
+    showToast(error instanceof ApiError ? error.message : 'Unable to verify the M-Pesa screenshot.', 'error');
+  } finally {
+    button.disabled = false;
   }
 }
 

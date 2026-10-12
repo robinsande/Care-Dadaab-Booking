@@ -617,9 +617,15 @@
               <input type="checkbox" name="confirmed" required>
               <span>I verified this M-Pesa message and its amount matches the invoice.</span>
             </label>
+            <div style="margin-top:var(--space-4);">
+              <label class="form-label" for="mpesa-screenshot">Or upload an M-Pesa SMS screenshot</label>
+              <input class="form-control" id="mpesa-screenshot" name="screenshot" type="file" accept="image/jpeg,image/png">
+              <p class="form-hint">JPEG or PNG, up to 5 MB. A valid confirmed transaction with the exact invoice amount will mark the invoice paid automatically.</p>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-close-modal="mpesa-confirmation">Cancel</button>
+            <button type="button" class="btn btn-secondary" id="mpesa-screenshot-upload">Upload and confirm</button>
             <button type="submit" class="btn btn-primary">Confirm payment</button>
           </div>
         </form>
