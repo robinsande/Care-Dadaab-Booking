@@ -70,19 +70,22 @@ function renderTable(tableBody) {
         ? '<span class="badge badge-approved">Active</span>'
         : '<span class="badge badge-cancelled">Inactive</span>';
       const toggleButton = active
-        ? `<button type="button" class="btn btn-secondary btn-sm" data-action="deactivate" data-id="${escapeHtml(id)}">Deactivate</button>`
-        : `<button type="button" class="btn btn-primary btn-sm" data-action="reactivate" data-id="${escapeHtml(id)}">Reactivate</button>`;
+        ? `<button type="button" class="action-dropdown-item" data-action="deactivate" data-id="${escapeHtml(id)}">Deactivate</button>`
+        : `<button type="button" class="action-dropdown-item" data-action="reactivate" data-id="${escapeHtml(id)}">Reactivate</button>`;
       return `
         <tr>
           <td><strong>${escapeHtml(camp.name)}</strong>${camp.description ? `<br><span class="form-hint">${escapeHtml(camp.description)}</span>` : ''}</td>
           <td>${escapeHtml(camp.code || '—')}</td>
           <td>${statusBadge}</td>
           <td>
-            <div class="table-actions">
-              <button type="button" class="btn btn-secondary btn-sm" data-action="edit" data-id="${escapeHtml(id)}">Edit</button>
+            <details class="action-dropdown">
+              <summary class="btn btn-secondary btn-sm action-dropdown-trigger">Actions</summary>
+              <div class="action-dropdown-menu">
+              <button type="button" class="action-dropdown-item" data-action="edit" data-id="${escapeHtml(id)}">Edit</button>
               ${toggleButton}
-              <button type="button" class="btn btn-danger btn-sm" data-action="delete" data-id="${escapeHtml(id)}">Delete</button>
-            </div>
+              <button type="button" class="action-dropdown-item action-dropdown-item-danger" data-action="delete" data-id="${escapeHtml(id)}">Delete</button>
+              </div>
+            </details>
           </td>
         </tr>
       `;

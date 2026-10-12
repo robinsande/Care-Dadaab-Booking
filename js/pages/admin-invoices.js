@@ -90,6 +90,7 @@ function boot() {
       handlePaymentChange(event.target);
       return;
     }
+    if (event.target.closest('.action-dropdown')) return;
     const row = event.target.closest('[data-invoice-id]');
     if (row) openInvoiceDetail(row.dataset.invoiceId);
   });
@@ -178,12 +179,22 @@ function renderTable() {
           <td>${escapeHtml(formatMoney(invoice.totalAmount, currency))}</td>
           <td>${paymentStatusBadge(invoice.paymentStatus)}</td>
           <td>${emailStatusBadge(emailStatus)}</td>
-          <td>          ${paid ? `Paid
-            ${invoiceEmailStatus(invoice).toLowerCase() !== 'sent' ? `<button type="button" class="btn btn-secondary btn-sm" data-resend-receipt data-invoice-id="${escapeHtml(id)}">Resend receipt email</button>` : ''}
+          <td>${paid ? `Paid
+            ${invoiceEmailStatus(invoice).toLowerCase() !== 'sent' ? `<details class="action-dropdown">
+              <summary class="btn btn-secondary btn-sm action-dropdown-trigger">Actions</summary>
+              <div class="action-dropdown-menu">
+                <button type="button" class="action-dropdown-item" data-resend-receipt data-invoice-id="${escapeHtml(id)}">Resend receipt email</button>
+              </div>
+            </details>` : ''}
           ` : `
-            <button type="button" class="btn btn-primary btn-sm" data-payment-action data-invoice-id="${escapeHtml(id)}">Record cash</button>
-            <button type="button" class="btn btn-secondary btn-sm" data-mpesa-action data-invoice-id="${escapeHtml(id)}">Confirm M-Pesa</button>
-            <button type="button" class="btn btn-secondary btn-sm" data-stk-action data-invoice-id="${escapeHtml(id)}">Request payment</button>
+            <details class="action-dropdown">
+              <summary class="btn btn-secondary btn-sm action-dropdown-trigger">Actions</summary>
+              <div class="action-dropdown-menu">
+                <button type="button" class="action-dropdown-item" data-payment-action data-invoice-id="${escapeHtml(id)}">Record cash</button>
+                <button type="button" class="action-dropdown-item" data-mpesa-action data-invoice-id="${escapeHtml(id)}">Confirm M-Pesa</button>
+                <button type="button" class="action-dropdown-item" data-stk-action data-invoice-id="${escapeHtml(id)}">Request payment</button>
+              </div>
+            </details>
           `}</td>
         </tr>
       `;

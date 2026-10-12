@@ -41,13 +41,13 @@ async function loadPayments(mouId) {
   const payments = response.data || [];
   paymentPanel.hidden = false;
   document.getElementById('payment-title').textContent = 'Payment schedule';
-  paymentRows.innerHTML = payments.map((payment) => `<tr><td>${escapeHtml(payment.periodLabel)}</td><td>${escapeHtml(String(payment.dueDate).slice(0, 10))}</td><td>${Number(payment.amountDue).toLocaleString()}</td><td>${Number(payment.amountPaid || 0).toLocaleString()}</td><td>${escapeHtml(payment.status)}</td><td>${payment.status === 'paid' ? 'Paid' : `<button class="btn btn-secondary btn-sm" data-payment="${payment._id}">Mark paid</button>`}</td></tr>`).join('') || '<tr><td colspan="6">No payment rows.</td></tr>';
+  paymentRows.innerHTML = payments.map((payment) => `<tr><td>${escapeHtml(payment.periodLabel)}</td><td>${escapeHtml(String(payment.dueDate).slice(0, 10))}</td><td>${Number(payment.amountDue).toLocaleString()}</td><td>${Number(payment.amountPaid || 0).toLocaleString()}</td><td>${escapeHtml(payment.status)}</td><td>${payment.status === 'paid' ? 'Paid' : `<details class="action-dropdown"><summary class="btn btn-secondary btn-sm action-dropdown-trigger">Actions</summary><div class="action-dropdown-menu"><button class="action-dropdown-item" data-payment="${payment._id}">Mark paid</button></div></details>`}</td></tr>`).join('') || '<tr><td colspan="6">No payment rows.</td></tr>';
 }
 
 async function loadMous() {
   const response = await api.get('/mous');
   const mous = response.data || [];
-  rows.innerHTML = mous.map((mou) => `<tr><td>${escapeHtml(mou.partyName)}</td><td>${escapeHtml(mou.mouType)}</td><td>${escapeHtml(String(mou.startDate).slice(0, 10))} - ${escapeHtml(String(mou.endDate).slice(0, 10))}</td><td>${escapeHtml(mou.rateCurrency)} ${Number(mou.rateAmount).toLocaleString()} / ${mou.ratePeriod === 'per_month' ? 'month' : 'year'}</td><td>${escapeHtml(mou.status)}</td><td><button class="btn btn-secondary btn-sm" data-mou="${mou._id}">View payments</button></td></tr>`).join('') || '<tr><td colspan="6">No MOUs found.</td></tr>';
+  rows.innerHTML = mous.map((mou) => `<tr><td>${escapeHtml(mou.partyName)}</td><td>${escapeHtml(mou.mouType)}</td><td>${escapeHtml(String(mou.startDate).slice(0, 10))} - ${escapeHtml(String(mou.endDate).slice(0, 10))}</td><td>${escapeHtml(mou.rateCurrency)} ${Number(mou.rateAmount).toLocaleString()} / ${mou.ratePeriod === 'per_month' ? 'month' : 'year'}</td><td>${escapeHtml(mou.status)}</td><td><details class="action-dropdown"><summary class="btn btn-secondary btn-sm action-dropdown-trigger">Actions</summary><div class="action-dropdown-menu"><button class="action-dropdown-item" data-mou="${mou._id}">View payments</button></div></details></td></tr>`).join('') || '<tr><td colspan="6">No MOUs found.</td></tr>';
 }
 
 form.addEventListener('submit', async (event) => {

@@ -226,17 +226,19 @@ function renderTable() {
       if (canManage) {
         const toggleMaintLabel = isMaintenance ? 'Mark Available' : 'Maintenance';
         const toggleMaintAction = isMaintenance ? 'mark-available' : 'maintenance';
-        const toggleMaintClass = isMaintenance ? 'btn-primary' : 'btn-secondary';
         const toggleButton = active
-          ? `<button type="button" class="btn btn-secondary btn-sm" data-action="deactivate" data-id="${escapeHtml(id)}">Deactivate</button>`
-          : `<button type="button" class="btn btn-primary btn-sm" data-action="reactivate" data-id="${escapeHtml(id)}">Reactivate</button>`;
+          ? `<button type="button" class="action-dropdown-item" data-action="deactivate" data-id="${escapeHtml(id)}">Deactivate</button>`
+          : `<button type="button" class="action-dropdown-item" data-action="reactivate" data-id="${escapeHtml(id)}">Reactivate</button>`;
         actions = `
-          <div class="table-actions">
-            <button type="button" class="btn btn-secondary btn-sm" data-action="edit" data-id="${escapeHtml(id)}">Edit</button>
-            <button type="button" class="btn ${toggleMaintClass} btn-sm" data-action="${toggleMaintAction}" data-id="${escapeHtml(id)}">${toggleMaintLabel}</button>
+          <details class="action-dropdown">
+            <summary class="btn btn-secondary btn-sm action-dropdown-trigger">Actions</summary>
+            <div class="action-dropdown-menu">
+            <button type="button" class="action-dropdown-item" data-action="edit" data-id="${escapeHtml(id)}">Edit</button>
+            <button type="button" class="action-dropdown-item" data-action="${toggleMaintAction}" data-id="${escapeHtml(id)}">${toggleMaintLabel}</button>
             ${toggleButton}
-            <button type="button" class="btn btn-danger btn-sm" data-action="delete" data-id="${escapeHtml(id)}">Delete</button>
-          </div>
+            <button type="button" class="action-dropdown-item action-dropdown-item-danger" data-action="delete" data-id="${escapeHtml(id)}">Delete</button>
+            </div>
+          </details>
         `;
       }
 

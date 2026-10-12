@@ -179,19 +179,20 @@ function renderActions(b) {
   const buttons = [];
 
   if (b.status === 'Booked') {
-    buttons.push(`<button type="button" class="btn btn-primary btn-sm" data-action="check-in">Check In</button>`);
-    buttons.push(`<button type="button" class="btn btn-danger btn-sm" data-action="cancel">Cancel Booking</button>`);
+    buttons.push(`<button type="button" class="action-dropdown-item" data-action="check-in">Check In</button>`);
+    buttons.push(`<button type="button" class="action-dropdown-item action-dropdown-item-danger" data-action="cancel">Cancel Booking</button>`);
   }
   if (b.status === 'Checked In') {
-    buttons.push(`<button type="button" class="btn btn-primary btn-sm" data-action="check-out">Check Out</button>`);
-    buttons.push(`<button type="button" class="btn btn-secondary btn-sm" data-action="early-check-out">Emergency Early Check Out</button>`);
-    buttons.push(`<button type="button" class="btn btn-danger btn-sm" data-action="cancel">Cancel Booking</button>`);
+    buttons.push(`<button type="button" class="action-dropdown-item" data-action="check-out">Check Out</button>`);
+    buttons.push(`<button type="button" class="action-dropdown-item" data-action="early-check-out">Emergency Early Check Out</button>`);
+    buttons.push(`<button type="button" class="action-dropdown-item action-dropdown-item-danger" data-action="cancel">Cancel Booking</button>`);
   }
   if (['Booked', 'Checked In'].includes(b.status)) {
-    buttons.push(`<button type="button" class="btn btn-secondary btn-sm" data-action="extend-stay">Extend Stay</button>`);
+    buttons.push(`<button type="button" class="action-dropdown-item" data-action="extend-stay">Extend Stay</button>`);
   }
-
-  actionBar.innerHTML = buttons.join('');
+  actionBar.innerHTML = buttons.length
+    ? `<details class="action-dropdown"><summary class="btn btn-secondary btn-sm action-dropdown-trigger">Actions</summary><div class="action-dropdown-menu">${buttons.join('')}</div></details>`
+    : '';
 }
 
 async function onSave(event) {
