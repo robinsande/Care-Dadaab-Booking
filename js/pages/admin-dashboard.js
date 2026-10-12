@@ -3,6 +3,7 @@ import { ApiError } from '../api/client.js';
 import { requireAuth } from '../auth/session.js';
 import { initAdminShell } from '../components/shell.js';
 import { showToast } from '../components/toast.js';
+import { renderDashboardCharts, showDashboardChartsError } from '../components/dashboard-charts.js';
 import {
   escapeHtml,
   formatDate,
@@ -57,11 +58,12 @@ async function loadDashboard({ manual = false } = {}) {
     if (updated) updated.textContent = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' }).format(new Date());
 
     renderCampStats(data.bookingsByCamp || []);
-    renderRoomStatuses(data.roomStatuses || []);
+    renderDashboardCharts(data);
     renderRecentBookings(data.recentBookings || []);
     renderPendingGuestRequests(data.pendingGuestRequests || []);
   } catch (error) {
     showDashboardError();
+    showDashboardChartsError();
     if (manual) {
       showToast(error instanceof ApiError ? error.message : 'Unable to sync dashboard.', 'error');
     }
@@ -74,29 +76,9 @@ async function loadDashboard({ manual = false } = {}) {
 
 function showDashboardError() {
   const messages = [
-    ['room-status-body', 4],
     ['camp-stats-body', 2],
     ['recent-bookings-body', 6],
     ['pending-guest-requests-body', 6],
-
-  function renderPendingGuestRequests(requests) {
-    const tbody = document.getElementById('pending-guest-requests-body');
-    if (!tbody) return;
-    if (!requests.length) {
-      tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No guest booking requests.</td></tr>';
-      return;
-    }
-    tbody.innerHTML = requests.map((request) => `
-      <tr>
-        <td data-label="Guest">${escapeHtml(fullName(request.guest || {}))}</td>
-        <td data-label="Camp">${escapeHtml(request.camp?.name || '—')}</td>
-        <td data-label="Arrival">${escapeHtml(formatDate(request.arrivalDate))}</td>
-        <td data-label="Departure">${escapeHtml(formatDate(request.departureDate))}</td>
-        <td data-label="Stay Type">${escapeHtml(request.stayType || '—')}</td>
-        <td data-label="Status">${statusBadge(request.status)}</td>
-      </tr>
-    `).join('');
-  }
   ];
   messages.forEach(([id, columns]) => {
     const tbody = document.getElementById(id);
@@ -104,23 +86,6 @@ function showDashboardError() {
       tbody.innerHTML = `<tr><td colspan="${columns}" class="empty-state">Dashboard data is temporarily unavailable. Refresh to try again.</td></tr>`;
     }
   });
-}
-
-function renderRoomStatuses(rooms) {
-  const tbody = document.getElementById('room-status-body');
-  if (!tbody) return;
-  if (!rooms.length) {
-    tbody.innerHTML = '<tr><td colspan="4" class="empty-state">No rooms available.</td></tr>';
-    return;
-  }
-  tbody.innerHTML = rooms.map((room) => `
-    <tr>
-      <td data-label="Camp">${escapeHtml(room.campName)}</td>
-      <td data-label="Block">${escapeHtml(room.blockName)}</td>
-      <td data-label="Room">${escapeHtml(room.roomNumber)}</td>
-      <td data-label="Status">${statusBadge(room.status)}</td>
-    </tr>
-  `).join('');
 }
 
 function renderCampStats(rows) {
@@ -138,6 +103,25 @@ function renderCampStats(rows) {
       </tr>
     `)
     .join('');
+}
+
+function renderPendingGuestRequests(requests) {
+  const tbody = document.getElementById('pending-guest-requests-body');
+  if (!tbody) return;
+  if (!requests.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No guest booking requests.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = requests.map((request) => `
+    <tr>
+      <td data-label="Guest">${escapeHtml(fullName(request.guest || {}))}</td>
+      <td data-label="Camp">${escapeHtml(request.camp?.name || '—')}</td>
+      <td data-label="Arrival">${escapeHtml(formatDate(request.arrivalDate))}</td>
+      <td data-label="Departure">${escapeHtml(formatDate(request.departureDate))}</td>
+      <td data-label="Stay Type">${escapeHtml(request.stayType || '—')}</td>
+      <td data-label="Status">${statusBadge(request.status)}</td>
+    </tr>
+  `).join('');
 }
 
 function renderRecentBookings(bookings) {

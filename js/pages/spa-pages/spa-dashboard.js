@@ -2,6 +2,7 @@ import { navigate } from '../spa-main.js';
 import { getDashboardStats } from '../../api/dashboard.js';
 import { ApiError } from '../../api/client.js';
 import { showToast } from '../../components/toast.js';
+import { renderDashboardCharts, showDashboardChartsError } from '../../components/dashboard-charts.js';
 import { escapeHtml, formatDate, fullName, campLabel, statusBadge } from '../../utils/format.js';
 
 let initialized = false;
@@ -58,11 +59,12 @@ async function loadDashboard({ manual = false } = {}) {
     if (updated) updated.textContent = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' }).format(new Date());
 
     renderCampStats(data.bookingsByCamp || []);
-    renderRoomStatuses(data.roomStatuses || []);
+    renderDashboardCharts(data);
     renderRecentBookings(data.recentBookings || []);
     renderPendingGuestRequests(data.pendingGuestRequests || []);
   } catch (error) {
     showDashboardError();
+    showDashboardChartsError();
     if (manual) showToast(error instanceof ApiError ? error.message : 'Unable to sync dashboard.', 'error');
   } finally {
     dashboardRequestActive = false;
@@ -73,7 +75,6 @@ async function loadDashboard({ manual = false } = {}) {
 
 function showDashboardError() {
   [
-    ['room-status-body', 4],
     ['camp-stats-body', 2],
     ['recent-bookings-body', 6],
     ['pending-guest-requests-body', 6],
@@ -100,23 +101,6 @@ function renderPendingGuestRequests(requests) {
       <td data-label="Departure">${escapeHtml(formatDate(request.departureDate))}</td>
       <td data-label="Stay Type">${escapeHtml(request.stayType || '—')}</td>
       <td data-label="Status">${statusBadge(request.status)}</td>
-    </tr>
-  `).join('');
-}
-
-function renderRoomStatuses(rooms) {
-  const tbody = document.getElementById('room-status-body');
-  if (!tbody) return;
-  if (!rooms.length) {
-    tbody.innerHTML = '<tr><td colspan="4" class="empty-state">No rooms available.</td></tr>';
-    return;
-  }
-  tbody.innerHTML = rooms.map(room => `
-    <tr>
-      <td data-label="Camp">${escapeHtml(room.campName)}</td>
-      <td data-label="Block">${escapeHtml(room.blockName)}</td>
-      <td data-label="Room">${escapeHtml(room.roomNumber)}</td>
-      <td data-label="Status">${statusBadge(room.status)}</td>
     </tr>
   `).join('');
 }

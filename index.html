@@ -10,8 +10,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;650;700;750&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css?v=20261012-4">
-  <link rel="stylesheet" href="css/layout.css?v=20261012-2">
+  <link rel="stylesheet" href="css/components.css?v=20261012-5">
+  <link rel="stylesheet" href="css/layout.css?v=20261012-3">
 </head>
 <body>
 
@@ -136,7 +136,7 @@
           </div>
           <section class="dashboard-service-strip" aria-label="Today's service pulse">
             <div class="service-pulse-card service-pulse-primary">
-              <div class="service-pulse-heading"><span class="panel-kicker">Today's service pulse</span><span class="service-pulse-status"><span class="live-dot"></span>Live</span></div>
+              <div class="service-pulse-heading"><span class="panel-kicker">Today's service pulse</span></div>
               <h3>Keep every arrival effortless</h3><p>Review the next movement through your accommodation desk.</p>
               <div class="service-pulse-metrics"><span><strong data-stat="todayArrivals">—</strong><small>arrivals</small></span><span><strong data-stat="todayDepartures">—</strong><small>departures</small></span><span><strong data-stat="availableRooms">—</strong><small>rooms ready</small></span></div>
             </div>
@@ -147,16 +147,21 @@
             <div><span class="panel-kicker">Your operations desk</span><h3>Everything you need, in one place</h3></div>
             <div class="service-menu-links"><a data-nav-link href="#/rooms"><span>▦</span>Room inventory <b>→</b></a><a data-nav-link href="#/camps"><span>⌖</span>Accommodation camps <b>→</b></a><a data-nav-link href="#/reservation-log"><span>◷</span>Reservation log <b>→</b></a><a data-nav-link href="#/reports"><span>◒</span>Performance reports <b>→</b></a></div>
           </section>
-          <div class="dashboard-grid">
-          <div class="panel dashboard-panel">
-            <div class="dashboard-panel-header"><div><span class="panel-kicker">Accommodation</span><h3>Room status</h3></div><span class="panel-caption">By camp and block</span></div>
-            <div class="table-wrap">
-              <table class="table" aria-label="Room status by camp and block">
-                <thead><tr><th>Camp</th><th>Block</th><th>Room</th><th>Status</th></tr></thead>
-                <tbody id="room-status-body"><tr aria-hidden="true"><td colspan="4"><span class="skeleton skeleton-row"></span><span class="skeleton skeleton-row"></span><span class="skeleton skeleton-row"></span></td></tr></tbody>
-              </table>
+          <section class="dashboard-grid dashboard-analytics-grid" aria-label="Performance analytics">
+            <div class="panel dashboard-panel dashboard-chart-panel dashboard-panel-wide">
+              <div class="dashboard-panel-header"><div><span class="panel-kicker">Income</span><h3>Invoiced revenue trend</h3></div><span class="panel-caption">Last 6 months · KES</span></div>
+              <div id="dashboard-revenue-chart"><p class="chart-empty-state chart-loading-state">Loading revenue…</p></div>
             </div>
-          </div>
+            <div class="panel dashboard-panel dashboard-chart-panel">
+              <div class="dashboard-panel-header"><div><span class="panel-kicker">Accommodation</span><h3>Room occupancy</h3></div><span class="panel-caption">Current inventory</span></div>
+              <div id="dashboard-occupancy-chart"><p class="chart-empty-state chart-loading-state">Loading room occupancy…</p></div>
+            </div>
+            <div class="panel dashboard-panel dashboard-chart-panel">
+              <div class="dashboard-panel-header"><div><span class="panel-kicker">Guest mix</span><h3>Stay type</h3></div><span class="panel-caption">Booking &amp; invoice totals</span></div>
+              <div id="dashboard-stay-type-chart"><p class="chart-empty-state chart-loading-state">Loading stay types…</p></div>
+            </div>
+          </section>
+          <div class="dashboard-grid">
           <div class="panel dashboard-panel">
             <div class="dashboard-panel-header"><div><span class="panel-kicker">Distribution</span><h3>Bookings by camp</h3></div><span class="panel-caption">Active bookings</span></div>
             <div class="table-wrap">
@@ -750,6 +755,6 @@
     </div>
   </div>
 
-  <script type="module" src="js/pages/spa-main.js?v=20261001-5"></script>
+  <script type="module" src="js/pages/spa-main.js?v=20261012-1"></script>
 </body>
 </html>
