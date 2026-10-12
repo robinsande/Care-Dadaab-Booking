@@ -28,6 +28,10 @@ export function confirmMpesaInvoiceScreenshot(id, screenshot) {
   return api.post(`/invoices/${id}/mpesa-screenshot`, formData, { timeoutMs: 120000 });
 }
 
+export function resendInvoiceReceiptEmail(id) {
+  return api.post(`/invoices/${id}/receipt-email`, {});
+}
+
 async function fetchInvoicePdf(id) {
   const base = config.API_BASE_URL.replace(/\/$/, '');
   const url = new URL(`${base}/invoices/${id}`);

@@ -7,6 +7,7 @@ import {
   initiateInvoiceStkPush,
   confirmMpesaInvoicePayment,
   confirmMpesaInvoiceScreenshot,
+  resendInvoiceReceiptEmail,
 } from '../api/invoices.js';
 import { ApiError } from '../api/client.js';
 import { getBrandLogoDataUrl } from '../config.js';
@@ -70,6 +71,11 @@ function boot() {
   });
 
   tableBody.addEventListener('click', (event) => {
+    const resendReceiptButton = event.target.closest('[data-resend-receipt]');
+    if (resendReceiptButton) {
+      handleReceiptEmailResend(resendReceiptButton);
+      return;
+    }
     const mpesaButton = event.target.closest('[data-mpesa-action]');
     if (mpesaButton) {
       openMpesaConfirmation(mpesaButton);
@@ -172,7 +178,9 @@ function renderTable() {
           <td>${escapeHtml(formatMoney(invoice.totalAmount, currency))}</td>
           <td>${paymentStatusBadge(invoice.paymentStatus)}</td>
           <td>${emailStatusBadge(emailStatus)}</td>
-          <td>${paid ? 'Paid' : `
+          <td>          ${paid ? `Paid
+            ${invoiceEmailStatus(invoice).toLowerCase() !== 'sent' ? `<button type="button" class="btn btn-secondary btn-sm" data-resend-receipt data-invoice-id="${escapeHtml(id)}">Resend receipt email</button>` : ''}
+          ` : `
             <button type="button" class="btn btn-primary btn-sm" data-payment-action data-invoice-id="${escapeHtml(id)}">Record cash</button>
             <button type="button" class="btn btn-secondary btn-sm" data-mpesa-action data-invoice-id="${escapeHtml(id)}">Confirm M-Pesa</button>
             <button type="button" class="btn btn-secondary btn-sm" data-stk-action data-invoice-id="${escapeHtml(id)}">Request payment</button>
@@ -234,6 +242,22 @@ async function handleMpesaScreenshotUpload(event) {
   }
 }
 
+async function handleReceiptEmailResend(button) {
+  button.disabled = true;
+  try {
+    const response = await resendInvoiceReceiptEmail(button.dataset.invoiceId);
+    if (response.data?.emailStatus === 'sent') {
+      showToast('Payment receipt emailed to the guest.', 'success');
+    } else {
+      showToast('Receipt email is still pending. Check the email configuration and retry.', 'error');
+    }
+    await loadInvoices();
+  } catch (error) {
+    button.disabled = false;
+    showToast(error instanceof ApiError ? error.message : 'Unable to resend the receipt email.', 'error');
+  }
+}
+
 async function handleStkPush(button) {
   const phoneNumber = window.prompt('Enter the guest Kenyan phone number for the M-Pesa prompt:');
   if (!phoneNumber?.trim()) return;
@@ -281,8 +305,9 @@ async function printInvoice() {
 function renderEmailStatus(invoice) {
   if (!emailStatusEl) return;
   const status = invoiceEmailStatus(invoice);
+  const label = invoice.paymentStatus === 'Paid' ? 'Receipt email' : 'Invoice email';
   emailStatusEl.innerHTML = `
-    <span class="form-label" style="margin:0;">Email status</span>
+    <span class="form-label" style="margin:0;">${label}</span>
     ${emailStatusBadge(status)}
   `;
 }

@@ -124,6 +124,7 @@ export function roomCurrentGuest(room) {
 /** Email delivery status for an invoice. */
 export function invoiceEmailStatus(invoice) {
   if (!invoice) return '—';
+  if (invoice.paymentStatus === 'Paid') return invoice.receiptEmailStatus || 'pending';
   if (invoice.emailStatus) return invoice.emailStatus;
   if (invoice.emailedAt) return 'Sent';
   if (invoice.emailSent === true) return 'Sent';
@@ -136,8 +137,8 @@ export function invoiceEmailStatus(invoice) {
 export function emailStatusBadge(status) {
   if (!status || status === '—') return '—';
   const normalized = String(status).toLowerCase();
-  const sent = normalized === 'sent' || normalized === 'delivered';
-  const failed = normalized === 'failed' || normalized === 'error';
+  const sent = normalized.includes('sent') || normalized === 'delivered';
+  const failed = normalized.includes('failed') || normalized === 'error';
   const cls = sent ? 'badge-approved' : failed ? 'badge-cancelled' : 'badge-pending';
   return `<span class="badge ${cls}">${escapeHtml(status)}</span>`;
 }

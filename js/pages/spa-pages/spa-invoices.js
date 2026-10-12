@@ -6,6 +6,7 @@ import {
   initiateInvoiceStkPush,
   confirmMpesaInvoicePayment,
   confirmMpesaInvoiceScreenshot,
+  resendInvoiceReceiptEmail,
 } from '../../api/invoices.js';
 import { ApiError } from '../../api/client.js';
 import { withLoading } from '../../components/loading.js';
@@ -32,6 +33,11 @@ export async function init() {
   });
 
   tableBody.addEventListener('click', (e) => {
+    const resendReceiptButton = e.target.closest('[data-resend-receipt]');
+    if (resendReceiptButton) {
+      handleReceiptEmailResend(resendReceiptButton);
+      return;
+    }
     const mpesaButton = e.target.closest('[data-mpesa-action]');
     if (mpesaButton) {
       openMpesaConfirmation(mpesaButton);
@@ -123,7 +129,9 @@ function renderTable() {
         <td>${escapeHtml(formatMoney(inv.totalAmount, currency))}</td>
         <td>${paymentStatusBadge(inv.paymentStatus)}</td>
         <td>${emailStatusBadge(emailStatus)}</td>
-        <td>${paid ? 'Paid' : `
+        <td>${paid ? `Paid
+          ${invoiceEmailStatus(inv).toLowerCase() !== 'sent' ? `<button type="button" class="btn btn-secondary btn-sm" data-resend-receipt data-invoice-id="${escapeHtml(id)}">Resend receipt email</button>` : ''}
+        ` : `
           <button type="button" class="btn btn-primary btn-sm" data-payment-action data-invoice-id="${escapeHtml(id)}">Record cash</button>
           <button type="button" class="btn btn-secondary btn-sm" data-mpesa-action data-invoice-id="${escapeHtml(id)}">Confirm M-Pesa</button>
           <button type="button" class="btn btn-secondary btn-sm" data-stk-action data-invoice-id="${escapeHtml(id)}">Request payment</button>
@@ -181,6 +189,22 @@ async function handleMpesaScreenshotUpload(event) {
     showToast(error instanceof ApiError ? error.message : 'Unable to verify the M-Pesa screenshot.', 'error');
   } finally {
     button.disabled = false;
+  }
+}
+
+async function handleReceiptEmailResend(button) {
+  button.disabled = true;
+  try {
+    const response = await resendInvoiceReceiptEmail(button.dataset.invoiceId);
+    if (response.data?.emailStatus === 'sent') {
+      showToast('Payment receipt emailed to the guest.', 'success');
+    } else {
+      showToast('Receipt email is still pending. Check the email configuration and retry.', 'error');
+    }
+    await loadInvoices();
+  } catch (error) {
+    button.disabled = false;
+    showToast(error instanceof ApiError ? error.message : 'Unable to resend the receipt email.', 'error');
   }
 }
 
